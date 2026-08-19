@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { callGemini } from '../utils/gemini';
 
 /* ─── Types ──────────────────────────────────────────────────── */
 type MoveKey = 'OPEN' | 'TRACE' | 'SHIFT' | 'SURFACE' | 'COMMIT';
