@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "bundle": "node scripts/build-bundle.js"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
