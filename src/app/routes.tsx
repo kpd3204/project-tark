@@ -32,4 +32,4 @@ export const router = createBrowserRouter([
       { path: 'speculate',                         Component: SpeculatePage           },
     ],
   },
-]);
+], { basename: import.meta.env.BASE_URL });
