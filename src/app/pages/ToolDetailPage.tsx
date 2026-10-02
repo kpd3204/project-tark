@@ -39,7 +39,7 @@ function CopyButton({ text, color, textColor }: { text: string; color: string; t
 
 function StepCard({ step, index, color, textColor }: { step: string; index: number; color: string; textColor: string }) {
   const [hovered, setHovered] = useState(false);
-  const isYellow = color === '#FFD167';
+  const isYellow = false; // move colours all take white text
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -97,7 +97,7 @@ export function ToolDetailPage() {
   const { move, tool } = result;
   const toolIndex = move.tools.findIndex((t) => t.slug === tool.slug);
   const letter = String.fromCharCode(65 + toolIndex);
-  const isYellow = move.color === '#FFD167';
+  const isYellow = false; // move colours all take white text
 
   return (
     <>
@@ -325,7 +325,7 @@ export function ToolDetailPage() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = m.color; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = m.key === move.key ? m.color : '#F5F4F1'; }}
               >
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: m.key === move.key ? (m.color === '#FFD167' ? '#1A1A1A' : '#FFFFFF') : '#1A1A1A' }}>{m.key}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: m.key === move.key ? '#FFFFFF' : '#1A1A1A' }}>{m.key}</div>
               </Link>
             ))}
           </div>

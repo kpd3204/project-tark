@@ -36,7 +36,7 @@ const moves: {
   {
     hindi: 'खुलना',
     english: 'OPEN',
-    color: '#FFD167', tint: 'var(--tint-open)', ink: '#1D1B16',
+    color: '#FFD167', tint: 'var(--tint-open)', ink: '#FFFFFF',
     number: '01',
     tagline: 'Challenge the given',
     question: 'What if the opposite were true?',

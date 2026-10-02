@@ -20,7 +20,7 @@ const PRINCIPLES = [
 ];
 
 const MOVES: { key: MoveKey; hindi: string; color: string; ink: string }[] = [
-  { key: 'OPEN',    hindi: 'खुलना',      color: '#FFD167', ink: '#1D1B16' },
+  { key: 'OPEN',    hindi: 'खुलना',      color: '#FFD167', ink: '#FFFFFF' },
   { key: 'TRACE',   hindi: 'खोजना',      color: '#E27238', ink: '#FFFFFF' },
   { key: 'SHIFT',   hindi: 'बदलना',      color: '#465BA4', ink: '#FFFFFF' },
   { key: 'SURFACE', hindi: 'उभरना',      color: '#4DB49F', ink: '#FFFFFF' },

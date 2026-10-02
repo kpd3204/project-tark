@@ -20,7 +20,7 @@ const TINT: Record<string, string> = {
   OPEN: 'var(--tint-open)', TRACE: 'var(--tint-trace)', SHIFT: 'var(--tint-shift)',
   SURFACE: 'var(--tint-surface)', COMMIT: 'var(--tint-commit)',
 };
-const INK: Record<string, string> = { OPEN: '#1D1B16' };
+const INK: Record<string, string> = {};
 
 /* Plain-language ways in: what the stuck feels like, mapped to a move */
 const STUCK: { move: string; feels: string }[] = [

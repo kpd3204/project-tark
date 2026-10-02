@@ -42,7 +42,7 @@ export const worksheetKits: WorksheetKit[] = [
     subtitle:    'Applied thinking for money decisions',
     description: 'TARK moves applied to real financial scenarios: loan decisions, insurance choices, salary negotiation, and savings trade-offs. Grounded in everyday Indian contexts.',
     color:       '#FFD167',
-    textColor:   '#1A1A1A',
+    textColor:   '#FFFFFF',
     status:      'coming-soon',
     audience:    'Age 18–22 · College / Young adults',
     count:       6,

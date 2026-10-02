@@ -19,7 +19,7 @@ const SESSION = [
 ];
 
 const MOVES_META: { key: MoveKey; color: string; tint: string; ink: string; hindi: string }[] = [
-  { key: 'OPEN',    color: '#FFD167', tint: 'var(--tint-open)',    ink: '#1D1B16', hindi: 'खुलना' },
+  { key: 'OPEN',    color: '#FFD167', tint: 'var(--tint-open)',    ink: '#FFFFFF', hindi: 'खुलना' },
   { key: 'TRACE',   color: '#E27238', tint: 'var(--tint-trace)',   ink: '#FFFFFF', hindi: 'खोजना' },
   { key: 'SHIFT',   color: '#465BA4', tint: 'var(--tint-shift)',   ink: '#FFFFFF', hindi: 'बदलना' },
   { key: 'SURFACE', color: '#4DB49F', tint: 'var(--tint-surface)', ink: '#FFFFFF', hindi: 'उभरना' },

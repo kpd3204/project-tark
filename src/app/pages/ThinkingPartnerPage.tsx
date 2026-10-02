@@ -11,7 +11,7 @@ const CHATGPT_URL = 'https://chatgpt.com/g/g-69e25c86db488191824d86bf3399227f-tr
 const GEMINI_URL  = 'https://gemini.google.com/gem/1O2CGR8VO65PPOBuctSwskGO7RyGUsucZ?usp=sharing';
 
 const MOVES: { key: MoveKey; hindi: string; color: string; ink: string; hint: string }[] = [
-  { key: 'OPEN',    hindi: 'खुलना',      color: '#FFD167', ink: '#1D1B16', hint: 'What if the opposite were true?' },
+  { key: 'OPEN',    hindi: 'खुलना',      color: '#FFD167', ink: '#FFFFFF', hint: 'What if the opposite were true?' },
   { key: 'TRACE',   hindi: 'खोजना',      color: '#E27238', ink: '#FFFFFF', hint: 'Where did this idea come from?' },
   { key: 'SHIFT',   hindi: 'बदलना',      color: '#465BA4', ink: '#FFFFFF', hint: 'What would this look like elsewhere?' },
   { key: 'SURFACE', hindi: 'उभरना',      color: '#4DB49F', ink: '#FFFFFF', hint: 'What is nobody saying out loud?' },

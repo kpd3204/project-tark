@@ -919,7 +919,6 @@ p, li, dd, figcaption, blockquote, .lede, .cite__text, .tcard__tag, .tool-row__t
   border-radius: var(--r-md);
   color: #FFFFFF;
 }
-.group-head[style*="#FFD167"] { color: var(--ink); }
 .group-head__icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 14px; background: rgba(255,255,255,0.18); }
 .group-head__name { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 2.4vw, 34px); letter-spacing: -0.02em; line-height: 1; }
 .group-head__hindi { font-weight: 700; font-size: clamp(16px, 1.4vw, 20px); opacity: 0.9; }
