@@ -29,8 +29,10 @@ export function ActivityBookletPage() {
               </div>
             </Reveal>
             <Reveal delay={0.05}>
-              <h1 className="display-xl tk-head__title" style={{ fontSize: 'clamp(38px, 4.6vw, 76px)' }}>
-                Five moves, unlimited <span className="nowrap">possibilities<Buddy color="#E27238" size={0} className="buddy--inline" delay={0.3} /></span>
+              <h1 className="display-xl tk-head__title">
+                Five moves,<br />
+                unlimited<br />
+                <span className="nowrap">possibilities<Buddy color="#E27238" size={0} className="buddy--inline" delay={0.3} /></span>
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
