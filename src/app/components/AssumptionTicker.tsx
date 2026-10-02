@@ -64,7 +64,7 @@ export function AssumptionTicker() {
       <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, zIndex: 2, display: 'flex', alignItems: 'stretch' }}>
         <div style={{ width: 64, background: 'linear-gradient(to left, #F5F4F1, transparent)' }} />
         <Link
-          to="/speculate"
+          to="/framework#open"
           style={{
             backgroundColor: '#F5F4F1',
             paddingInline: 'clamp(16px, 3vw, 28px)',
@@ -85,7 +85,7 @@ export function AssumptionTicker() {
           }}
         >
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600, color: '#999999', whiteSpace: 'nowrap', transition: 'color 0.25s' }}>
-            Speculate →
+            Question them →
           </span>
         </Link>
       </div>

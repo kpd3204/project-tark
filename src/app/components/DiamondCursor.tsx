@@ -12,6 +12,7 @@ const TRAIL_COLORS = ['#FFD167', '#E27238', '#465BA4', '#4DB49F', '#DA3832'];
 
 // Walk up DOM, find first opaque background, return true if dark
 function isBgDark(el: Element): boolean {
+  if (el.closest('[data-hero]')) return true; // photography under a dark grade
   let node: Element | null = el;
   for (let i = 0; i < 20 && node && node !== document.body; i++) {
     const bg = window.getComputedStyle(node as HTMLElement).backgroundColor;
@@ -45,6 +46,7 @@ export function DiamondCursor() {
     document.head.appendChild(styleEl);
 
     let visible = false;
+    let overHero = false; // the hero's diamond grid answers the cursor itself
     let moving = false;
     let stillFrames = 0;
     const HISTORY = 30;
@@ -66,7 +68,7 @@ export function DiamondCursor() {
       prevX = lastX; prevY = lastY;
       if (dist > 1.5) {
         stillFrames = 0;
-        if (!moving && visible) { moving = true; setTrail(true); }
+        if (!moving && visible && !overHero) { moving = true; setTrail(true); }
       } else if (moving && ++stillFrames > 24) {
         moving = false;
         setTrail(false);
@@ -94,6 +96,11 @@ export function DiamondCursor() {
       const moveEl    = target.closest('[data-move]') as HTMLElement | null;
       const linkEl    = target.closest('a, button, [role="button"]');
       const dark      = isBgDark(target);
+      const inHero    = !!target.closest('[data-hero]');
+      if (inHero !== overHero) {
+        overHero = inHero;
+        if (inHero) { moving = false; setTrail(false); }
+      }
 
       // CSS-transition-friendly: set via style, not setAttribute
       if (moveEl) {

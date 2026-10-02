@@ -18,7 +18,6 @@ const PAGE_WIPE_COLORS: Record<string, string> = {
   '/case-studies':     '#E27238',
   '/research':         '#465BA4',
   '/about':            '#1A1A1A',
-  '/speculate':        '#DA3832',
 };
 
 function getWipeColor(pathname: string): string {
@@ -33,7 +32,6 @@ export function Root() {
   const [wipeColor, setWipeColor] = useState('#1A1A1A');
   const prevPath = useRef(pathname);
   const isMobile = useIsMobile();
-  const isSpeculate = pathname === '/speculate';
   const isThinkingPartner = pathname === '/thinking-partner';
 
   /* Mobile CTA appears only once the reader has committed to the page */
@@ -41,8 +39,14 @@ export function Root() {
   const [pastFold, setPastFold] = useState(false);
   useMotionValueEvent(scrollY, 'change', (y) => setPastFold(y > 480));
 
-  /* The intro plays on every full page load */
-  const [showIntro, setShowIntro] = useState(true);
+  /* The intro plays once per visit, not on every reload */
+  const [showIntro, setShowIntro] = useState(() => {
+    try {
+      if (sessionStorage.getItem('tk-intro-seen')) return false;
+      sessionStorage.setItem('tk-intro-seen', '1');
+    } catch { /* storage unavailable — just play it */ }
+    return true;
+  });
 
   const isMainPage = (p: string) => p.split('/').filter(Boolean).length <= 1;
 
@@ -109,7 +113,7 @@ export function Root() {
       </motion.main>
 
       <AnimatePresence>
-      {isMobile && !isSpeculate && !isThinkingPartner && pastFold && (
+      {isMobile && !isThinkingPartner && pastFold && (
         <motion.div
           key="mobile-cta"
           initial={{ y: 80, opacity: 0 }}
