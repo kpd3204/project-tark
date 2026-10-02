@@ -16,7 +16,7 @@ import photoPresentation from '../../imports/photos/presentation-screen.jpg';
 
 /* ─── Data ─────────────────────────────────────────────────── */
 const MOVES: { key: MoveKey; color: string; tint: string; text: string; ink: string; hindi: string; tagline: string; question: string }[] = [
-  { key: 'OPEN',    color: '#FFD167', tint: 'var(--tint-open)',    text: 'var(--text-open)',    ink: '#1D1B16', hindi: 'खुलना',           tagline: 'Challenge the given',   question: 'What if the opposite were true?' },
+  { key: 'OPEN',    color: '#FFD167', tint: 'var(--tint-open)',    text: 'var(--text-open)',    ink: '#FFFFFF', hindi: 'खुलना',           tagline: 'Challenge the given',   question: 'What if the opposite were true?' },
   { key: 'TRACE',   color: '#E27238', tint: 'var(--tint-trace)',   text: 'var(--text-trace)',   ink: '#FFFFFF', hindi: 'खोजना',       tagline: 'Map the system',        question: 'Where did this idea come from?' },
   { key: 'SHIFT',   color: '#465BA4', tint: 'var(--tint-shift)',   text: 'var(--text-shift)',   ink: '#FFFFFF', hindi: 'बदलना',           tagline: 'Imagine alternatives',  question: 'What would this look like elsewhere?' },
   { key: 'SURFACE', color: '#4DB49F', tint: 'var(--tint-surface)', text: 'var(--text-surface)', ink: '#FFFFFF', hindi: 'उभरना',          tagline: 'See your thinking',     question: 'What is nobody saying out loud?' },

@@ -25,7 +25,7 @@ export interface MoveData {
 
 export const toolsData: MoveData[] = [
   {
-    key: 'OPEN', label: 'OPEN', color: '#FFD167', textColor: '#1A1A1A',
+    key: 'OPEN', label: 'OPEN', color: '#FFD167', textColor: '#FFFFFF',
     hindi: 'खुलना', tagline: 'Challenge the given',
     tools: [
       {

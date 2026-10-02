@@ -8,7 +8,7 @@ import photoWorkshop from '../../imports/photos/real/commit-booklet.jpg';
 const SECTIONS = [
   {
     title: 'Learning, measured', tint: 'var(--tint-open)',
-    color: '#FFD167', textColor: '#1A1A1A',
+    color: '#FFD167', textColor: '#FFFFFF',
     stats: [
       { stat: '1 in 3', label: 'Class 8 students in rural government schools cannot read a Class 2 level text', source: 'ASER 2024' },
       { stat: '37%',    label: 'average Class 9 score in mathematics in the national achievement survey', source: 'PARAKH 2024' },
@@ -82,7 +82,7 @@ const levelColor: Record<string, string> = {
 };
 
 const archetypes = [
-  { name: 'The Exam Maximiser',       age: '16–18', color: '#FFD167', textColor: '#1A1A1A', desc: 'High-achieving students who conflate marks with worth. Entry point: suspend that equation.' },
+  { name: 'The Exam Maximiser',       age: '16–18', color: '#FFD167', textColor: '#FFFFFF', desc: 'High-achieving students who conflate marks with worth. Entry point: suspend that equation.' },
   { name: 'The Aspirational Migrant', age: '18–22', color: '#E27238', textColor: '#FFFFFF', desc: 'First-generation college students navigating unfamiliar systems with remarkable resourcefulness.' },
   { name: 'The Question Hoarder',     age: '15–17', color: '#465BA4', textColor: '#FFFFFF', desc: "Curious minds sitting on questions they've been told not to ask. Entry point: legitimise the unspoken." },
   { name: 'The Skilled Pragmatist',   age: '16–19', color: '#4DB49F', textColor: '#FFFFFF', desc: 'Vocational students with practical intelligence, a different but equally valid cognition.' },
