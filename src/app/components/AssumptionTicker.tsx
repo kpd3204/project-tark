@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Tag, Pill } from './play';
 
 const ITEMS = [
@@ -20,10 +19,9 @@ const TILTS = [-2.5, 1.5, -1, 2.5, -1.8];
 /* A band of everyday assumptions drifting past as tilted tags.
    Hover pauses it; the action asks the reader to question them. */
 export function AssumptionTicker() {
-  const [paused, setPaused] = useState(false);
 
   return (
-    <section className="ticker" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <section className="ticker">
       <div className="tk-wrap ticker__head">
         <h2 className="ticker__title">
           Are these <Tag bg="#FFD167" color="#1D1B16" tilt={-3}>facts?</Tag>
@@ -32,7 +30,7 @@ export function AssumptionTicker() {
       </div>
 
       <div className="ticker__track" aria-label="Common assumptions">
-        <div className="ticker__run" style={{ animationPlayState: paused ? 'paused' : 'running' }}>
+        <div className="ticker__run">
           {[...ITEMS, ...ITEMS].map((item, i) => {
             const c = COLORS[i % COLORS.length];
             return (

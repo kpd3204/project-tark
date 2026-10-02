@@ -11,6 +11,7 @@ import photoStudio from '../../imports/photos/about/studio-review.jpg';
 import photoStickers from '../../imports/photos/about/thinking-stickers.jpg';
 import photoBooklet from '../../imports/photos/about/five-moves-booklet.jpg';
 import photoCards from '../../imports/photos/about/thinking-toolkit-cards.jpg';
+import photoJury from '../../imports/photos/about/final-jury.jpg';
 
 const PRINCIPLES = [
   { label: 'Design principle', text: 'A system for thinking, not a website for reading.', color: '#E27238', tint: 'var(--tint-trace)' },
@@ -29,9 +30,62 @@ const MOVES: { key: MoveKey; hindi: string; color: string; ink: string }[] = [
 const TEAM = [
   { role: 'Author and framework design', name: 'Kalpak Doshi',            color: '#FFD167' },
   { role: 'Mentor',                      name: 'Swapnil Soni',            color: '#E27238' },
-  { role: 'Institutional partner',       name: 'GLS Institute of Design', color: '#465BA4' },
-  { role: 'Studio',                      name: 'Studio Carbon',           color: '#4DB49F' },
-  { role: 'Published',                   name: 'April 2026',              color: '#DA3832' },
+  { role: 'Institute mentor',            name: 'Prof. Saurabh Vyas',      color: '#465BA4' },
+  { role: 'Institution',                 name: 'GLS Institute of Design', color: '#4DB49F' },
+  { role: 'Studio',                      name: 'Studio Carbon',           color: '#DA3832' },
+  { role: 'Published',                   name: 'July 2026',               color: '#FFD167' },
+];
+
+/* Acknowledgements, kept short */
+const THANKS: { group: string; color: string; people: [string, string][] }[] = [
+  {
+    group: 'Institutions', color: '#FFD167',
+    people: [
+      ['GLS Institute of Design', 'Four years that reshaped how design thinks'],
+      ['Studio Carbon', 'The room, the critique, the systems thinking'],
+      ['IIT Centre for Creative Learning', 'Tools that guide themselves'],
+    ],
+  },
+  {
+    group: 'Mentors', color: '#E27238',
+    people: [
+      ['Swapnil Soni', 'Present through every phase'],
+      ['Prof. Saurabh Vyas', 'Rigour and structural honesty'],
+    ],
+  },
+  {
+    group: 'Experts and educators', color: '#465BA4',
+    people: [
+      ['Kavita Arvind', 'Build something specific enough to test'],
+      ['Mehul Raval', 'The PACE framework behind the Thinking Partner'],
+      ['Soham Chandrachud', 'Who TARK is designed for'],
+      ['Priyanshu Shah', 'Classroom data that shaped COMMIT'],
+      ['Dharmesh Naik', 'High-impact tools in limited time'],
+      ['Urmi Dave', 'The realities of the classroom'],
+    ],
+  },
+  {
+    group: 'People who shaped the work', color: '#4DB49F',
+    people: [
+      ['Naveen Kumar Gonga', 'Clarity on what it was trying to be'],
+      ['Om Gajjar', 'Knowing the Indian education sector'],
+      ['Vivek Bhuwad', 'Honest, specific feedback'],
+      ['Siddhi Kansara', 'Documentation and narrative'],
+      ['Shageera Mazid', 'Creative direction and visual confidence'],
+      ['Janvi Shah', 'Fresh eyes at the right moment'],
+      ['Ashray Sachan', 'A systems view of scale'],
+      ['Mallika Lahiry', 'Research structure and UI/UX'],
+      ['Suyash Kamble', 'UI/UX feedback on every digital output'],
+    ],
+  },
+  {
+    group: 'And', color: '#DA3832',
+    people: [
+      ['Family', 'Patience, trust and constant support'],
+      ['Friends', 'Late nights, feedback and testing sessions'],
+      ['The students who took part', 'Every worksheet, card and conversation'],
+    ],
+  },
 ];
 
 /* The making of TARK, in the order it happened */
@@ -166,17 +220,28 @@ export function AboutPage() {
             <Reveal delay={0.05}><h2 className="display-lg mentor__title">Thought through, together</h2></Reveal>
             <Reveal delay={0.1}>
               <p className="lede" style={{ maxWidth: '40ch' }}>
-                Project <span className="deva" lang="hi">तर्क</span> is Kalpak Doshi’s graduation project at
-                GLS Faculty of Design, developed with mentor Swapnil Soni.
+                Kalpak Doshi created Project <span className="deva" lang="hi">तर्क</span> as a graduation
+                project at GLS Institute of Design. Swapnil Soni mentored the work, with Prof. Saurabh Vyas
+                as institute mentor.
               </p>
             </Reveal>
             <Reveal delay={0.15}>
               <div className="mentor__names">
                 <div><span className="mini-head">Author</span><strong>Kalpak Doshi</strong></div>
                 <div><span className="mini-head">Mentor</span><strong>Swapnil Soni</strong></div>
+                <div><span className="mini-head">Institute mentor</span><strong>Prof. Saurabh Vyas</strong></div>
               </div>
             </Reveal>
           </div>
+        </div>
+        <div className="tk-wrap">
+          <Reveal y={40}>
+            <figure className="jury">
+              <SoftImg src={photoJury} alt="Kalpak Doshi presenting Project TARK to the final jury, with the worksheet kits on screen and booklets and cards on the table" />
+              <figcaption><i aria-hidden="true" />Presenting Project <span className="deva" lang="hi">तर्क</span> to the final jury</figcaption>
+              <Squiggle kind="arrow" width={80} color="var(--ink)" className="jury__sq" delay={0.3} />
+            </figure>
+          </Reveal>
         </div>
       </section>
 
@@ -184,7 +249,7 @@ export function AboutPage() {
       <section className="sec sec--cream">
         <div className="tk-wrap">
           <Reveal><h2 className="display-lg" style={{ marginBottom: 'clamp(28px, 4vw, 56px)' }}>Team and publication</h2></Reveal>
-          <div className="five">
+          <div className="six">
             {TEAM.map((t, i) => (
               <Reveal key={t.role} delay={i * 0.05} style={{ height: '100%' }}>
                 <div className="person">
@@ -192,6 +257,30 @@ export function AboutPage() {
                   <span className="mini-head">{t.role}</span>
                   <strong className="person__name">{t.name}</strong>
                 </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── With thanks ─────────────────────────────────────── */}
+      <section className="sec">
+        <div className="tk-wrap">
+          <div className="section-head">
+            <Reveal><h2 className="display-lg">With thanks</h2></Reveal>
+            <Reveal delay={0.05} className="section-head__aside">
+              <p>TARK was shaped by many people. Each of them changed something about it.</p>
+            </Reveal>
+          </div>
+          <div className="thanks">
+            {THANKS.map((g) => (
+              <Reveal key={g.group} className="thanks__group">
+                <h3 className="mini-head"><i style={{ backgroundColor: g.color }} aria-hidden="true" />{g.group}</h3>
+                <ul>
+                  {g.people.map(([name, note]) => (
+                    <li key={name}><strong>{name}</strong><span>{note}</span></li>
+                  ))}
+                </ul>
               </Reveal>
             ))}
           </div>
