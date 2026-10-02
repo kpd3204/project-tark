@@ -37,53 +37,53 @@ const TEAM = [
 ];
 
 /* Acknowledgements, kept short */
-const THANKS: { group: string; color: string; people: [string, string][] }[] = [
+const THANKS: { group: string; color: string; people: string[] }[] = [
   {
     group: 'Institutions', color: '#FFD167',
     people: [
-      ['GLS Institute of Design', 'Four years that reshaped how design thinks'],
-      ['Studio Carbon', 'The room, the critique, the systems thinking'],
-      ['IIT Centre for Creative Learning', 'Tools that guide themselves'],
+      'GLS Institute of Design',
+      'Studio Carbon',
+      'IIT Centre for Creative Learning',
     ],
   },
   {
     group: 'Mentors', color: '#E27238',
     people: [
-      ['Swapnil Soni', 'Present through every phase'],
-      ['Prof. Saurabh Vyas', 'Rigour and structural honesty'],
+      'Swapnil Soni',
+      'Prof. Saurabh Vyas',
     ],
   },
   {
     group: 'Experts and educators', color: '#465BA4',
     people: [
-      ['Kavita Arvind', 'Build something specific enough to test'],
-      ['Mehul Raval', 'The PACE framework behind the Thinking Partner'],
-      ['Soham Chandrachud', 'Who TARK is designed for'],
-      ['Priyanshu Shah', 'Classroom data that shaped COMMIT'],
-      ['Dharmesh Naik', 'High-impact tools in limited time'],
-      ['Urmi Dave', 'The realities of the classroom'],
+      'Kavita Arvind',
+      'Mehul Raval',
+      'Soham Chandrachud',
+      'Priyanshu Shah',
+      'Dharmesh Naik',
+      'Urmi Dave',
     ],
   },
   {
     group: 'People who shaped the work', color: '#4DB49F',
     people: [
-      ['Naveen Kumar Gonga', 'Clarity on what it was trying to be'],
-      ['Om Gajjar', 'Knowing the Indian education sector'],
-      ['Vivek Bhuwad', 'Honest, specific feedback'],
-      ['Siddhi Kansara', 'Documentation and narrative'],
-      ['Shageera Mazid', 'Creative direction and visual confidence'],
-      ['Janvi Shah', 'Fresh eyes at the right moment'],
-      ['Ashray Sachan', 'A systems view of scale'],
-      ['Mallika Lahiry', 'Research structure and UI/UX'],
-      ['Suyash Kamble', 'UI/UX feedback on every digital output'],
+      'Naveen Kumar Gonga',
+      'Om Gajjar',
+      'Vivek Bhuwad',
+      'Siddhi Kansara',
+      'Shageera Mazid',
+      'Janvi Shah',
+      'Ashray Sachan',
+      'Mallika Lahiry',
+      'Suyash Kamble',
     ],
   },
   {
     group: 'And', color: '#DA3832',
     people: [
-      ['Family', 'Patience, trust and constant support'],
-      ['Friends', 'Late nights, feedback and testing sessions'],
-      ['The students who took part', 'Every worksheet, card and conversation'],
+      'Family',
+      'Friends',
+      'The students who took part',
     ],
   },
 ];
@@ -239,7 +239,6 @@ export function AboutPage() {
             <figure className="jury">
               <SoftImg src={photoJury} alt="Kalpak Doshi presenting Project TARK to the final jury, with the worksheet kits on screen and booklets and cards on the table" />
               <figcaption><i aria-hidden="true" />Presenting Project <span className="deva" lang="hi">तर्क</span> to the final jury</figcaption>
-              <Squiggle kind="arrow" width={80} color="var(--ink)" className="jury__sq" delay={0.3} />
             </figure>
           </Reveal>
         </div>
@@ -269,7 +268,7 @@ export function AboutPage() {
           <div className="section-head">
             <Reveal><h2 className="display-lg">With thanks</h2></Reveal>
             <Reveal delay={0.05} className="section-head__aside">
-              <p>TARK was shaped by many people. Each of them changed something about it.</p>
+              <p>TARK was shaped by many people. Thank you.</p>
             </Reveal>
           </div>
           <div className="thanks">
@@ -277,9 +276,7 @@ export function AboutPage() {
               <Reveal key={g.group} className="thanks__group">
                 <h3 className="mini-head"><i style={{ backgroundColor: g.color }} aria-hidden="true" />{g.group}</h3>
                 <ul>
-                  {g.people.map(([name, note]) => (
-                    <li key={name}><strong>{name}</strong><span>{note}</span></li>
-                  ))}
+                  {g.people.map((name) => <li key={name}>{name}</li>)}
                 </ul>
               </Reveal>
             ))}
