@@ -11,7 +11,6 @@ import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { CaseStudyZenovocarePage } from './pages/CaseStudyZenovocarePage';
 import { ResearchPage } from './pages/ResearchPage';
 import { AboutPage } from './pages/AboutPage';
-import { SpeculatePage } from './pages/SpeculatePage';
 
 export const router = createBrowserRouter([
   {
@@ -29,7 +28,6 @@ export const router = createBrowserRouter([
       { path: 'case-studies/zenovocare',           Component: CaseStudyZenovocarePage },
       { path: 'research',                          Component: ResearchPage            },
       { path: 'about',                             Component: AboutPage               },
-      { path: 'speculate',                         Component: SpeculatePage           },
     ],
   },
 ], { basename: import.meta.env.BASE_URL });
