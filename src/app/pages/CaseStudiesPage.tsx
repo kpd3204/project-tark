@@ -35,7 +35,7 @@ export function CaseStudiesPage() {
           <Reveal delay={0.1} y={40} className="tk-head__photo">
             <SoftImg src={photoSession} alt="A TARK session in progress, with the framework on the screen" loading="eager" />
             <Buddy color="#465BA4" size={64} className="tk-head__buddy" delay={0.4} />
-            <Squiggle kind="arrow" width={90} color="var(--ink)" className="tk-head__sq" delay={0.5} />
+            <Squiggle kind="zigzag" width={110} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>
         </div>
       </header>

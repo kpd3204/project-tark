@@ -239,7 +239,6 @@ export function AboutPage() {
             <figure className="jury">
               <SoftImg src={photoJury} alt="Kalpak Doshi presenting Project TARK to the final jury, with the worksheet kits on screen and booklets and cards on the table" />
               <figcaption><i aria-hidden="true" />Presenting Project <span className="deva" lang="hi">तर्क</span> to the final jury</figcaption>
-              <Squiggle kind="arrow" width={80} color="var(--ink)" className="jury__sq" delay={0.3} />
             </figure>
           </Reveal>
         </div>
