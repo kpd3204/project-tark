@@ -7,6 +7,9 @@ import imgButterfly from '../../imports/photos/butterfly-effect-group.jpg';
 import imgTeam from '../../imports/photos/team-thinking-partner.jpg';
 import filmSrc from '../../imports/hero-media/film.mp4';
 import filmWebm from '../../imports/hero-media/film.webm';
+import sessionSrc from '../../imports/hero-media/session.mp4';
+import sessionWebm from '../../imports/hero-media/session.webm';
+import sessionPoster from '../../imports/hero-media/session.jpg';
 import filmPoster from '../../imports/hero-media/film.jpg';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { DiamondField } from './DiamondField';
@@ -25,14 +28,15 @@ const SLIDES = [
 
 const CYCLE_MS = 6500;
 
-/* Hero background: 'clips' (twelve short session clips), 'film' (one loop)
-   or 'photos'. Preview another with ?hero=film or ?hero=photos. */
-type HeroMedia = 'clips' | 'film' | 'photos';
-const DEFAULT_MEDIA: HeroMedia = 'clips';
+/* Hero background: 'video' (the session video), 'clips' (twelve short
+   clips), 'film' (the square loop) or 'photos'. Preview another with
+   ?hero=clips, ?hero=film or ?hero=photos. */
+type HeroMedia = 'video' | 'clips' | 'film' | 'photos';
+const DEFAULT_MEDIA: HeroMedia = 'video';
 function heroMedia(): HeroMedia {
   try {
     const q = new URLSearchParams(window.location.search).get('hero');
-    if (q === 'clips' || q === 'film' || q === 'photos') return q;
+    if (q === 'video' || q === 'clips' || q === 'film' || q === 'photos') return q;
   } catch { /* no window */ }
   return DEFAULT_MEDIA;
 }
@@ -86,14 +90,14 @@ function ClipReel({ reduced }: { reduced: boolean }) {
   );
 }
 
-function Film({ reduced }: { reduced: boolean }) {
+function Film({ reduced, mp4, webm, poster }: { reduced: boolean; mp4: string; webm: string; poster: string }) {
   return reduced ? (
-    <img src={filmPoster} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+    <img src={poster} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
   ) : (
-    <video poster={filmPoster} autoPlay muted loop playsInline preload="auto" aria-hidden="true"
+    <video poster={poster} autoPlay muted loop playsInline preload="auto" aria-hidden="true"
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}>
-      <source src={filmSrc} type="video/mp4" />
-      <source src={filmWebm} type="video/webm" />
+      <source src={mp4} type="video/mp4" />
+      <source src={webm} type="video/webm" />
     </video>
   );
 }
@@ -205,7 +209,8 @@ export function HeroSection() {
       <div className="tk-grain" style={{ position: 'absolute', inset: 0, overflow: 'hidden', backgroundColor: '#141414', zIndex: 0 }}>
         <motion.div style={{ position: 'absolute', inset: 0, scale: photoScale }}>
           {media === 'clips' && <ClipReel reduced={reduced} />}
-          {media === 'film' && <Film reduced={reduced} />}
+          {media === 'video' && <Film reduced={reduced} mp4={sessionSrc} webm={sessionWebm} poster={sessionPoster} />}
+          {media === 'film' && <Film reduced={reduced} mp4={filmSrc} webm={filmWebm} poster={filmPoster} />}
           {media === 'photos' && <AnimatePresence initial={false}>
             <motion.img
               key={index}
