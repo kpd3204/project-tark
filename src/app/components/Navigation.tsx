@@ -21,8 +21,57 @@ const TOOLS = [
   { heading: 'Toolkit',      subtitle: '25 thinking tools',  path: '/toolkit',      color: MOVE_COLORS.SURFACE },
   { heading: 'Worksheets',   subtitle: 'Printable kits',     path: '/worksheets',   color: MOVE_COLORS.TRACE,  soon: true },
   { heading: 'Games',        subtitle: 'Thinking, played',   path: '/games',        color: MOVE_COLORS.OPEN,   soon: true },
+];
+
+const RESEARCH = [
+  { heading: 'The evidence', subtitle: 'Why TARK exists',    path: '/research',     color: MOVE_COLORS.TRACE },
   { heading: 'Case Studies', subtitle: 'TARK in the field',  path: '/case-studies', color: MOVE_COLORS.COMMIT },
 ];
+
+type MenuItem = { heading: string; subtitle: string; path: string; color: string; soon?: boolean };
+
+/* A link in the pill that opens a small card of destinations.
+   Opens on hover or click, waits a moment before closing so the pointer can
+   travel onto the card, and closes on Escape or an outside click. */
+function MenuLink({ label, color, tint, items, active, id, open, setOpen }: {
+  label: string; color: string; tint: string; items: MenuItem[]; active: boolean;
+  id: string; open: string; setOpen: (v: string) => void;
+}) {
+  const timer = useRef<number>(0);
+  const isOpen = open === id;
+  const show = () => { window.clearTimeout(timer.current); setOpen(id); };
+  const hideSoon = () => { window.clearTimeout(timer.current); timer.current = window.setTimeout(() => setOpen(''), 160); };
+  return (
+    <div className="nav__tools" data-menu={id} onMouseEnter={show} onMouseLeave={hideSoon}>
+      <button
+        type="button"
+        className={`nav__link ${active ? 'is-active' : ''} ${isOpen ? 'is-open' : ''}`}
+        style={{ ['--c' as string]: color, ['--t' as string]: tint }}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        onClick={() => setOpen(isOpen ? '' : id)}
+      >
+        <span className="nav__dot" aria-hidden="true" />{label}
+        <span className="nav__caret" aria-hidden="true" />
+      </button>
+      <div className={`nav__menu ${isOpen ? 'is-open' : ''}`} role="menu">
+        {items.map((t) => (
+          <Link key={t.path} to={t.path} className="nav__item" role="menuitem" tabIndex={isOpen ? 0 : -1} onClick={() => setOpen('')}>
+            <Buddy color={t.color} size={40} />
+            <span className="nav__item-text">
+              <span className="nav__item-title">
+                {t.heading}
+                {t.soon && <span className="soon">Soon</span>}
+              </span>
+              <span className="nav__item-sub">{t.subtitle}</span>
+            </span>
+            <span className="nav__item-go" aria-hidden="true">→</span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const MOBILE = [
   { label: 'Framework',        path: '/framework',        color: MOVE_COLORS.OPEN    },
@@ -30,14 +79,14 @@ const MOBILE = [
   { label: 'Thinking Partner', path: '/thinking-partner', color: MOVE_COLORS.SHIFT   },
   { label: 'Worksheets',       path: '/worksheets',       color: MOVE_COLORS.TRACE, soon: true },
   { label: 'Games',            path: '/games',            color: MOVE_COLORS.OPEN,  soon: true },
-  { label: 'Case Studies',     path: '/case-studies',     color: MOVE_COLORS.COMMIT  },
   { label: 'Research',         path: '/research',         color: MOVE_COLORS.TRACE   },
+  { label: 'Case Studies',     path: '/case-studies',     color: MOVE_COLORS.COMMIT  },
   { label: 'About',            path: '/about',            color: MOVE_COLORS.COMMIT  },
 ];
 
 /* Pages that still open on a dark band: the mark switches to its light
    version while that band is behind the bar. */
-const DARK_TOP = ['/framework', '/thinking-partner', '/toolkit', '/research', '/about'];
+const DARK_TOP = ['/framework', '/thinking-partner', '/research', '/about'];
 
 function useScrollFlags(pathname: string) {
   const [overHero, setOverHero] = useState(pathname === '/');
@@ -71,19 +120,14 @@ function useScrollFlags(pathname: string) {
 export function Navigation() {
   const { pathname } = useLocation();
   const { overHero, scrolled, darkTop } = useScrollFlags(pathname);
-  const [toolsOpen, setToolsOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
-  const closeTimer = useRef<number>(0);
-  const toolsRef = useRef<HTMLDivElement>(null);
 
-  const openTools = () => { window.clearTimeout(closeTimer.current); setToolsOpen(true); };
-  const closeToolsSoon = () => { window.clearTimeout(closeTimer.current); closeTimer.current = window.setTimeout(() => setToolsOpen(false), 160); };
-
-  useEffect(() => { setMobileOpen(false); setToolsOpen(false); }, [pathname]);
+  useEffect(() => { setMobileOpen(false); setOpenMenu(''); }, [pathname]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setToolsOpen(false); setMobileOpen(false); } };
-    const onDown = (e: MouseEvent) => { if (toolsRef.current && !toolsRef.current.contains(e.target as Node)) setToolsOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setOpenMenu(''); setMobileOpen(false); } };
+    const onDown = (e: MouseEvent) => { if (!(e.target as Element).closest?.('[data-menu]')) setOpenMenu(''); };
     document.addEventListener('keydown', onKey);
     document.addEventListener('mousedown', onDown);
     return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('mousedown', onDown); };
@@ -94,7 +138,8 @@ export function Navigation() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const toolsActive = ['/toolkit', '/worksheets', '/games', '/case-studies'].some((p) => pathname.startsWith(p));
+  const toolsActive = ['/toolkit', '/worksheets', '/games'].some((p) => pathname.startsWith(p));
+  const researchActive = ['/research', '/case-studies'].some((p) => pathname.startsWith(p));
   const light = overHero && !mobileOpen;
   const v = (c: string, t: string) => ({ ['--c' as string]: c, ['--t' as string]: t });
 
@@ -111,41 +156,17 @@ export function Navigation() {
             <span className="nav__dot" aria-hidden="true" />Framework
           </NavLink>
 
-          <div ref={toolsRef} className="nav__tools" onMouseEnter={openTools} onMouseLeave={closeToolsSoon}>
-            <button
-              type="button"
-              className={`nav__link ${toolsActive ? 'is-active' : ''} ${toolsOpen ? 'is-open' : ''}`}
-              style={v(MOVE_COLORS.SURFACE, 'var(--tint-surface)')}
-              aria-expanded={toolsOpen}
-              aria-haspopup="true"
-              onClick={() => setToolsOpen((o) => !o)}
-            >
-              <span className="nav__dot" aria-hidden="true" />Tools
-              <span className="nav__caret" aria-hidden="true" />
-            </button>
+          <MenuLink id="tools" label="Tools" color={MOVE_COLORS.SURFACE} tint="var(--tint-surface)" items={TOOLS} active={toolsActive} open={openMenu} setOpen={setOpenMenu} />
 
-            <div className={`nav__menu ${toolsOpen ? 'is-open' : ''}`} role="menu">
-              {TOOLS.map((t) => (
-                <Link key={t.path} to={t.path} className="nav__item" role="menuitem" tabIndex={toolsOpen ? 0 : -1} onClick={() => setToolsOpen(false)}>
-                  <Buddy color={t.color} size={40} />
-                  <span className="nav__item-text">
-                    <span className="nav__item-title">
-                      {t.heading}
-                      {t.soon && <span className="soon">Soon</span>}
-                    </span>
-                    <span className="nav__item-sub">{t.subtitle}</span>
-                  </span>
-                  <span className="nav__item-go" aria-hidden="true">→</span>
-                </Link>
-              ))}
-            </div>
-          </div>
+          <NavLink to="/thinking-partner" className={({ isActive }) => `nav__link ${isActive ? 'is-active' : ''}`} style={v(LINKS[1].color, LINKS[1].tint)}>
+            <span className="nav__dot" aria-hidden="true" />Thinking Partner
+          </NavLink>
 
-          {LINKS.slice(1).map((l) => (
-            <NavLink key={l.path} to={l.path} className={({ isActive }) => `nav__link ${isActive ? 'is-active' : ''}`} style={v(l.color, l.tint)}>
-              <span className="nav__dot" aria-hidden="true" />{l.label}
-            </NavLink>
-          ))}
+          <MenuLink id="research" label="Research" color={MOVE_COLORS.TRACE} tint="var(--tint-trace)" items={RESEARCH} active={researchActive} open={openMenu} setOpen={setOpenMenu} />
+
+          <NavLink to="/about" className={({ isActive }) => `nav__link ${isActive ? 'is-active' : ''}`} style={v(LINKS[3].color, LINKS[3].tint)}>
+            <span className="nav__dot" aria-hidden="true" />About
+          </NavLink>
 
           <Link to="/thinking-partner" className="nav__cta">
             Start thinking <span className="nav__cta-arrow" aria-hidden="true">→</span>

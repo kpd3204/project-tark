@@ -126,26 +126,10 @@ export function Root() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.5, ease: EASE }}
-          style={{
-            position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 70,
-            padding: '24px 16px 20px',
-            background: 'linear-gradient(to top, rgba(15,15,15,0.95) 55%, transparent)',
-            pointerEvents: 'none',
-          }}
+          className="m-cta"
         >
-          <Link
-            to="/thinking-partner"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-              backgroundColor: '#FFFFFF', color: '#0F0F0F',
-              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.16em',
-              textTransform: 'uppercase', fontWeight: 700,
-              padding: '15px 20px', textDecoration: 'none',
-              width: '100%', boxSizing: 'border-box', pointerEvents: 'auto',
-            }}
-          >
-            <span style={{ width: 7, height: 7, backgroundColor: '#FFD167', transform: 'rotate(45deg)', flexShrink: 0, display: 'inline-block' }} />
-            Start Thinking →
+          <Link to="/thinking-partner" className="pill pill--yellow">
+            <span>Start thinking</span><span className="pill__arrow" aria-hidden="true">→</span>
           </Link>
         </motion.div>
       )}

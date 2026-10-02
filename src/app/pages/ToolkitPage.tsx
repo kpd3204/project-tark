@@ -1,300 +1,270 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { toolsData } from '../data/tools';
 import { PageFooter } from '../components/PageFooter';
-import { useIsMobile } from '../hooks/useIsMobile';
 import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
-import { EASE, Reveal, LineReveal, Diamond, MOVE_TEXT } from '../components/kit';
+import { Reveal, EASE } from '../components/kit';
+import { Buddy, Squiggle, Tag, Pill } from '../components/play';
+import photoDomino from '../../imports/photos/domino-qr-closeup.jpg';
+import photoWorksheet from '../../imports/photos/worksheet-and-phone.jpg';
 
 type MoveData = typeof toolsData[0];
-type Tool     = MoveData['tools'][0];
+type Tool = MoveData['tools'][0];
 
 const FALLBACK_URL = 'https://drive.google.com/drive/folders/1ivpEmL7nj3No2GXXrpZAo_Qk70TGEpxL';
+const AUDIENCES = ['Solo', 'Small Group', 'Large Group'];
 
-/* ── Tool card ───────────────────────────────────────────────── */
+const TINT: Record<string, string> = {
+  OPEN: 'var(--tint-open)', TRACE: 'var(--tint-trace)', SHIFT: 'var(--tint-shift)',
+  SURFACE: 'var(--tint-surface)', COMMIT: 'var(--tint-commit)',
+};
+const INK: Record<string, string> = { OPEN: '#1D1B16' };
+
+/* Plain-language ways in: what the stuck feels like, mapped to a move */
+const STUCK: { move: string; feels: string }[] = [
+  { move: 'OPEN',    feels: 'I keep landing on the same answer' },
+  { move: 'TRACE',   feels: 'I want to see where this leads' },
+  { move: 'SHIFT',   feels: "I can't see the other side" },
+  { move: 'SURFACE', feels: "I'm not sure what I really think" },
+  { move: 'COMMIT',  feels: 'I need to decide' },
+];
+
+const TOTAL = toolsData.reduce((n, m) => n + m.tools.length, 0);
+
+/* ── Card ───────────────────────────────────────────────────── */
 function ToolCard({ tool, move, index }: { tool: Tool; move: MoveData; index: number }) {
-  const [hovered, setHovered] = useState(false);
-  const moveSlug = move.key.toLowerCase();
-  const accent = MOVE_TEXT[move.key] ?? move.color;
-
+  const href = `/toolkit/${move.key.toLowerCase()}/${tool.slug}`;
   return (
-    <Reveal delay={(index % 3) * 0.06} y={20} style={{ height: '100%' }}>
-      <div
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        style={{
-          position: 'relative',
-          backgroundColor: '#FFFFFF',
-          height: '100%',
-          padding: 'clamp(24px, 2.4vw, 36px)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 18,
-          overflow: 'hidden',
-          isolation: 'isolate',
-          outline: '1px solid var(--tk-border)',
-        }}
-      >
-        {/* Hover wash */}
-        <motion.div
-          animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          style={{ position: 'absolute', inset: 0, backgroundColor: `${move.color}0D`, zIndex: -1 }}
-        />
-        {/* Top accent draws in */}
-        <motion.div
-          animate={{ scaleX: hovered ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: EASE }}
-          style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, backgroundColor: move.color, transformOrigin: 'left' }}
-        />
-
-        {/* Meta row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', color: '#BBBBBB' }}>
-            {move.key} · {String(index + 1).padStart(2, '0')}
-          </span>
-          <span style={{ display: 'block', width: 20, height: 20, opacity: hovered ? 1 : 0.65, transition: 'opacity 0.3s' }}>
-            <MoveIcon move={move.key as MoveKey} size={20} variant="color" />
-          </span>
-        </div>
-
-        {/* Name + tagline */}
-        <div style={{ flex: 1 }}>
-          <Link to={`/toolkit/${moveSlug}/${tool.slug}`} style={{ textDecoration: 'none' }}>
-            <h3
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(19px, 1.8vw, 24px)',
-                fontWeight: 700,
-                lineHeight: 1.1,
-                letterSpacing: '-0.015em',
-                color: hovered ? accent : '#1A1A1A',
-                margin: 0,
-                marginBottom: 10,
-                transition: 'color 0.25s',
-              }}
-            >
-              {tool.name}
-            </h3>
-          </Link>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#555555', lineHeight: 1.6, margin: 0 }}>
-            {tool.tagline}
-          </p>
-        </div>
-
-        {/* Tags */}
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {tool.audience.map((a, i) => (
-            <span key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: 8.5, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600, color: '#999999', border: '1px solid var(--tk-border)', padding: '4px 9px' }}>
-              {a}
-            </span>
-          ))}
-          {tool.thinkingPartner === 'YES' && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8.5, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600, color: accent, border: `1px solid ${move.color}66`, padding: '4px 9px' }}>
-              ◆ AI Partner
-            </span>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 14, borderTop: '1px solid var(--tk-border)' }}>
-          <Link to={`/toolkit/${moveSlug}/${tool.slug}`} className="tk-arrow-link" style={{ fontSize: 10 }}>
-            <span>Details</span>
-            <span className="arr">→</span>
-          </Link>
-          <a
-            href={tool.driveUrl || FALLBACK_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="tk-arrow-link"
-            style={{ fontSize: 10, color: accent }}
-          >
-            <span>PDF</span>
-            <span className="arr">↓</span>
-          </a>
-        </div>
+    <article className="tcard" style={{ ['--c' as string]: move.color, ['--t' as string]: TINT[move.key] }} data-move={move.key}>
+      <div className="tcard__top">
+        <span className="tcard__move"><i aria-hidden="true" />{move.key} · {String(index + 1).padStart(2, '0')}</span>
+        <span className="tcard__icon" aria-hidden="true"><MoveIcon move={move.key as MoveKey} size={28} variant="color" /></span>
       </div>
-    </Reveal>
-  );
-}
-
-/* ── Move divider ────────────────────────────────────────────── */
-function MoveDivider({ move }: { move: MoveData }) {
-  return (
-    <Reveal y={16}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 'clamp(40px, 5vw, 64px) 0 clamp(20px, 2.5vw, 28px)' }}>
-        <MoveIcon move={move.key as MoveKey} size={26} variant="color" />
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px, 2.6vw, 34px)', fontWeight: 700, letterSpacing: '-0.02em', color: '#1A1A1A' }}>{move.key}</span>
-          <span style={{ fontFamily: 'var(--font-devanagari)', fontSize: 15, fontWeight: 700, color: '#999999' }}>{move.hindi}</span>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#999999' }}>{move.tagline}</span>
-        </div>
-        <div className="tk-rule-x" />
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#BBBBBB', whiteSpace: 'nowrap' }}>
-          {move.tools.length} tools
-        </span>
+      <h3 className="tcard__name">
+        <Link to={href} className="tcard__link">{tool.name}</Link>
+      </h3>
+      <p className="tcard__tag">{tool.tagline}</p>
+      <div className="tcard__chips">
+        {tool.audience.map((a) => <span key={a} className="mini-chip">{a}</span>)}
       </div>
-    </Reveal>
+      <div className="tcard__actions">
+        <span className="tcard__open">Open tool <span aria-hidden="true">→</span></span>
+        <a className="tcard__pdf" href={tool.driveUrl || FALLBACK_URL} target="_blank" rel="noopener noreferrer">PDF ↓</a>
+      </div>
+    </article>
   );
 }
 
-/* ── Filter tab ──────────────────────────────────────────────── */
-function FilterBtn({ label, isActive, moveColor, moveKey, onClick }: { label: string; isActive: boolean; moveColor: string; moveKey?: MoveKey; onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: 10.5,
-        letterSpacing: '0.16em',
-        fontWeight: 600,
-        textTransform: 'uppercase',
-        padding: '18px 18px 15px',
-        border: 'none',
-        backgroundColor: 'transparent',
-        cursor: 'pointer',
-        color: isActive || hovered ? '#1A1A1A' : '#999999',
-        transition: 'color 0.25s',
-        whiteSpace: 'nowrap',
-        position: 'relative',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 8,
-      }}
-    >
-      {moveKey && (
-        <span style={{ opacity: isActive || hovered ? 1 : 0.45, transition: 'opacity 0.25s' }}>
-          <MoveIcon move={moveKey} size={13} variant="color" />
-        </span>
-      )}
-      {label}
-      <motion.div
-        animate={{ scaleX: isActive ? 1 : 0 }}
-        transition={{ duration: 0.35, ease: EASE }}
-        style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, backgroundColor: moveColor, transformOrigin: 'left' }}
-      />
-    </button>
-  );
-}
-
+/* ── Page ───────────────────────────────────────────────────── */
 export function ToolkitPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const paramMove = (searchParams.get('move') || '').toUpperCase();
-  const validMove = toolsData.some((m) => m.key === paramMove) ? paramMove : 'ALL';
-  const [filter, setFilter] = useState<string>(validMove);
-  const isMobile = useIsMobile();
+  const [params, setParams] = useSearchParams();
+  const resultsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setFilter(validMove); }, [validMove]);
+  const moveParam = (params.get('move') || '').toUpperCase();
+  const move = toolsData.some((m) => m.key === moveParam) ? moveParam : 'ALL';
+  const q = params.get('q') || '';
+  const who = params.get('who') || '';
 
-  const applyFilter = (key: string) => {
-    setFilter(key);
-    setSearchParams(key === 'ALL' ? {} : { move: key }, { replace: true });
+  const set = (key: string, value: string) => {
+    const next = new URLSearchParams(params);
+    if (value) next.set(key, value); else next.delete(key);
+    setParams(next, { replace: true });
+  };
+  const reset = () => setParams({}, { replace: true });
+
+  const filtering = move !== 'ALL' || !!q || !!who;
+  const needle = q.trim().toLowerCase();
+
+  const results = useMemo(() => {
+    const out: { tool: Tool; move: MoveData; index: number }[] = [];
+    toolsData.forEach((m) => m.tools.forEach((t, i) => {
+      if (move !== 'ALL' && m.key !== move) return;
+      if (who && !t.audience.includes(who)) return;
+      if (needle && ![t.name, t.tagline, t.plainDescription, t.description].join(' ').toLowerCase().includes(needle)) return;
+      out.push({ tool: t, move: m, index: i });
+    }));
+    return out;
+  }, [move, who, needle]);
+
+  const pickStuck = (key: string) => {
+    const next = new URLSearchParams();
+    next.set('move', key.toLowerCase());
+    setParams(next, { replace: true });
+    requestAnimationFrame(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
 
-  const filteredMoves = filter === 'ALL' ? toolsData : toolsData.filter((m) => m.key === filter);
-  const totalTools = toolsData.reduce((n, m) => n + m.tools.length, 0);
-
   return (
-    <>
-      {/* ── HEADER ──────────────────────────────────────────── */}
-      <header className="tk-grain" style={{ backgroundColor: '#1A1A1A', paddingTop: 'clamp(128px, 18vh, 192px)', paddingBottom: 'clamp(48px, 6vw, 88px)' }}>
-        <div className="tk-wrap">
-          <Reveal y={16}>
-            <div className="tk-eyebrow" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: 28 }}>
-              The Toolkit · {totalTools} thinking tools
-            </div>
-          </Reveal>
-          <LineReveal
-            as="h1"
-            className="tk-hero-h"
-            color="#FFFFFF"
-            lines={[
-              <span key="a" className="tk-light" style={{ color: 'rgba(255,255,255,0.75)' }}>Pick any tool.</span>,
-              'Start anywhere.',
-            ]}
-            delay={0.1}
-          />
-          <Reveal delay={0.35}>
-            <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.6)', fontSize: 'var(--text-lede)', lineHeight: 1.7, maxWidth: '46ch', margin: 'clamp(28px, 3.5vw, 44px) 0 0' }}>
-              Every tool is a one-page structure for a specific kind of stuck.
-              Each one is printable, free, and works with the AI Thinking Partner.
-            </p>
+    <div className="toolkit">
+      {/* ── Header ──────────────────────────────────────────── */}
+      <header className="tk-head">
+        <div className="tk-wrap tk-head__grid">
+          <div>
+            <Reveal><Tag bg="#4DB49F" tilt={-3}>The toolkit</Tag></Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="display-xl tk-head__title">
+                Pick a tool.<br />
+                Start <span className="nowrap">anywhere<Buddy color="#FFD167" size={0} className="buddy--inline" delay={0.3} /></span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="lede">Every tool is a one-page structure for a specific kind of stuck. Printable, free, and each one works with the AI Thinking Partner.</p>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <div className="toolkit-counters">
+                <div><strong>{TOTAL}</strong><span>tools</span></div>
+                <div><strong>5</strong><span>moves</span></div>
+                <div><strong>1</strong><span>page each</span></div>
+                <div><strong>₹0</strong><span>always free</span></div>
+              </div>
+            </Reveal>
+          </div>
+          <Reveal delay={0.1} y={40} className="tk-head__photo">
+            <img src={photoDomino} alt="The Domino worksheet, with its QR code being scanned to open the AI Thinking Partner" />
+            <Buddy color="#E27238" size={64} className="tk-head__buddy" delay={0.4} />
+            <Squiggle kind="spiral" width={84} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>
         </div>
       </header>
 
-      {/* ── STICKY FILTER ───────────────────────────────────── */}
-      <div
-        style={{
-          position: 'sticky',
-          top: 0,
-          backgroundColor: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          zIndex: 20,
-          borderBottom: '1px solid var(--tk-border)',
-        }}
-      >
-        <div className="tk-wrap" style={{ display: 'flex', overflowX: 'auto', gap: 4 }} >
-          {['ALL', ...toolsData.map((m) => m.key)].map((key) => {
-            const moveColor = key === 'ALL' ? '#1A1A1A' : (toolsData.find((m) => m.key === key)?.color ?? '#1A1A1A');
-            return (
-              <FilterBtn
-                key={key}
-                label={key === 'ALL' ? `All · ${totalTools}` : key}
-                isActive={filter === key}
-                moveColor={moveColor}
-                moveKey={key !== 'ALL' ? (key as MoveKey) : undefined}
-                onClick={() => applyFilter(key)}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ── TOOLS ───────────────────────────────────────────── */}
-      <section style={{ paddingBottom: 'var(--space-block)', backgroundColor: '#F5F4F1' }}>
+      {/* ── What kind of stuck? ─────────────────────────────── */}
+      <section className="stuck">
         <div className="tk-wrap">
-          {filteredMoves.map((move) => (
-            <div key={move.key}>
-              <MoveDivider move={move} />
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))',
-                  gap: 1,
-                }}
-              >
-                {move.tools.map((tool, i) => (
-                  <ToolCard key={tool.slug} tool={tool} move={move} index={i} />
-                ))}
-              </div>
-            </div>
-          ))}
+          <Reveal><h2 className="display-lg">What kind of stuck are you?</h2></Reveal>
+          <div className="stuck__grid">
+            {STUCK.map((s, i) => {
+              const m = toolsData.find((d) => d.key === s.move)!;
+              return (
+                <Reveal key={s.move} delay={i * 0.05} y={24}>
+                  <button type="button" className="stuck__btn" style={{ backgroundColor: m.color, color: INK[s.move] || '#FFFFFF' }} onClick={() => pickStuck(s.move)}>
+                    <span className="stuck__feels">“{s.feels}”</span>
+                    <span className="stuck__move">
+                      Try <strong>{s.move}</strong> · {m.tools.length} tools <span aria-hidden="true">→</span>
+                    </span>
+                  </button>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* ── CTA ─────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: 'var(--tk-navy)', paddingBlock: 'var(--space-block)' }}>
-        <div className="tk-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
-          <div>
-            <div className="tk-eyebrow" style={{ color: 'rgba(245,244,241,0.4)', marginBottom: 12 }}>Apply these tools</div>
-            <p style={{ fontFamily: 'var(--font-display)', color: '#F5F4F1', fontSize: 'var(--text-title)', fontWeight: 700, lineHeight: 1.05, margin: 0 }}>
-              Use them with the Thinking Partner.
-            </p>
+      {/* ── Filters + archive: the bar sticks only while the list is in view ── */}
+      <div className="archive-wrap">
+      <div className="filters" ref={resultsRef}>
+        <div className="tk-wrap filters__inner">
+          <label className="search">
+            <span className="sr-only">Search tools</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.2" /><path d="M15.5 15.5 20 20" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg>
+            <input type="search" placeholder="Search tools…" value={q} onChange={(e) => set('q', e.target.value)} />
+          </label>
+          <div className="chip-scroll" role="group" aria-label="Filter by move">
+            <button type="button" className={`chip ${move === 'ALL' ? 'is-on is-ink' : ''}`} onClick={() => set('move', '')}>All · {TOTAL}</button>
+            {toolsData.map((m) => (
+              <button
+                key={m.key}
+                type="button"
+                className={`chip ${move === m.key ? 'is-on' : ''}`}
+                style={move === m.key ? { backgroundColor: m.color, borderColor: m.color, color: INK[m.key] || '#FFFFFF' } : undefined}
+                onClick={() => set('move', move === m.key ? '' : m.key.toLowerCase())}
+              >
+                <span className="chip__dot" style={{ backgroundColor: m.color }} />{m.key}
+              </button>
+            ))}
+            <span className="chip-sep" aria-hidden="true" />
+            {AUDIENCES.map((a) => (
+              <button key={a} type="button" className={`chip ${who === a ? 'is-on is-ink' : ''}`} onClick={() => set('who', who === a ? '' : a)}>
+                {a}
+              </button>
+            ))}
           </div>
-          <Link to="/thinking-partner" className="tk-btn tk-btn--yellow" style={{ padding: '18px 36px' }}>
-            Open Thinking Partner →
-          </Link>
+        </div>
+      </div>
+
+      {/* ── Archive ─────────────────────────────────────────── */}
+      <section className="archive">
+        <div className="tk-wrap">
+          {!filtering ? (
+            toolsData.map((m) => (
+              <div key={m.key} className="archive__group" id={m.key.toLowerCase()}>
+                <Reveal y={20}>
+                  <div className="group-head" style={{ ['--c' as string]: m.color, ['--t' as string]: TINT[m.key] }}>
+                    <span className="group-head__icon"><MoveIcon move={m.key as MoveKey} size={34} variant={INK[m.key] ? 'black' : 'white'} /></span>
+                    <span className="group-head__name">{m.key}</span>
+                    <span className="group-head__hindi deva" lang="hi">{m.hindi}</span>
+                    <span className="group-head__tag">{m.tagline}</span>
+                    <span className="group-head__count">{m.tools.length} tools</span>
+                  </div>
+                </Reveal>
+                <div className="tgrid tgrid--five">
+                  {m.tools.map((t, i) => (
+                    <Reveal key={t.slug} delay={(i % 5) * 0.05} y={24} style={{ height: '100%' }}>
+                      <ToolCard tool={t} move={m} index={i} />
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="results-bar">
+                <span><strong>{results.length}</strong> {results.length === 1 ? 'tool' : 'tools'}{move !== 'ALL' && <> in <strong>{move}</strong></>}{who && <> for <strong>{who.toLowerCase()}</strong></>}{q && <> matching “{q}”</>}</span>
+                <button type="button" className="link-btn" onClick={reset}>Clear filters</button>
+              </div>
+              <AnimatePresence mode="popLayout">
+                {results.length > 0 ? (
+                  <motion.div key={`${move}-${who}-${needle}`} className={`tgrid ${results.length === 5 ? 'tgrid--five' : ''}`} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+                    {results.map((r) => <ToolCard key={r.tool.slug} tool={r.tool} move={r.move} index={r.index} />)}
+                  </motion.div>
+                ) : (
+                  <motion.div key="empty" className="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <Buddy color="#465BA4" size={72} />
+                    <h3>No tool matches that yet.</h3>
+                    <p>Try fewer filters, or a different word.</p>
+                    <button type="button" className="pill pill--ink" onClick={reset}><span>Show all tools</span><span className="pill__arrow" aria-hidden="true">→</span></button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          )}
+        </div>
+      </section>
+      </div>
+
+      {/* ── How a tool works ────────────────────────────────── */}
+      <section className="howto">
+        <div className="tk-wrap howto__grid">
+          <Reveal y={40} className="howto__photo">
+            <img src={photoWorksheet} alt="A student filling in a TARK worksheet with a phone beside it" loading="lazy" />
+          </Reveal>
+          <div>
+            <Reveal><h2 className="display-lg">How a tool works</h2></Reveal>
+            <ol className="steps">
+              {[
+                { t: 'Pick the stuck', d: 'Choose a tool by what the problem feels like, or by move.', c: '#FFD167' },
+                { t: 'Print it or open it', d: 'Every tool is one page. Fill it in alone, or around a table.', c: '#E27238' },
+                { t: 'Think it through with a partner', d: 'Scan the QR code to open the AI Thinking Partner, already set up for that tool.', c: '#465BA4' },
+              ].map((s, i) => (
+                <Reveal key={s.t} delay={i * 0.07}>
+                  <li>
+                    <Buddy color={s.c} size={44} delay={0.08 * i} />
+                    <div><h3>{s.t}</h3><p>{s.d}</p></div>
+                  </li>
+                </Reveal>
+              ))}
+            </ol>
+            <Reveal delay={0.2}>
+              <div className="howto__actions">
+                <Pill to="/thinking-partner" variant="ink">Open the Thinking Partner</Pill>
+                <Pill href={FALLBACK_URL} variant="ghost">All PDFs</Pill>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
       <PageFooter />
-    </>
+    </div>
   );
 }
