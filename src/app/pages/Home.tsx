@@ -7,12 +7,11 @@ import { HeroSection } from '../components/HeroSection';
 import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, Counter, EASE } from '../components/kit';
-import { Buddy, Squiggle, Tag, Pill } from '../components/play';
+import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
 import { toolsData } from '../data/tools';
 import photoUniversity from '../../imports/photos/university-workshop.jpg';
 import photoWorksheetPhone from '../../imports/photos/worksheet-and-phone.jpg';
 import photoPresentation from '../../imports/photos/presentation-screen.jpg';
-import photoDomino from '../../imports/photos/domino-qr-closeup.jpg';
 
 /* ─── Data ─────────────────────────────────────────────────── */
 const MOVES: { key: MoveKey; color: string; tint: string; text: string; ink: string; hindi: string; tagline: string; question: string }[] = [
@@ -74,7 +73,7 @@ function Manifesto() {
         <div className="photo-strip">
           {PHOTOS.map((p, i) => (
             <Reveal key={p.src} delay={0.08 * i} y={36} className={`photo-strip__item photo-strip__item--${p.shape}`}>
-              <img src={p.src} alt={p.alt} loading="lazy" />
+              <SoftImg src={p.src} alt={p.alt} />
             </Reveal>
           ))}
           <Buddy color="#4DB49F" size={64} className="photo-strip__buddy" delay={0.3} />
@@ -158,13 +157,8 @@ function ToolkitPeek() {
             <div className="toolkit-counters">
               <div><strong><Counter target={total} /></strong><span>tools</span></div>
               <div><strong>5</strong><span>moves</span></div>
-              <div><strong>₹0</strong><span>always free</span></div>
             </div>
             <Pill to="/toolkit" variant="ink">Browse all {total} tools</Pill>
-            <figure className="toolkit-photo">
-              <img src={photoDomino} alt="The Domino worksheet, with its QR code being scanned to open the AI Thinking Partner" loading="lazy" />
-              <figcaption>Every sheet has a QR code that opens the Thinking Partner.</figcaption>
-            </figure>
           </div>
 
           <div className="toolkit-panel__browser">

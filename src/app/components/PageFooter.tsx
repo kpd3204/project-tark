@@ -57,7 +57,6 @@ export function PageFooter() {
         </div>
 
         <div className="footer__base">
-          <span>Developed under the guidance of Studio Carbon</span>
           <span>Project <span lang="hi" className="deva">तर्क</span> · 2026</span>
         </div>
       </div>

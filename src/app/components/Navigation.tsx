@@ -84,14 +84,9 @@ const MOBILE = [
   { label: 'About',            path: '/about',            color: MOVE_COLORS.COMMIT  },
 ];
 
-/* Pages that still open on a dark band: the mark switches to its light
-   version while that band is behind the bar. */
-const DARK_TOP = ['/framework', '/thinking-partner', '/research', '/about'];
-
 function useScrollFlags(pathname: string) {
   const [overHero, setOverHero] = useState(pathname === '/');
   const [scrolled, setScrolled] = useState(false);
-  const [darkTop, setDarkTop] = useState(false);
   useEffect(() => {
     let raf = 0;
     const read = () => {
@@ -101,8 +96,6 @@ function useScrollFlags(pathname: string) {
       setOverHero((v) => (v === hero ? v : hero));
       const s = y > 8;
       setScrolled((v) => (v === s ? v : s));
-      const d = DARK_TOP.includes(pathname) && y < 300;
-      setDarkTop((v) => (v === d ? v : d));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
     read();
@@ -114,12 +107,12 @@ function useScrollFlags(pathname: string) {
       cancelAnimationFrame(raf);
     };
   }, [pathname]);
-  return { overHero, scrolled, darkTop };
+  return { overHero, scrolled };
 }
 
 export function Navigation() {
   const { pathname } = useLocation();
-  const { overHero, scrolled, darkTop } = useScrollFlags(pathname);
+  const { overHero, scrolled } = useScrollFlags(pathname);
   const [openMenu, setOpenMenu] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -145,9 +138,9 @@ export function Navigation() {
 
   return (
     <>
-      <header className={`nav ${light ? 'nav--hero' : ''} ${scrolled && !light && !darkTop ? 'nav--solid' : ''}`}>
+      <header className={`nav ${light ? 'nav--hero' : ''} ${scrolled && !light ? 'nav--solid' : ''}`}>
         <Link to="/" className="nav__logo" aria-label="Project तर्क home">
-          <img src={light || (darkTop && !mobileOpen) ? logoLightSrc : logoSrc} alt="Project तर्क" />
+          <img src={light ? logoLightSrc : logoSrc} alt="Project तर्क" />
         </Link>
 
         {/* Desktop index */}

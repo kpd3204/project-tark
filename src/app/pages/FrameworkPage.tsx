@@ -1,15 +1,16 @@
-import { Link } from 'react-router';
-import { motion } from 'motion/react';
 import { PageFooter } from '../components/PageFooter';
 import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
-import { useIsMobile } from '../hooks/useIsMobile';
-import { EASE, Reveal, LineReveal, SectionHead, Diamond, MOVE_TEXT } from '../components/kit';
+import { Reveal } from '../components/kit';
+import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
+import photoBooklets from '../../imports/photos/five-moves-booklets.jpg';
 
 const moves: {
   hindi: string;
   english: MoveKey;
   color: string;
+  tint: string;
+  ink: string;
   number: string;
   tagline: string;
   question: string;
@@ -21,7 +22,7 @@ const moves: {
   {
     hindi: 'खुलना',
     english: 'OPEN',
-    color: '#FFD167',
+    color: '#FFD167', tint: 'var(--tint-open)', ink: '#1D1B16',
     number: '01',
     tagline: 'Challenge the given',
     question: 'What if the opposite were true?',
@@ -38,7 +39,7 @@ const moves: {
   {
     hindi: 'खोजना',
     english: 'TRACE',
-    color: '#E27238',
+    color: '#E27238', tint: 'var(--tint-trace)', ink: '#FFFFFF',
     number: '02',
     tagline: 'Map the system',
     question: 'Where did this idea come from?',
@@ -55,14 +56,14 @@ const moves: {
   {
     hindi: 'बदलना',
     english: 'SHIFT',
-    color: '#465BA4',
+    color: '#465BA4', tint: 'var(--tint-shift)', ink: '#FFFFFF',
     number: '03',
     tagline: 'Imagine alternatives',
     question: 'What would this look like in a completely different world?',
     questionHi: 'यह एक अलग दुनिया में कैसा दिखेगा?',
     whatItIs: 'What if the rules were different?',
     inPlainLanguage:
-      'The way things are is not the only way they could be. SHIFT is the move that picks up the situation and puts it in a completely different world, different rules, different people, different time. What changes? What stays the same? What does that reveal about the situation you started with?',
+      'The way things are is not the only way they could be. SHIFT is the move that picks up the situation and puts it in a completely different world: different rules, different people, different time. What changes? What stays the same? What does that reveal about the situation you started with?',
     whenToUse: [
       "When you're stuck in one framing.",
       'When all your options feel the same.',
@@ -72,14 +73,14 @@ const moves: {
   {
     hindi: 'उभरना',
     english: 'SURFACE',
-    color: '#4DB49F',
+    color: '#4DB49F', tint: 'var(--tint-surface)', ink: '#FFFFFF',
     number: '04',
     tagline: 'See your thinking',
     question: 'What is everyone assuming but nobody is saying?',
     questionHi: 'यहाँ सब क्या मान रहे हैं, लेकिन कोई बोल नहीं रहा?',
     whatItIs: 'Name what nobody is saying.',
     inPlainLanguage:
-      "Most conversations have an invisible layer, the things everyone assumes but nobody says out loud. SURFACE is the move that makes the invisible visible. What are the unspoken rules here? What are people assuming? What can't be said in this room? Naming it is the first step to changing it, or choosing it consciously.",
+      "Most conversations have an invisible layer: the things everyone assumes but nobody says out loud. SURFACE is the move that makes the invisible visible. What are the unspoken rules here? What are people assuming? What can't be said in this room? Naming it is the first step to changing it, or choosing it consciously.",
     whenToUse: [
       'In group discussions that feel stuck.',
       'When something feels "off" but you can\'t say what.',
@@ -89,7 +90,7 @@ const moves: {
   {
     hindi: 'प्रतिबद्ध',
     english: 'COMMIT',
-    color: '#DA3832',
+    color: '#DA3832', tint: 'var(--tint-commit)', ink: '#FFFFFF',
     number: '05',
     tagline: 'Act under uncertainty',
     question: 'What will I actually do with this thinking?',
@@ -105,214 +106,110 @@ const moves: {
   },
 ];
 
-const INTRO_CARDS = [
-  { title: 'Not a sequence',    body: "You don't need to use all five in order. Use one. Use three. Come back to others.", color: '#E27238' },
-  { title: 'Pick what you need', body: "Use OPEN when you're stuck. Use COMMIT when you need to decide. It's a toolkit.",   color: '#465BA4' },
-  { title: 'Built for India',    body: 'Every example, every scenario, every question, grounded in Indian contexts.',       color: '#4DB49F' },
+const NOTES = [
+  { title: 'Not a sequence',     body: 'Use any move, in any order. One at a time, or all five. Come back to others when you need them.', color: '#E27238', tint: 'var(--tint-trace)' },
+  { title: 'Pick what you need', body: "Use OPEN when you're stuck. Use COMMIT when you need to decide. It's a toolkit, not a ladder.",   color: '#465BA4', tint: 'var(--tint-shift)' },
+  { title: 'Built for India',    body: 'Every example, every scenario, every question, grounded in Indian contexts and Indian lives.',    color: '#4DB49F', tint: 'var(--tint-surface)' },
 ];
 
-/* ── One move as an editorial chapter ────────────────────────── */
-function MoveChapter({ move, index }: { move: typeof moves[0]; index: number }) {
-  const isMobile = useIsMobile();
-  const accent = MOVE_TEXT[move.english] ?? move.color;
-
+/* ── One move as a chapter ───────────────────────────────────── */
+function Chapter({ move }: { move: typeof moves[0] }) {
   return (
-    <article
-      id={move.english.toLowerCase()}
-      style={{
-        borderTop: '1px solid var(--tk-border)',
-        paddingBlock: 'clamp(56px, 7vw, 112px)',
-        position: 'relative',
-        scrollMarginTop: 72,
-      }}
-    >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : 'minmax(240px, 340px) minmax(0, 1fr)',
-          gap: isMobile ? 40 : 'clamp(48px, 6vw, 112px)',
-          alignItems: 'start',
-        }}
-      >
-        {/* Left rail, sticky identity */}
-        <div style={isMobile ? {} : { position: 'sticky', top: 100 }}>
-          <Reveal y={20}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.2em', color: '#BBBBBB', marginBottom: 24 }}>
-              MOVE {move.number} / 05
-            </div>
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.9, ease: EASE }}
-              style={{ width: 'clamp(72px, 8vw, 120px)', height: 'clamp(72px, 8vw, 120px)', marginBottom: 28 }}
-            >
-              <MoveIcon move={move.english} size={120} variant="color" />
-            </motion.div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px, 5vw, 72px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 0.95, color: '#1A1A1A', margin: 0 }}>
-              {move.english}
-            </h2>
-            <div style={{ fontFamily: 'var(--font-devanagari)', fontWeight: 700, fontSize: 'clamp(20px, 2.2vw, 28px)', color: accent, marginTop: 10 }}>
-              {move.hindi}
-            </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#999999', marginTop: 16 }}>
-              {move.tagline}
-            </div>
-          </Reveal>
-        </div>
+    <article id={move.english.toLowerCase()} className="chapter" style={{ ['--c' as string]: move.color, ['--t' as string]: move.tint }}>
+      <div className="chapter__id-wrap">
+        <Reveal y={24} className="chapter__id" style={{ backgroundColor: move.color, color: move.ink }}>
+          <div className="chapter__top">
+            <span className="chapter__num">Move {move.number}</span>
+            <MoveIcon move={move.english} size={56} variant={move.ink === '#FFFFFF' ? 'white' : 'black'} />
+          </div>
+          <h2 className="chapter__name">{move.english}</h2>
+          <div className="chapter__hindi deva" lang="hi">{move.hindi}</div>
+          <div className="chapter__tagline">{move.tagline}</div>
+        </Reveal>
+      </div>
 
-        {/* Right, the chapter body */}
-        <div>
-          <Reveal delay={0.05}>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 2.8vw, 40px)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.015em', color: '#1A1A1A', margin: 0, maxWidth: '24ch' }}>
-              {move.whatItIs}
-            </p>
-          </Reveal>
+      <div className="chapter__body">
+        <Reveal><p className="chapter__lead">{move.whatItIs}</p></Reveal>
+        <Reveal delay={0.05}><p className="chapter__text">{move.inPlainLanguage}</p></Reveal>
 
-          <Reveal delay={0.1}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(16px, 1.4vw, 18px)', color: '#555555', lineHeight: 1.8, margin: '28px 0 0', maxWidth: '58ch' }}>
-              {move.inPlainLanguage}
-            </p>
-          </Reveal>
+        <Reveal delay={0.08}>
+          <h3 className="mini-head">When to use it</h3>
+          <ul className="dlist">
+            {move.whenToUse.map((w) => <li key={w}><i aria-hidden="true" />{w}</li>)}
+          </ul>
+        </Reveal>
 
-          {/* When to use, list */}
-          <Reveal delay={0.12}>
-            <div style={{ marginTop: 'clamp(36px, 4vw, 56px)' }}>
-              <div className="tk-eyebrow" style={{ marginBottom: 8 }}>When to use it</div>
-              <div>
-                {move.whenToUse.map((w, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: 'flex', alignItems: 'baseline', gap: 14,
-                      padding: '14px 0',
-                      borderBottom: '1px solid var(--tk-border)',
-                    }}
-                  >
-                    <Diamond color={move.color} size={7} style={{ position: 'relative', top: -1 }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#1A1A1A', lineHeight: 1.5 }}>{w}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
+        <Reveal delay={0.1}>
+          <figure className="qcard">
+            <figcaption className="mini-head">The question it asks</figcaption>
+            <blockquote>
+              <p className="qcard__en">{move.question}</p>
+              <p className="qcard__hi deva" lang="hi">{move.questionHi}</p>
+            </blockquote>
+            <Buddy color={move.color} size={52} className="qcard__buddy" />
+          </figure>
+        </Reveal>
 
-          {/* The question it asks, set like a pull quote */}
-          <Reveal delay={0.14}>
-            <figure style={{ margin: 0, marginTop: 'clamp(40px, 5vw, 64px)', paddingLeft: 'clamp(20px, 2.5vw, 36px)', borderLeft: `3px solid ${move.color}` }}>
-              <div className="tk-eyebrow" style={{ marginBottom: 16 }}>The question it asks</div>
-              <blockquote style={{ margin: 0 }}>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px, 2.6vw, 36px)', fontWeight: 700, fontStyle: 'italic', color: accent, lineHeight: 1.2, letterSpacing: '-0.015em', margin: 0 }}>
-                  “{move.question}”
-                </p>
-                <p style={{ fontFamily: 'var(--font-devanagari)', fontWeight: 700, fontSize: 'clamp(17px, 2vw, 26px)', color: accent, opacity: 0.75, lineHeight: 1.4, margin: '10px 0 0' }}>
-                  {move.questionHi}
-                </p>
-              </blockquote>
-            </figure>
-          </Reveal>
-
-          <Reveal delay={0.16}>
-            <div style={{ marginTop: 'clamp(36px, 4vw, 56px)' }}>
-              <Link to={`/toolkit?move=${move.english}`} className="tk-arrow-link" style={{ color: accent }}>
-                <span>Try a {move.english} tool</span>
-                <span className="arr">→</span>
-              </Link>
-            </div>
-          </Reveal>
-        </div>
+        <Reveal delay={0.12}>
+          <Pill to={`/toolkit?move=${move.english.toLowerCase()}`} variant="ink">Try {move.english === 'OPEN' ? 'an' : 'a'} {move.english} tool</Pill>
+        </Reveal>
       </div>
     </article>
   );
 }
 
 export function FrameworkPage() {
-  const isMobile = useIsMobile();
-
   return (
-    <>
-      {/* ── HEADER, dark, editorial ───────────────────────── */}
-      <header className="tk-grain" style={{ backgroundColor: '#1A1A1A', paddingTop: 'clamp(128px, 18vh, 200px)', paddingBottom: 'clamp(56px, 7vw, 104px)' }}>
-        <div className="tk-wrap">
-          <Reveal y={16}>
-            <div className="tk-eyebrow" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: 32 }}>
-              The Framework · Five Cognitive Moves
-            </div>
-          </Reveal>
-
-          <LineReveal
-            as="h1"
-            className="tk-hero-h"
-            color="#FFFFFF"
-            lines={[
-              <span key="a" className="tk-light" style={{ color: 'rgba(255,255,255,0.75)' }}>Five moves</span>,
-              'for thinking.',
-            ]}
-            delay={0.1}
-          />
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 560px) 1fr',
-              gap: 32,
-              alignItems: 'end',
-              marginTop: 'clamp(32px, 4vw, 56px)',
-            }}
-          >
-            <Reveal delay={0.3}>
-              <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.62)', fontSize: 'var(--text-lede)', lineHeight: 1.7, margin: 0 }}>
-                Not rules, not steps. Five ways of looking at any situation differently.
-                Use any one of them. Use one at a time. Come back to others when you need them.
-              </p>
+    <div className="page">
+      {/* ── Header ──────────────────────────────────────────── */}
+      <header className="tk-head">
+        <div className="tk-wrap tk-head__grid">
+          <div>
+            <Reveal><Tag bg="#FFD167" color="#1D1B16" tilt={-3}>The framework</Tag></Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="display-xl tk-head__title">
+                Five moves<br />
+                for <span className="nowrap">thinking<Buddy color="#465BA4" size={0} className="buddy--inline" delay={0.3} /></span>
+              </h1>
             </Reveal>
-
-            <Reveal delay={0.4}>
-              <div style={{ display: 'flex', gap: 'clamp(12px, 1.6vw, 24px)', justifyContent: isMobile ? 'flex-start' : 'flex-end', flexWrap: 'wrap' }}>
-                {moves.map((m, i) => (
-                  <motion.a
-                    key={m.english}
-                    href={`#${m.english.toLowerCase()}`}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.5 + i * 0.07, ease: EASE }}
-                    whileHover={{ y: -4 }}
-                    style={{ display: 'block' }}
-                    aria-label={`Jump to ${m.english}`}
-                  >
-                    <MoveIcon move={m.english} size={isMobile ? 30 : 38} variant="color" />
-                  </motion.a>
-                ))}
-              </div>
+            <Reveal delay={0.1}>
+              <p className="lede">Not rules, not steps. Five ways of looking at any situation differently. Use any move, in any order: one at a time, or all five.</p>
             </Reveal>
           </div>
+          <Reveal delay={0.1} y={40} className="tk-head__photo">
+            <SoftImg src={photoBooklets} alt="The five TARK move booklets laid out side by side" loading="eager" />
+            <Buddy color="#DA3832" size={64} className="tk-head__buddy" delay={0.4} />
+            <Squiggle kind="loop" width={120} color="var(--ink)" className="tk-head__sq" delay={0.5} />
+          </Reveal>
+        </div>
+
+        {/* Jump to a move */}
+        <div className="tk-wrap">
+          <Reveal delay={0.15}>
+            <nav className="jump" aria-label="Jump to a move">
+              {moves.map((m) => (
+                <a key={m.english} href={`#${m.english.toLowerCase()}`} className="jump__item" style={{ backgroundColor: m.color, color: m.ink }}>
+                  <MoveIcon move={m.english} size={26} variant={m.ink === '#FFFFFF' ? 'white' : 'black'} />
+                  <span className="jump__name">{m.english}</span>
+                  <span className="jump__hindi deva" lang="hi">{m.hindi}</span>
+                  <span className="jump__go" aria-hidden="true">↓</span>
+                </a>
+              ))}
+            </nav>
+          </Reveal>
         </div>
       </header>
 
-      {/* ── INTRO NOTES, three hairline columns ───────────── */}
-      <section style={{ backgroundColor: '#F5F4F1', borderBottom: '1px solid var(--tk-border)' }}>
-        <div className="tk-wrap" style={{ paddingBlock: 'clamp(40px, 5vw, 72px)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)' }}>
-            {INTRO_CARDS.map((card, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <div
-                  style={{
-                    paddingTop: isMobile ? 20 : 8,
-                    paddingBottom: isMobile ? 20 : 8,
-                    paddingRight: isMobile ? 0 : 'clamp(24px, 3vw, 48px)',
-                    paddingLeft: isMobile || i === 0 ? 0 : 'clamp(24px, 3vw, 48px)',
-                    borderLeft: !isMobile && i > 0 ? '1px solid var(--tk-border)' : 'none',
-                    borderTop: isMobile && i > 0 ? '1px solid var(--tk-border)' : 'none',
-                    height: '100%',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <Diamond color={card.color} size={7} />
-                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, color: '#1A1A1A' }}>{card.title}</span>
-                  </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#555555', lineHeight: 1.7, margin: 0 }}>
-                    {card.body}
-                  </p>
+      {/* ── Three notes ─────────────────────────────────────── */}
+      <section className="sec sec--cream sec--tight">
+        <div className="tk-wrap">
+          <div className="trio">
+            {NOTES.map((n, i) => (
+              <Reveal key={n.title} delay={i * 0.06} style={{ height: '100%' }}>
+                <div className="note" style={{ backgroundColor: n.tint }}>
+                  <span className="note__mark" style={{ backgroundColor: n.color }} aria-hidden="true" />
+                  <h2 className="note__title">{n.title}</h2>
+                  <p className="note__body">{n.body}</p>
                 </div>
               </Reveal>
             ))}
@@ -320,31 +217,32 @@ export function FrameworkPage() {
         </div>
       </section>
 
-      {/* ── FIVE CHAPTERS ───────────────────────────────────── */}
-      <section>
+      {/* ── Five chapters ───────────────────────────────────── */}
+      <section className="sec">
         <div className="tk-wrap">
-          {moves.map((move, i) => (
-            <MoveChapter key={move.english} move={move} index={i} />
-          ))}
+          {moves.map((m) => <Chapter key={m.english} move={m} />)}
         </div>
       </section>
 
-      {/* ── CLOSE ───────────────────────────────────────────── */}
-      <section style={{ backgroundColor: '#1A1A1A', paddingBlock: 'var(--space-block)' }}>
-        <div className="tk-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
-          <div>
-            <div className="tk-eyebrow" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: 12 }}>Put it to work</div>
-            <p style={{ fontFamily: 'var(--font-display)', color: '#F5F4F1', fontSize: 'var(--text-title)', fontWeight: 700, lineHeight: 1.05, margin: 0 }}>
-              Five moves. Twenty-five tools.
-            </p>
-          </div>
-          <Link to="/toolkit" className="tk-btn tk-btn--yellow" style={{ padding: '18px 36px' }}>
-            Open the Toolkit →
-          </Link>
+      {/* ── Close ───────────────────────────────────────────── */}
+      <section className="home-close" style={{ background: 'var(--tint-surface)' }}>
+        <Squiggle kind="zigzag" width={150} color="#4DB49F" className="home-close__sq1" />
+        <Squiggle kind="spiral" width={90} color="#465BA4" className="home-close__sq2" delay={0.2} />
+        <div className="tk-wrap home-close__inner">
+          <Reveal><p className="home-close__kicker">Put it to work</p></Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="home-close__title" style={{ fontSize: 'clamp(40px, 6.4vw, 104px)' }}>Five moves.<br />Twenty-five tools.</h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="home-close__actions">
+              <Pill to="/toolkit" variant="ink">Open the toolkit</Pill>
+              <Pill to="/thinking-partner" variant="ghost">Try the Thinking Partner</Pill>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       <PageFooter />
-    </>
+    </div>
   );
 }

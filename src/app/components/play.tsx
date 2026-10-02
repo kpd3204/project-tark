@@ -5,7 +5,7 @@
    Pill:     the rounded button with a round arrow.
    Styling lives in styles/play.css so every piece stays fluid across widths. */
 
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
 
@@ -197,4 +197,64 @@ export function Pill({
   );
   if (href) return <a className={cls} href={href} target="_blank" rel="noopener noreferrer" style={style}>{inner}</a>;
   return <Link className={cls} to={to || '/'} style={style}>{inner}</Link>;
+}
+
+/* ── SoftImg, a photo in a diamond-cut frame with softened corners ──
+   The shape comes from the CSS custom property --crop on the image or an
+   ancestor (corners | all | diamond | round), so breakpoints can change it.
+   Cuts stay at 45° whatever the aspect; every vertex is rounded. */
+type Pt = [number, number];
+function roundedPath(pts: Pt[], r: number) {
+  const n = pts.length;
+  let d = '';
+  for (let i = 0; i < n; i++) {
+    const [px, py] = pts[(i - 1 + n) % n];
+    const [x, y] = pts[i];
+    const [nx, ny] = pts[(i + 1) % n];
+    const lin = Math.hypot(x - px, y - py), lout = Math.hypot(nx - x, ny - y);
+    const ri = Math.min(r, lin / 2), ro = Math.min(r, lout / 2);
+    const ax = x + ((px - x) / lin) * ri, ay = y + ((py - y) / lin) * ri;
+    const bx = x + ((nx - x) / lout) * ro, by = y + ((ny - y) / lout) * ro;
+    d += `${i === 0 ? 'M' : 'L'}${ax.toFixed(1)} ${ay.toFixed(1)} Q${x.toFixed(1)} ${y.toFixed(1)} ${bx.toFixed(1)} ${by.toFixed(1)} `;
+  }
+  return d + 'Z';
+}
+export function softCropPath(kind: string, w: number, h: number) {
+  const cut = Math.min(Math.max(48, window.innerWidth * 0.07), 120, w * 0.3, h * 0.3);
+  const r = Math.min(26, Math.min(w, h) * 0.07);
+  let pts: Pt[];
+  if (kind === 'diamond') {
+    pts = [[w / 2, 0], [w, h / 2], [w / 2, h], [0, h / 2]];
+    return roundedPath(pts, Math.min(w, h) * 0.1);
+  }
+  if (kind === 'all') {
+    pts = [[cut, 0], [w - cut, 0], [w, cut], [w, h - cut], [w - cut, h], [cut, h], [0, h - cut], [0, cut]];
+  } else if (kind === 'round') {
+    pts = [[0, 0], [w, 0], [w, h], [0, h]];
+  } else {
+    pts = [[cut, 0], [w, 0], [w, h - cut], [w - cut, h], [0, h], [0, cut]];
+  }
+  return roundedPath(pts, r);
+}
+
+export function SoftImg({ src, alt, className, style, loading = 'lazy' }: {
+  src: string; alt: string; className?: string; style?: CSSProperties; loading?: 'lazy' | 'eager';
+}) {
+  const ref = useRef<HTMLImageElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const apply = () => {
+      const w = el.offsetWidth, h = el.offsetHeight;
+      if (!w || !h) return;
+      const kind = getComputedStyle(el).getPropertyValue('--crop').trim() || 'corners';
+      el.style.clipPath = `path('${softCropPath(kind, w, h)}')`;
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    window.addEventListener('resize', apply);
+    return () => { ro.disconnect(); window.removeEventListener('resize', apply); };
+  }, []);
+  return <img ref={ref} src={src} alt={alt} className={`soft-img ${className || ''}`} style={style} loading={loading} decoding="async" />;
 }

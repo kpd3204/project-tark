@@ -1,178 +1,120 @@
 import { Link } from 'react-router';
-import { motion } from 'motion/react';
 import { PageFooter } from '../components/PageFooter';
-import { useIsMobile } from '../hooks/useIsMobile';
-import { EASE, Reveal, LineReveal, SectionHead, Diamond, MOVE_COLORS, MOVE_ORDER } from '../components/kit';
+import { MoveIcon } from '../components/MoveIcon';
+import type { MoveKey } from '../components/MoveIcon';
+import { Reveal, MOVE_COLORS, MOVE_ORDER } from '../components/kit';
+import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
+import photoSession from '../../imports/photos/presentation-screen.jpg';
+
+const MOVES_APPLIED: Record<string, string> = {
+  OPEN: 'Persona and audience work',
+  TRACE: 'Trust hierarchy and journey',
+  SHIFT: 'Positioning and perception',
+  SURFACE: 'Language audit',
+  COMMIT: 'Direction and promise',
+};
 
 export function CaseStudiesPage() {
-  const isMobile = useIsMobile();
-
   return (
-    <>
-      {/* ── HEADER, OPEN yellow ────────────────────────────── */}
-      <header style={{ backgroundColor: '#FFD167', paddingTop: 'clamp(128px, 18vh, 192px)', paddingBottom: 'clamp(48px, 6vw, 88px)' }}>
-        <div className="tk-wrap">
-          <Reveal y={16}>
-            <div className="tk-eyebrow" style={{ color: 'rgba(26,26,26,0.55)', marginBottom: 28 }}>
-              Field Work · Deployments of the framework
-            </div>
-          </Reveal>
-          <LineReveal as="h1" className="tk-hero-h" color="#1A1A1A" lines={['Case Studies']} delay={0.1} />
-          <Reveal delay={0.25}>
-            <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(26,26,26,0.68)', fontSize: 'var(--text-lede)', lineHeight: 1.7, maxWidth: '48ch', margin: 'clamp(24px, 3vw, 40px) 0 0' }}>
-              Real deployments of the TARK framework: how the five moves have been applied
-              across different contexts and organisations.
-            </p>
+    <div className="page">
+      {/* ── Header ──────────────────────────────────────────── */}
+      <header className="tk-head">
+        <div className="tk-wrap tk-head__grid">
+          <div>
+            <Reveal><Tag bg="#DA3832" tilt={-3}>Case studies</Tag></Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="display-xl tk-head__title">
+                TARK in<br />
+                the <span className="nowrap">field<Buddy color="#E27238" size={0} className="buddy--inline" delay={0.3} /></span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="lede">Real deployments of the framework: how the five moves have been used across different rooms, teams and organisations.</p>
+            </Reveal>
+          </div>
+          <Reveal delay={0.1} y={40} className="tk-head__photo">
+            <SoftImg src={photoSession} alt="A TARK session in progress, with the framework on the screen" loading="eager" />
+            <Buddy color="#465BA4" size={64} className="tk-head__buddy" delay={0.4} />
+            <Squiggle kind="arrow" width={90} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>
         </div>
       </header>
 
-      {/* ── FEATURED CASE ───────────────────────────────────── */}
-      <section style={{ paddingBlock: 'var(--space-block)' }}>
+      {/* ── Cases ───────────────────────────────────────────── */}
+      <section className="sec sec--cream">
         <div className="tk-wrap">
-          <SectionHead label="Case Study 01" index="2026 · Brand Strategy" />
-
-          <Reveal delay={0.1}>
-            <Link
-              to="/case-studies/zenovocare"
-              style={{ textDecoration: 'none', display: 'block', marginTop: 'clamp(28px, 3.5vw, 48px)' }}
-            >
-              <motion.div
-                whileHover="hover"
-                initial="rest"
-                style={{
-                  border: '1px solid #1A1A1A',
-                  backgroundColor: '#FFFFFF',
-                  overflow: 'hidden',
-                  position: 'relative',
-                }}
-              >
-                {/* Top accent */}
-                <div style={{ height: 3, backgroundColor: '#E27238' }} />
-
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr',
-                    gap: 0,
-                  }}
-                >
-                  {/* Left, narrative */}
-                  <div style={{ padding: 'clamp(28px, 4vw, 64px)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
-                      <Diamond color="#1A1A1A" size={7} />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 600, color: '#1A1A1A' }}>
-                        Samvardhan
-                      </span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', color: '#999999' }}>
-                        · Studio Carbon
-                      </span>
-                    </div>
-
-                    <h2 style={{ fontFamily: 'var(--font-display)', color: '#1A1A1A', fontSize: 'clamp(32px, 4.5vw, 64px)', fontWeight: 700, lineHeight: 0.98, letterSpacing: '-0.025em', margin: '0 0 10px' }}>
-                      ZenovoCare
-                    </h2>
-                    <div style={{ fontFamily: 'var(--font-body)', color: '#555555', fontSize: 'clamp(15px, 1.5vw, 18px)', marginBottom: 28 }}>
-                      Brand Strategy &amp; Future Positioning
-                    </div>
-
-                    <p style={{ fontFamily: 'var(--font-body)', color: '#555555', fontSize: 15, lineHeight: 1.75, margin: '0 0 36px', maxWidth: '54ch' }}>
-                      The TARK framework was deployed within Samvardhan (a Studio Carbon programme)
-                      to guide ZenovoCare through a structured brand strategy process. The five
-                      cognitive moves were used to surface assumptions in their current positioning,
-                      trace the origins of their market beliefs, and build a more grounded foundation
-                      for future direction.
-                    </p>
-
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                      {['Brand Strategy', 'Future Positioning', 'Assumption Surfacing', 'Organisational Thinking'].map((tag) => (
-                        <span key={tag} style={{ fontFamily: 'var(--font-mono)', color: '#555555', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', border: '1px solid var(--tk-border)', padding: '5px 11px', fontWeight: 600 }}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right, moves applied */}
-                  <div
-                    style={{
-                      borderLeft: isMobile ? 'none' : '1px solid var(--tk-border)',
-                      borderTop: isMobile ? '1px solid var(--tk-border)' : 'none',
-                      padding: 'clamp(28px, 4vw, 64px)',
-                      backgroundColor: '#F5F4F1',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      gap: 32,
-                    }}
-                  >
-                    <div>
-                      <div className="tk-eyebrow" style={{ marginBottom: 20 }}>Moves applied</div>
-                      <div>
-                        {MOVE_ORDER.map((key, i) => (
-                          <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '11px 0', borderBottom: i < MOVE_ORDER.length - 1 ? '1px solid var(--tk-border)' : 'none' }}>
-                            <Diamond color={MOVE_COLORS[key]} size={8} />
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600, color: '#1A1A1A' }}>
-                              {key}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <motion.div
-                      variants={{ rest: { x: 0 }, hover: { x: 6 } }}
-                      transition={{ duration: 0.35, ease: EASE }}
-                      className="tk-arrow-link"
-                      style={{ alignSelf: 'flex-start' }}
-                    >
-                      <span>Read case study</span>
-                      <span className="arr">→</span>
-                    </motion.div>
-                  </div>
+          <Reveal>
+            <article className="case">
+              <div className="case__main">
+                <div className="case__meta">
+                  <span className="mini-chip">Case study 01</span>
+                  <span className="mini-chip">2026</span>
+                  <span className="mini-chip">Samvardhan × Studio Carbon</span>
                 </div>
-              </motion.div>
-            </Link>
+                <h2 className="case__title">
+                  <Link to="/case-studies/zenovocare" className="case__link">ZenovoCare</Link>
+                </h2>
+                <p className="case__sub">Brand strategy and future positioning</p>
+                <p className="case__text">
+                  The TARK framework was deployed within Samvardhan, a Studio Carbon programme, to guide
+                  ZenovoCare through a structured brand strategy process. The five moves were used to
+                  surface assumptions in their positioning, trace the origins of their market beliefs,
+                  and build a more grounded foundation for what comes next.
+                </p>
+                <div className="case__tags">
+                  {['Brand strategy', 'Future positioning', 'Assumption surfacing', 'Organisational thinking'].map((t) => (
+                    <span key={t} className="mini-chip">{t}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="case__side">
+                <h3 className="mini-head">Moves applied</h3>
+                <ul className="case__moves">
+                  {MOVE_ORDER.map((k) => (
+                    <li key={k}>
+                      <MoveIcon move={k as MoveKey} size={22} variant="color" />
+                      <strong>{k}</strong>
+                      <span>{MOVES_APPLIED[k]}</span>
+                    </li>
+                  ))}
+                </ul>
+                <span className="case__go">Read the case study <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
           </Reveal>
 
-          {/* More coming */}
-          <Reveal delay={0.15}>
-            <div
-              style={{
-                border: '1px dashed #CFCDC7',
-                padding: 'clamp(40px, 5vw, 72px)',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                textAlign: 'center', gap: 18, marginTop: 24,
-              }}
-            >
-              <div style={{ display: 'flex', gap: 12 }}>
-                {MOVE_ORDER.map((k) => (
-                  <span key={k} className="tk-diamond" style={{ width: 9, height: 9, border: `1px solid ${MOVE_COLORS[k]}`, display: 'inline-block' }} />
-                ))}
+          <Reveal delay={0.08}>
+            <div className="soon-card">
+              <div className="soon-card__diamonds" aria-hidden="true">
+                {MOVE_ORDER.map((k) => <i key={k} style={{ borderColor: MOVE_COLORS[k] }} />)}
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', color: '#555555', fontSize: 'clamp(19px, 2.4vw, 30px)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.015em' }}>
-                More case studies being documented
-              </div>
-              <p style={{ fontFamily: 'var(--font-body)', color: '#999999', fontSize: 14, lineHeight: 1.65, maxWidth: '44ch', margin: 0 }}>
-                As TARK continues to be deployed across programmes, organisations, and classrooms,
-                each application will be documented and published here.
-              </p>
+              <h3>More case studies are being documented</h3>
+              <p>As TARK is used across programmes, organisations and classrooms, each one will be written up and published here.</p>
             </div>
           </Reveal>
+        </div>
+      </section>
 
-          {/* Footnote */}
-          <Reveal delay={0.2}>
-            <div style={{ borderTop: '1px solid var(--tk-border)', paddingTop: 24, marginTop: 'clamp(40px, 5vw, 64px)', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span className="tk-diamond" style={{ width: 5, height: 5, border: '1px solid #CFCDC7', display: 'inline-block' }} />
-              <p style={{ fontFamily: 'var(--font-mono)', color: '#999999', fontSize: 9.5, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600, margin: 0 }}>
-                Project तर्क · Field deployments · Samvardhan × Studio Carbon
-              </p>
+      {/* ── Close ───────────────────────────────────────────── */}
+      <section className="home-close" style={{ background: 'var(--tint-commit)' }}>
+        <Squiggle kind="wave" width={150} color="#DA3832" className="home-close__sq1" />
+        <Squiggle kind="spiral" width={90} color="#E27238" className="home-close__sq2" delay={0.2} />
+        <div className="tk-wrap home-close__inner">
+          <Reveal><p className="home-close__kicker">Running TARK with your team?</p></Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="home-close__title" style={{ fontSize: 'clamp(40px, 6.4vw, 104px)' }}>Tell us how<br />it went.</h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="home-close__actions">
+              <a className="pill pill--ink" href="mailto:project.tark@gmail.com"><span>project.tark@gmail.com</span><span className="pill__arrow" aria-hidden="true">→</span></a>
+              <Pill to="/research" variant="ghost">See the evidence</Pill>
             </div>
           </Reveal>
         </div>
       </section>
 
       <PageFooter />
-    </>
+    </div>
   );
 }
