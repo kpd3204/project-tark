@@ -1440,7 +1440,25 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .thanks { display: grid; gap: clamp(28px, 3vw, 44px); }
 .thanks .mini-head { display: flex; align-items: center; gap: 10px; color: var(--ink); }
 .thanks .mini-head i { width: 10px; height: 10px; border-radius: 2px; transform: rotate(45deg); }
-.thanks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 clamp(16px, 2vw, 32px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
-.thanks li { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-top: 1.5px solid var(--line); }
+.thanks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 clamp(16px, 2vw, 32px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
+.thanks li { padding: 12px 0; border-top: 1.5px solid var(--line); font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
 .thanks strong { font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
 .thanks li span { font-family: var(--font-body); font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+
+/* ═══ Page transition ══════════════════════════════════════════ */
+.pt { position: fixed; inset: 0; z-index: 9000; pointer-events: none; overflow: hidden; }
+.pt__d {
+  position: absolute;
+  left: var(--x, 50%); top: var(--y, 50%);
+  width: 100px; height: 100px;
+  margin: -50px 0 0 -50px;
+  border-radius: 14px;
+  transform: rotate(45deg) scale(0);
+  will-change: transform;
+}
+.pt__buddy {
+  position: absolute; left: 50%; top: 50%;
+  width: 72px; height: 72px; margin: -36px 0 0 -36px;
+  transform: scale(0);
+  will-change: transform;
+}
