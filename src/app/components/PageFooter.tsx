@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { Instagram } from 'lucide-react';
 import logoLight from '../../imports/logo-light.png';
+import carbonLogo from '../../imports/carbon.svg';
 
 const EXPLORE = [
   { label: 'Framework',        path: '/framework'        },
@@ -24,7 +25,10 @@ export function PageFooter() {
             <Link to="/" className="footer__logo" aria-label="Project तर्क, home">
               <img src={logoLight} alt="Project तर्क" />
             </Link>
-            <p>A system for thinking when answers are not given.</p>
+            <a className="footer__carbon" href="https://www.studiocarbon.com/" target="_blank" rel="noopener noreferrer">
+              <span>Proudly designed at</span>
+              <img src={carbonLogo} alt="Studio Carbon" />
+            </a>
           </div>
 
           <nav className="footer__col" aria-label="Explore">
