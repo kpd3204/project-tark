@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { useOutlet, useLocation, Link } from 'react-router';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent, useAnimate } from 'motion/react';
+import { useOutlet, useLocation } from 'react-router';
+import { useAnimate } from 'motion/react';
 import { Navigation } from '../components/Navigation';
 import { DiamondCursor } from '../components/DiamondCursor';
 import { ScrollProgress } from '../components/ScrollProgress';
 import { IntroAnimation } from '../components/IntroAnimation';
-import { useIsMobile } from '../hooks/useIsMobile';
 import { EASE } from '../components/kit';
 import { Buddy } from '../components/play';
+import { watchWidows } from '../components/noWidows';
 
 /* ── Page transition ──────────────────────────────────────────
    Two diamonds in brand colours grow out of the point you tapped and cover
@@ -21,6 +21,7 @@ const PAGE_COLOR: Record<string, string> = {
   '/thinking-partner': '#465BA4',
   '/worksheets':       '#E27238',
   '/games':            '#FFD167',
+  '/activity-booklet': '#4DB49F',
   '/case-studies':     '#DA3832',
   '/research':         '#E27238',
   '/about':            '#465BA4',
@@ -37,13 +38,9 @@ const BASE = 100; // px side of the diamond before scaling
 export function Root() {
   const { pathname, hash } = useLocation();
   const outlet = useOutlet();
-  const isMobile = useIsMobile();
-  const isThinkingPartner = pathname === '/thinking-partner';
 
-  /* Mobile CTA appears only once the reader has committed to the page */
-  const { scrollY } = useScroll();
-  const [pastFold, setPastFold] = useState(false);
-  useMotionValueEvent(scrollY, 'change', (y) => setPastFold(y > 480));
+  useEffect(() => watchWidows(), []);
+
 
   /* The intro plays once per visit, not on every reload */
   const [showIntro, setShowIntro] = useState(() => {
@@ -150,8 +147,7 @@ export function Root() {
   return (
     <div style={{ backgroundColor: 'var(--paper)', minHeight: '100vh' }}>
       {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
-      {/* The landing page has its own pen interaction in the hero */}
-      {pathname !== '/' && <DiamondCursor />}
+      <DiamondCursor />
       <Navigation />
       <ScrollProgress />
 
@@ -165,22 +161,6 @@ export function Root() {
         {page}
       </main>
 
-      <AnimatePresence>
-      {isMobile && !isThinkingPartner && pastFold && (
-        <motion.div
-          key="mobile-cta"
-          initial={{ y: 80, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 80, opacity: 0 }}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="m-cta"
-        >
-          <Link to="/thinking-partner" className="pill pill--yellow">
-            <span>Start thinking</span><span className="pill__arrow" aria-hidden="true">→</span>
-          </Link>
-        </motion.div>
-      )}
-      </AnimatePresence>
     </div>
   );
 }

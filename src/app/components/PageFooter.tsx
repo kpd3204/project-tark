@@ -10,6 +10,7 @@ const EXPLORE = [
   { label: 'Toolkit',          path: '/toolkit'          },
   { label: 'Worksheets',       path: '/worksheets',  soon: true },
   { label: 'Games',            path: '/games',       soon: true },
+  { label: 'Activity booklet', path: '/activity-booklet', soon: true },
 ];
 const ABOUT = [
   { label: 'Case Studies', path: '/case-studies' },
