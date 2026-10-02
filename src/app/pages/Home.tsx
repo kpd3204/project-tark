@@ -9,14 +9,18 @@ import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, Counter, EASE } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill } from '../components/play';
 import { toolsData } from '../data/tools';
+import photoUniversity from '../../imports/photos/university-workshop.jpg';
+import photoWorksheetPhone from '../../imports/photos/worksheet-and-phone.jpg';
+import photoPresentation from '../../imports/photos/presentation-screen.jpg';
+import photoDomino from '../../imports/photos/domino-qr-closeup.jpg';
 
 /* ─── Data ─────────────────────────────────────────────────── */
 const MOVES: { key: MoveKey; color: string; tint: string; text: string; ink: string; hindi: string; tagline: string; question: string }[] = [
   { key: 'OPEN',    color: '#FFD167', tint: 'var(--tint-open)',    text: 'var(--text-open)',    ink: '#1D1B16', hindi: 'खुलना',           tagline: 'Challenge the given',   question: 'What if the opposite were true?' },
-  { key: 'TRACE',   color: '#E27238', tint: 'var(--tint-trace)',   text: 'var(--text-trace)',   ink: '#FFFFFF', hindi: 'पता लगाना',       tagline: 'Map the system',        question: 'Where did this idea come from?' },
+  { key: 'TRACE',   color: '#E27238', tint: 'var(--tint-trace)',   text: 'var(--text-trace)',   ink: '#FFFFFF', hindi: 'खोजना',       tagline: 'Map the system',        question: 'Where did this idea come from?' },
   { key: 'SHIFT',   color: '#465BA4', tint: 'var(--tint-shift)',   text: 'var(--text-shift)',   ink: '#FFFFFF', hindi: 'बदलना',           tagline: 'Imagine alternatives',  question: 'What would this look like elsewhere?' },
-  { key: 'SURFACE', color: '#4DB49F', tint: 'var(--tint-surface)', text: 'var(--text-surface)', ink: '#FFFFFF', hindi: 'उभारना',          tagline: 'See your thinking',     question: 'What is nobody saying out loud?' },
-  { key: 'COMMIT',  color: '#DA3832', tint: 'var(--tint-commit)',  text: 'var(--text-commit)',  ink: '#FFFFFF', hindi: 'प्रतिबद्ध होना', tagline: 'Act under uncertainty', question: 'What will I actually do with this?' },
+  { key: 'SURFACE', color: '#4DB49F', tint: 'var(--tint-surface)', text: 'var(--text-surface)', ink: '#FFFFFF', hindi: 'उभरना',          tagline: 'See your thinking',     question: 'What is nobody saying out loud?' },
+  { key: 'COMMIT',  color: '#DA3832', tint: 'var(--tint-commit)',  text: 'var(--text-commit)',  ink: '#FFFFFF', hindi: 'प्रतिबद्ध', tagline: 'Act under uncertainty', question: 'What will I actually do with this?' },
 ];
 
 const PILLARS = [
@@ -25,10 +29,16 @@ const PILLARS = [
   { color: '#4DB49F', lead: 'Built for India.',          text: 'Every scenario, every question, grounded in Indian contexts and concerns.' },
 ];
 
-const STATS: { value?: number; suffix?: string; text?: string; label: string; color: string; source: string }[] = [
-  { value: 56, suffix: '%', label: "of Grade 8 students can't read a Grade 2 text.", color: '#FFD167', source: 'ASER 2023' },
-  { text: '1 in 7', label: 'Indian adolescents experience a mental health condition.', color: '#E27238', source: 'NIMHANS 2023' },
-  { value: 0, suffix: ' hrs', label: 'mandated in the Indian curriculum for thinking practice.', color: '#4DB49F', source: 'NEP 2020' },
+const STATS: { value?: number; suffix?: string; text?: string; label: string; color: string; tint: string; source: string }[] = [
+  { value: 56, suffix: '%', label: "of Grade 8 students can't read a Grade 2 text.", color: '#FFD167', tint: 'var(--tint-open)',    source: 'ASER 2023' },
+  { text: '1 in 7',         label: 'Indian adolescents experience a mental health condition.', color: '#E27238', tint: 'var(--tint-trace)',   source: 'NIMHANS 2023' },
+  { value: 0, suffix: ' hrs', label: 'mandated in the Indian curriculum for thinking practice.', color: '#4DB49F', tint: 'var(--tint-surface)', source: 'NEP 2020' },
+];
+
+const PHOTOS = [
+  { src: photoUniversity,     alt: 'Students around a table, working through printed TARK tools together', shape: 'a' },
+  { src: photoWorksheetPhone, alt: 'A student filling in a TARK worksheet while scanning its QR code with a phone', shape: 'b' },
+  { src: photoPresentation,   alt: 'A group mapping ideas on a large screen in a workshop', shape: 'c' },
 ];
 
 const WHY_LINES = [
@@ -44,7 +54,7 @@ function Manifesto() {
       <div className="tk-wrap">
         <Reveal>
           <p className="home-eyebrow">
-            <span lang="hi" className="deva">तर्क</span> (tark) — Sanskrit-rooted Hindi for <em>reasoning, logic, deliberation</em>
+            <span lang="hi" className="deva">तर्क</span> (tark): Sanskrit-rooted Hindi for <em>reasoning, logic, deliberation</em>
             <Squiggle kind="arrow" width={64} color="var(--ink-3)" stroke={2} className="home-eyebrow__arrow" />
           </p>
         </Reveal>
@@ -52,7 +62,7 @@ function Manifesto() {
         <Reveal delay={0.05}>
           <h2 className="home-statement">
             Most education gives you <span className="nowrap">answers <Buddy color="#465BA4" size={0} className="buddy--inline" delay={0.2} /></span>{' '}
-            <span lang="hi" className="deva" style={{ color: 'var(--text-open)' }}>तर्क</span> gives you a{' '}
+            <Tag bg="#FFD167" color="#1D1B16" tilt={-2} className="tag--word"><span lang="hi" className="deva">तर्क</span></Tag> gives you a{' '}
             <span className="hl">
               system
               <Squiggle kind="underline" color="#FFD167" stroke={9} width="100%" className="hl__mark" delay={0.4} />
@@ -60,6 +70,15 @@ function Manifesto() {
             for finding better <span className="nowrap"><Buddy color="#DA3832" size={0} className="buddy--inline" delay={0.35} /> ones.</span>
           </h2>
         </Reveal>
+
+        <div className="photo-strip">
+          {PHOTOS.map((p, i) => (
+            <Reveal key={p.src} delay={0.08 * i} y={36} className={`photo-strip__item photo-strip__item--${p.shape}`}>
+              <img src={p.src} alt={p.alt} loading="lazy" />
+            </Reveal>
+          ))}
+          <Buddy color="#4DB49F" size={64} className="photo-strip__buddy" delay={0.3} />
+        </div>
 
         <div className="home-pillars">
           {PILLARS.map((p, i) => (
@@ -107,7 +126,7 @@ function FiveMoves() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="section-head__aside">
-              <p>Not a sequence. Use any move, in any order — one at a time, or all five.</p>
+              <p>Not a sequence. Use any move, in any order. One at a time, or all five.</p>
               <Pill to="/framework" variant="ghost">Read the framework</Pill>
             </div>
           </Reveal>
@@ -121,7 +140,7 @@ function FiveMoves() {
   );
 }
 
-/* ═══ Toolkit — a live peek into the archive ════════════════ */
+/* ═══ Toolkit, a live peek into the archive ════════════════ */
 function ToolkitPeek() {
   const [active, setActive] = useState(0);
   const move = toolsData[active];
@@ -142,6 +161,10 @@ function ToolkitPeek() {
               <div><strong>₹0</strong><span>always free</span></div>
             </div>
             <Pill to="/toolkit" variant="ink">Browse all {total} tools</Pill>
+            <figure className="toolkit-photo">
+              <img src={photoDomino} alt="The Domino worksheet, with its QR code being scanned to open the AI Thinking Partner" loading="lazy" />
+              <figcaption>Every sheet has a QR code that opens the Thinking Partner.</figcaption>
+            </figure>
           </div>
 
           <div className="toolkit-panel__browser">
@@ -173,7 +196,7 @@ function ToolkitPeek() {
                 {move.tools.map((t, i) => (
                   <li key={t.slug}>
                     <Link to={`/toolkit/${move.key.toLowerCase()}/${t.slug}`} className="tool-row" data-move={move.key}>
-                      <span className="tool-row__num" style={{ color: meta.text }}>{move.label.slice(0, 1)}{i + 1}</span>
+                      <span className="tool-row__num"><i style={{ backgroundColor: meta.color }} aria-hidden="true" />{String(i + 1).padStart(2, '0')}</span>
                       <span className="tool-row__body">
                         <span className="tool-row__name">{t.name}</span>
                         <span className="tool-row__tag">{t.tagline}</span>
@@ -201,18 +224,18 @@ function Why() {
       <div className="tk-wrap">
         <div className="section-head">
           <Reveal>
-            <h2 className="display-xl">Why <span lang="hi" className="deva" style={{ color: 'var(--text-trace)' }}>तर्क</span> exists.</h2>
+            <h2 className="display-xl">Why <span lang="hi" className="deva" style={{ color: '#E27238' }}>तर्क</span> exists.</h2>
           </Reveal>
         </div>
 
         <div className="stat-grid">
           {STATS.map((s, i) => (
             <Reveal key={s.source} delay={i * 0.08}>
-              <div className="stat">
-                <span className="stat__shape" style={{ backgroundColor: s.color }} aria-hidden="true" />
+              <div className="stat" style={{ backgroundColor: s.tint }}>
+                <span className="stat__mark" style={{ backgroundColor: s.color }} aria-hidden="true" />
                 <span className="stat__num">{s.text ?? <Counter target={s.value!} suffix={s.suffix} />}</span>
                 <p className="stat__label">{s.label}</p>
-                <span className="stat__src">{s.source}</span>
+                <span className="stat__src">Source · {s.source}</span>
               </div>
             </Reveal>
           ))}

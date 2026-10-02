@@ -1,4 +1,4 @@
-/* kit — the shared editorial grammar of the TARK site.
+/* kit, the shared editorial grammar of the TARK site.
    One easing, one reveal voice, one set of layout primitives.
    Every page composes from these so the whole site moves as one system. */
 
@@ -24,7 +24,7 @@ export const MOVE_TEXT: Record<string, string> = {
   COMMIT: '#DA3832',
 };
 
-/* ── Reveal — the single scroll-entrance used across the site ── */
+/* ── Reveal, the single scroll-entrance used across the site ── */
 export function Reveal({
   children,
   delay = 0,
@@ -56,7 +56,7 @@ export function Reveal({
   );
 }
 
-/* ── LineReveal — headline lines rise out of a mask ──────────── */
+/* ── LineReveal, headline lines rise out of a mask ──────────── */
 export function LineReveal({
   lines,
   as = 'h2',
@@ -107,7 +107,7 @@ export function LineReveal({
   );
 }
 
-/* ── Eyebrow — mono section label with diamond ───────────────── */
+/* ── Eyebrow, mono section label with diamond ───────────────── */
 export function Eyebrow({
   children,
   color = '#999999',
@@ -132,7 +132,7 @@ export function Eyebrow({
   );
 }
 
-/* ── SectionHead — eyebrow + rule + optional index number ────── */
+/* ── SectionHead, eyebrow + rule + optional index number ────── */
 export function SectionHead({
   label,
   index,
@@ -169,7 +169,7 @@ export function SectionHead({
   );
 }
 
-/* ── Diamond — the brand mark, sized ─────────────────────────── */
+/* ── Diamond, the brand mark, sized ─────────────────────────── */
 export function Diamond({
   color,
   size = 8,
@@ -187,7 +187,7 @@ export function Diamond({
   );
 }
 
-/* ── Counter — animated stat number ──────────────────────────── */
+/* ── Counter, animated stat number ──────────────────────────── */
 export function Counter({
   target,
   suffix = '',

@@ -929,7 +929,7 @@ export function ToolkitSection() {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <>
-      {/* Colored header — SURFACE teal */}
+      {/* Colored header, SURFACE teal */}
       <div className="pt-24 pb-14 px-6 md:px-16" style={{ backgroundColor: '#4DB49F' }}>
         <div className="max-w-6xl mx-auto">
           <div
@@ -985,7 +985,7 @@ export function WorksheetsSection() {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <>
-      {/* Colored header — SURFACE teal */}
+      {/* Colored header, SURFACE teal */}
       <div className="pt-24 pb-14 px-6 md:px-16" style={{ backgroundColor: '#4DB49F' }}>
         <div className="max-w-6xl mx-auto">
           <div
@@ -1040,7 +1040,7 @@ export function WorksheetsSection() {
 export function GamesSection() {
   return (
     <>
-      {/* Colored header — COMMIT red */}
+      {/* Colored header, COMMIT red */}
       <div className="pt-24 pb-14 px-6 md:px-16" style={{ backgroundColor: '#DA3832' }}>
         <div className="max-w-6xl mx-auto">
           <div

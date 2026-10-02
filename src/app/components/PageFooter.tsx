@@ -1,7 +1,6 @@
 import { Link } from 'react-router';
 import { Instagram } from 'lucide-react';
-import { MOVE_COLORS, MOVE_ORDER } from './kit';
-import { Buddy } from './play';
+import logoLight from '../../imports/logo-light.png';
 
 const EXPLORE = [
   { label: 'Framework',        path: '/framework'        },
@@ -22,12 +21,9 @@ export function PageFooter() {
       <div className="tk-wrap">
         <div className="footer__top">
           <div className="footer__brand">
-            <div className="footer__mark">
-              <span lang="hi" className="deva">तर्क</span>
-              <span className="footer__buddies" aria-hidden="true">
-                {MOVE_ORDER.map((k, i) => <Buddy key={k} color={MOVE_COLORS[k]} size={34} delay={0.05 * i} />)}
-              </span>
-            </div>
+            <Link to="/" className="footer__logo" aria-label="Project तर्क, home">
+              <img src={logoLight} alt="Project तर्क" />
+            </Link>
             <p>A system for thinking when answers are not given.</p>
           </div>
 
@@ -57,7 +53,7 @@ export function PageFooter() {
         </div>
 
         <div className="footer__base">
-          <span>Studio Carbon, Gandhinagar · GLS Institute of Design, Ahmedabad</span>
+          <span>Developed under the guidance of Studio Carbon</span>
           <span>Project <span lang="hi" className="deva">तर्क</span> · 2026</span>
         </div>
       </div>

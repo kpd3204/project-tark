@@ -1,6 +1,6 @@
 import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 
-/* Reading-progress hairline — the five move colours filling left to right. */
+/* Reading-progress hairline, the five move colours filling left to right. */
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const smooth = useSpring(scrollYProgress, { stiffness: 220, damping: 40, restDelta: 0.001 });
@@ -24,7 +24,7 @@ export function ScrollProgress() {
           overflow: 'hidden',
         }}
       >
-        {/* Fixed-position bands pinned to the viewport width, revealed as the bar grows —
+        {/* Fixed-position bands pinned to the viewport width, revealed as the bar grows , 
             each fifth stays a true move colour with a hard edge, never a blend */}
         <div
           style={{

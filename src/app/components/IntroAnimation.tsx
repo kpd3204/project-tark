@@ -32,7 +32,7 @@ export function IntroAnimation({ onComplete }: { onComplete: () => void }) {
       }}
     >
       {/* Five diamonds rise out of a mask, in sequence.
-          The motion wrapper only translates — the rotation lives on the
+          The motion wrapper only translates, the rotation lives on the
           inner element so the diamond orientation is never overridden. */}
       <div style={{ display: 'flex', gap: 18, overflow: 'hidden', padding: 8 }}>
         {DIAMONDS.map((color, i) => (

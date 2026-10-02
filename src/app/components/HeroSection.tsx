@@ -1,10 +1,10 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import imgRoom from '../../imports/hero/session-room.jpg';
-import imgWriting from '../../imports/hero/writing.jpg';
-import imgGroup from '../../imports/hero/group-table.jpg';
-import imgWorksheet from '../../imports/hero/worksheet.jpg';
-import imgDiscussion from '../../imports/hero/discussion.jpg';
+import imgCapsule from '../../imports/photos/time-capsule-letter.jpg';
+import imgClassroom from '../../imports/photos/classroom-workshop.jpg';
+import imgBooklets from '../../imports/photos/five-moves-booklets.jpg';
+import imgButterfly from '../../imports/photos/butterfly-effect-group.jpg';
+import imgTeam from '../../imports/photos/team-thinking-partner.jpg';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { DiamondField } from './DiamondField';
 import { EASE } from './kit';
@@ -13,11 +13,11 @@ import { Pill } from './play';
 /* Each phrase is paired with a photograph from a TARK session
    and one of the five move colours. */
 const SLIDES = [
-  { line1: 'Indian adolescents grow up around answers.', line2: 'तर्क begins with questions.',      img: imgRoom,       pos: '50% 45%', color: '#FFD167' },
-  { line1: 'Thoughts are often given.',                  line2: 'तर्क lets you rearrange them.',    img: imgWriting,    pos: '40% 60%', color: '#E27238' },
-  { line1: 'Ideas come pre-shaped.',                     line2: 'तर्क reshapes them.',              img: imgGroup,      pos: '50% 55%', color: '#4DB49F' },
-  { line1: 'We hold on to first thoughts.',              line2: 'तर्क revisits them.',              img: imgWorksheet,  pos: '50% 50%', color: '#7B8FD6' },
-  { line1: 'We look for the right answer.',              line2: 'तर्क looks for better questions.', img: imgDiscussion, pos: '50% 40%', color: '#F0675F' },
+  { line1: 'Indian adolescents grow up around answers.', line2: 'तर्क begins with questions.',      img: imgCapsule,    pos: '50% 40%', color: '#FFD167' },
+  { line1: 'Thoughts are often given.',                  line2: 'तर्क lets you rearrange them.',    img: imgClassroom,  pos: '50% 55%', color: '#E27238' },
+  { line1: 'Ideas come pre-shaped.',                     line2: 'तर्क reshapes them.',              img: imgBooklets,   pos: '55% 45%', color: '#4DB49F' },
+  { line1: 'We hold on to first thoughts.',              line2: 'तर्क revisits them.',              img: imgButterfly,  pos: '50% 50%', color: '#7B8FD6' },
+  { line1: 'We look for the right answer.',              line2: 'तर्क looks for better questions.', img: imgTeam,       pos: '50% 45%', color: '#F0675F' },
 ];
 
 const CYCLE_MS = 6500;
@@ -122,7 +122,7 @@ export function HeroSection() {
         paddingBottom: 'clamp(28px, 3.4vw, 48px)',
       }}
     >
-      {/* Photography — crossfades with each phrase, slow push-in */}
+      {/* Photography, crossfades with each phrase, slow push-in */}
       <div className="tk-grain" style={{ position: 'absolute', inset: 0, overflow: 'hidden', backgroundColor: '#141414', zIndex: 0 }}>
         <motion.div style={{ position: 'absolute', inset: 0, scale: photoScale }}>
           <AnimatePresence initial={false}>
@@ -144,7 +144,7 @@ export function HeroSection() {
         <motion.div style={{ position: 'absolute', inset: 0, background: '#0C0C0C', opacity: veil }} />
       </div>
 
-      {/* Hand-drawn diamond grid — over the photo, clear of the headline and actions */}
+      {/* Hand-drawn diamond grid, over the photo, clear of the headline and actions */}
       <DiamondField heroRef={heroRef} />
 
       {/* Headline + actions */}
@@ -201,7 +201,7 @@ export function HeroSection() {
             )}
           </div>
 
-          {/* Slide markers — five diamonds, one per move colour */}
+          {/* Slide markers, five diamonds, one per move colour */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginRight: -7 }} role="tablist" aria-label="Hero statements">
             {SLIDES.map((s, i) => (
               <button

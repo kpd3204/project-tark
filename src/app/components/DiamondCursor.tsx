@@ -137,7 +137,7 @@ export function DiamondCursor() {
           pointerEvents: 'none',
           zIndex: 99999,
           opacity: 0,
-          // transition ONLY on transform (scale) and NOT on left/top — position is set directly
+          // transition ONLY on transform (scale) and NOT on left/top, position is set directly
           transition: 'transform 0.28s ease, opacity 0.15s',
         }}
       >

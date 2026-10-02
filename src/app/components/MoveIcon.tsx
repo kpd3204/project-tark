@@ -1,4 +1,4 @@
-/* MoveIcon — five diamond-based identity icons for TARK's cognitive moves.
+/* MoveIcon, five diamond-based identity icons for TARK's cognitive moves.
    Uses SVG paths from the provided brand assets (Asset_17–21).
    Supports any render size and three color variants. */
 
@@ -19,7 +19,7 @@ function getColor(move: MoveKey, variant: Variant): string {
   return MOVE_COLORS[move];
 }
 
-/* ── OPEN — Asset_17: hollow diamond with four separated corner arrows */
+/* ── OPEN, Asset_17: hollow diamond with four separated corner arrows */
 function OpenIcon({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 295.2 295.2" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%', height: '100%' }}>
@@ -31,7 +31,7 @@ function OpenIcon({ color }: { color: string }) {
   );
 }
 
-/* ── SHIFT — Asset_18: diamond outline with square inside */
+/* ── SHIFT, Asset_18: diamond outline with square inside */
 function ShiftIcon({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 322.37 329.54" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%', height: '100%' }}>
@@ -41,7 +41,7 @@ function ShiftIcon({ color }: { color: string }) {
   );
 }
 
-/* ── SURFACE — Asset_19: diamond with mountain/wave silhouette inside */
+/* ── SURFACE, Asset_19: diamond with mountain/wave silhouette inside */
 function SurfaceIcon({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 330.07 330.07" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%', height: '100%' }}>
@@ -50,7 +50,7 @@ function SurfaceIcon({ color }: { color: string }) {
   );
 }
 
-/* ── TRACE — Asset_20: diamond with pixel/stepped squares trailing inward */
+/* ── TRACE, Asset_20: diamond with pixel/stepped squares trailing inward */
 function TraceIcon({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 334.92 330.07" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%', height: '100%' }}>
@@ -63,7 +63,7 @@ function TraceIcon({ color }: { color: string }) {
   );
 }
 
-/* ── COMMIT — Asset_21: nested diamonds (diamond within diamond) */
+/* ── COMMIT, Asset_21: nested diamonds (diamond within diamond) */
 function CommitIcon({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 330.07 330.07" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%', height: '100%' }}>
