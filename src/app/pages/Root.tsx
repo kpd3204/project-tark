@@ -47,6 +47,11 @@ export function Root() {
     } catch { /* storage unavailable — just play it */ }
     return true;
   });
+  /* Let the page know while the intro covers it (the hero holds its entrance) */
+  useEffect(() => {
+    if (showIntro) document.documentElement.dataset.intro = '1';
+    else delete document.documentElement.dataset.intro;
+  }, [showIntro]);
 
   const isMainPage = (p: string) => p.split('/').filter(Boolean).length <= 1;
 
@@ -68,7 +73,8 @@ export function Root() {
   return (
     <div style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
       {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
-      <DiamondCursor />
+      {/* The landing page has its own pen interaction in the hero */}
+      {pathname !== '/' && <DiamondCursor />}
       <Navigation />
       <ScrollProgress />
 

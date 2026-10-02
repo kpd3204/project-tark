@@ -105,8 +105,8 @@ export function HeroSection() {
         <motion.div style={{ position: 'absolute', inset: 0, background: '#0C0C0C', opacity: veil }} />
       </div>
 
-      {/* The diamond grid — sits over the photo, clears around the headline */}
-      <DiamondField heroRef={heroRef} wave={index} />
+      {/* Hand-drawn diamond grid — over the photo, clear of the headline and actions */}
+      <DiamondField heroRef={heroRef} inkColor={slide.color} />
 
       {/* Headline + actions */}
       <motion.div style={{ position: 'relative', zIndex: 3, y: textY, opacity: textOpacity }}>
@@ -149,6 +149,7 @@ export function HeroSection() {
 
         {/* Bottom bar */}
         <motion.div
+          data-avoid
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5, ease: EASE }}
@@ -163,7 +164,7 @@ export function HeroSection() {
             borderTop: '1px solid rgba(255,255,255,0.22)',
           }}
         >
-          <div data-avoid style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', width: isMobile ? '100%' : 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', width: isMobile ? '100%' : 'auto' }}>
             <Link to="/thinking-partner" className="tk-btn tk-btn--paper" style={{ padding: isMobile ? '15px 20px' : '16px 30px', flex: isMobile ? 1 : undefined }}>
               Start Thinking →
             </Link>
@@ -178,7 +179,7 @@ export function HeroSection() {
           </div>
 
           {/* Slide markers — five diamonds, one per move colour */}
-          <div data-avoid style={{ display: 'flex', alignItems: 'center', gap: 4 }} role="tablist" aria-label="Hero statements">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }} role="tablist" aria-label="Hero statements">
             {SLIDES.map((s, i) => (
               <button
                 key={i}

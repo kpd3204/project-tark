@@ -73,7 +73,7 @@ function ToolsDropdown({ onClose }: { onClose: () => void }) {
       style={{
         position: 'absolute',
         top: '100%',
-        left: -22,
+        right: -22,
         width: 264,
         backgroundColor: '#FFFFFF',
         border: '1px solid var(--tk-border)',
@@ -195,27 +195,29 @@ export function Navigation() {
         }}
       >
         <div
+          className={light ? 'h-[80px] lg:h-[112px]' : 'h-[68px]'}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            height: 68, paddingInline: 'var(--gutter)',
+            paddingInline: 'var(--gutter)',
+            transition: 'height 0.45s cubic-bezier(0.22,1,0.36,1)',
           }}
         >
-          {/* Left — the index */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {/* Mobile toggle */}
-            <button
-              className="lg:hidden flex flex-col items-start justify-center"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                minWidth: 44, minHeight: 44, gap: 5, padding: '8px 8px 8px 0',
-              }}
-            >
-              <motion.span animate={{ rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 3.5 : 0 }} style={{ display: 'block', height: 1.5, width: 22, backgroundColor: ink, transformOrigin: 'center', transition: 'background-color 0.3s' }} />
-              <motion.span animate={{ rotate: mobileOpen ? -45 : 0, y: mobileOpen ? -3.5 : 0, width: mobileOpen ? 22 : 14 }} style={{ display: 'block', height: 1.5, width: 14, backgroundColor: ink, transformOrigin: 'center', transition: 'background-color 0.3s' }} />
-            </button>
+          {/* Left — the mark. Over the home hero it sits large, like a masthead. */}
+          <button
+            onClick={() => navigate('/')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+            aria-label="Project TARK — home"
+          >
+            <img
+              src={light ? logoLightSrc : logoSrc}
+              alt="Project तर्क"
+              className={light ? 'h-[30px] lg:h-[46px]' : 'h-[24px] lg:h-[30px]'}
+              style={{ width: 'auto', display: 'block', transition: 'height 0.45s cubic-bezier(0.22,1,0.36,1)' }}
+            />
+          </button>
 
+          {/* Right — the index */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 34 }}>
             {/* Desktop — only once there is genuinely room for the full row */}
             <div className="hidden lg:flex items-center" style={{ gap: 34 }}>
               <TopLink label="Framework" path="/framework" light={light} />
@@ -258,31 +260,27 @@ export function Navigation() {
               <TopLink label="Thinking Partner" path="/thinking-partner" light={light} />
               <TopLink label="Research" path="/research" light={light} />
               <TopLink label="About" path="/about" light={light} />
-            </div>
-          </div>
 
-          {/* Right — action + mark */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
-            <span className="hidden lg:inline-flex">
-              <Link
-                to="/thinking-partner"
-                className={`tk-btn ${light ? 'tk-btn--paper' : 'tk-btn--ink'}`}
-                style={{ padding: '13px 24px' }}
-              >
-                Start Thinking →
-              </Link>
-            </span>
+              {/* The hero carries its own call to action; the bar picks it up after */}
+              {!light && (
+                <Link to="/thinking-partner" className="tk-btn tk-btn--ink" style={{ padding: '13px 24px' }}>
+                  Start Thinking →
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile toggle */}
             <button
-              onClick={() => navigate('/')}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
-              aria-label="Project TARK — home"
+              className="lg:hidden flex flex-col items-end justify-center"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                minWidth: 44, minHeight: 44, gap: 5, padding: '8px 0 8px 8px',
+              }}
             >
-              <img
-                src={light ? logoLightSrc : logoSrc}
-                alt="Project तर्क"
-                className="h-[24px] lg:h-[30px]"
-                style={{ width: 'auto', display: 'block' }}
-              />
+              <motion.span animate={{ rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 3.5 : 0 }} style={{ display: 'block', height: 1.5, width: 22, backgroundColor: ink, transformOrigin: 'center', transition: 'background-color 0.3s' }} />
+              <motion.span animate={{ rotate: mobileOpen ? -45 : 0, y: mobileOpen ? -3.5 : 0, width: mobileOpen ? 22 : 14 }} style={{ display: 'block', height: 1.5, width: 14, backgroundColor: ink, transformOrigin: 'center', transition: 'background-color 0.3s' }} />
             </button>
           </div>
         </div>
