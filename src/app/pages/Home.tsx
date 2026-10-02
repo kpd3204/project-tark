@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
+import { DocBand } from '../components/ProjectDoc';
 import { PageFooter } from '../components/PageFooter';
 import { AssumptionTicker } from '../components/AssumptionTicker';
 import { HeroSection } from '../components/HeroSection';
@@ -305,6 +306,9 @@ export function Home() {
       <ToolkitPeek />
       <AssumptionTicker />
       <Why />
+      <section className="sec sec--tight" style={{ background: '#FFFDF8', paddingTop: 0 }}>
+        <div className="tk-wrap"><DocBand /></div>
+      </section>
       <Close />
       <PageFooter />
     </div>

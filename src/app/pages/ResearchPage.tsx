@@ -1,4 +1,5 @@
 import { PageFooter } from '../components/PageFooter';
+import { DocBand, DocPill } from '../components/ProjectDoc';
 import { Reveal } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
 import photoWorkshop from '../../imports/photos/real/commit-booklet.jpg';
@@ -151,6 +152,7 @@ export function ResearchPage() {
             </Reveal>
             <Reveal delay={0.15}>
               <div className="head-actions">
+                <DocPill />
                 <Pill to="/case-studies" variant="ghost">See the case studies</Pill>
               </div>
             </Reveal>
@@ -166,6 +168,7 @@ export function ResearchPage() {
       {/* ── Five bodies of evidence ─────────────────────────── */}
       <section className="sec sec--cream">
         <div className="tk-wrap">
+          <div style={{ marginBottom: 'clamp(56px, 7vw, 112px)' }}><DocBand kicker="Start here" /></div>
           {SECTIONS.map((s, i) => <EvidenceBlock key={s.title} s={s} index={i} />)}
           <p className="fine" style={{ marginTop: 32 }}>Every figure links to its original source. Last checked October 2026.</p>
         </div>

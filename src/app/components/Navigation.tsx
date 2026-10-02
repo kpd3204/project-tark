@@ -4,6 +4,7 @@ import logoSrc from '../../imports/Asset_23_4x-5.png';
 import logoLightSrc from '../../imports/logo-light.png';
 import { MOVE_COLORS } from './kit';
 import { Buddy } from './play';
+import { DOC_URL } from './ProjectDoc';
 
 /* Navigation: logo on the left; on the right, the index sits in a solid
    rounded pill so it reads the same over photography and over paper.
@@ -26,9 +27,10 @@ const TOOLS = [
 const RESEARCH = [
   { heading: 'The evidence', subtitle: 'Why TARK exists',    path: '/research',     color: MOVE_COLORS.TRACE },
   { heading: 'Case Studies', subtitle: 'TARK in the field',  path: '/case-studies', color: MOVE_COLORS.COMMIT },
+  { heading: 'The document', subtitle: 'The full project, in one file', path: DOC_URL, color: MOVE_COLORS.SHIFT, external: true },
 ];
 
-type MenuItem = { heading: string; subtitle: string; path: string; color: string; soon?: boolean };
+type MenuItem = { heading: string; subtitle: string; path: string; color: string; soon?: boolean; external?: boolean };
 
 /* A link in the pill that opens a small card of destinations.
    Opens on hover or click, waits a moment before closing so the pointer can
@@ -55,19 +57,27 @@ function MenuLink({ label, color, tint, items, active, id, open, setOpen }: {
         <span className="nav__caret" aria-hidden="true" />
       </button>
       <div className={`nav__menu ${isOpen ? 'is-open' : ''}`} role="menu">
-        {items.map((t) => (
-          <Link key={t.path} to={t.path} className="nav__item" role="menuitem" tabIndex={isOpen ? 0 : -1} onClick={() => setOpen('')}>
-            <Buddy color={t.color} size={40} />
-            <span className="nav__item-text">
-              <span className="nav__item-title">
-                {t.heading}
-                {t.soon && <span className="soon">Soon</span>}
+        {items.map((t) => {
+          const inner = (
+            <>
+              <Buddy color={t.color} size={40} />
+              <span className="nav__item-text">
+                <span className="nav__item-title">
+                  {t.heading}
+                  {t.soon && <span className="soon">Soon</span>}
+                  {t.external && <span className="soon soon--new">PDF</span>}
+                </span>
+                <span className="nav__item-sub">{t.subtitle}</span>
               </span>
-              <span className="nav__item-sub">{t.subtitle}</span>
-            </span>
-            <span className="nav__item-go" aria-hidden="true">→</span>
-          </Link>
-        ))}
+              <span className="nav__item-go" aria-hidden="true">{t.external ? '↗' : '→'}</span>
+            </>
+          );
+          return t.external ? (
+            <a key={t.path} href={t.path} target="_blank" rel="noopener noreferrer" className="nav__item" role="menuitem" tabIndex={isOpen ? 0 : -1} onClick={() => setOpen('')}>{inner}</a>
+          ) : (
+            <Link key={t.path} to={t.path} className="nav__item" role="menuitem" tabIndex={isOpen ? 0 : -1} onClick={() => setOpen('')}>{inner}</Link>
+          );
+        })}
       </div>
     </div>
   );
@@ -200,6 +210,7 @@ export function Navigation() {
           <Link to="/thinking-partner" className="pill pill--ink" tabIndex={mobileOpen ? 0 : -1}>
             <span>Start thinking</span><span className="pill__arrow" aria-hidden="true">→</span>
           </Link>
+          <a href={DOC_URL} target="_blank" rel="noopener noreferrer" className="mnav__doc" tabIndex={mobileOpen ? 0 : -1}>The project document ↗</a>
           <a href="https://www.instagram.com/project.tark/" target="_blank" rel="noopener noreferrer" className="mnav__ig" tabIndex={mobileOpen ? 0 : -1}>@project.tark</a>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { Instagram } from 'lucide-react';
 import logoLight from '../../imports/logo-light.png';
 import carbonLogo from '../../imports/carbon.svg';
+import { DOC_URL } from './ProjectDoc';
 
 const EXPLORE = [
   { label: 'Framework',        path: '/framework'        },
@@ -44,6 +45,7 @@ export function PageFooter() {
           <nav className="footer__col" aria-label="About">
             <h3>Project</h3>
             {ABOUT.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
+            <a href={DOC_URL} target="_blank" rel="noopener noreferrer">Project document ↗</a>
           </nav>
 
           <div className="footer__col">
