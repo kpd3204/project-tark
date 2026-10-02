@@ -4,12 +4,14 @@ import { MOVE_ORDER, MOVE_COLORS } from './kit';
 /* DiamondField — hand-drawn TARK diamonds over the hero photography.
    · One shape: a solid diamond with a hand-drawn, marker-like edge.
      Orientation never changes; size is even across the grid.
-   · The grid is aligned to the page gutters and starts below the nav.
-     Elements marked [data-avoid] inside the hero keep a clear margin.
+   · The grid's outer diamond edges sit exactly on the page gutters (in line
+     with the logo, headline and nav), and its rows are spaced evenly to fill
+     the space between the nav and the headline ([data-grid-floor]).
+     A row that would touch a [data-avoid] element is hidden whole.
    · Line boil: each diamond cycles a few hand-drawn variants (~6 fps).
    · Diamonds draw themselves in on load: outline first, then the fill.
-   · Pointer: a marker line follows the cursor and fades; diamonds it
-     passes swell slightly and boil faster. Tap does the same on touch.
+   · Pointer: diamonds near the cursor are nudged the way it is moving —
+     harder for faster strokes — then spring back with a soft wobble.
    · Scroll: diamonds drift at different depths and fade into the page.
    Everything renders to one canvas in a single rAF loop. */
 
@@ -28,7 +30,7 @@ interface Cell {
   v: number;         // current variant
   order: number;     // draw-in order (0–1)
   // live state
-  excite: number; o: number;
+  dx: number; dy: number; vx: number; vy: number; o: number;
 }
 
 const VARIANTS = 3;
@@ -74,12 +76,16 @@ function lengthOf(p: Pt[]) {
 /* Mirrors --gutter in theme.css */
 function gutterFor(w: number) { return Math.min(72, Math.max(20, w * 0.05)); }
 
-function buildCells(w: number, h: number, top: number) {
+function buildCells(w: number, top: number, floor: number) {
   const g = gutterFor(w);
   const cols = w < 640 ? 5 : w < 1024 ? 7 : 10;
-  const spacing = (w - 2 * g) / (cols - 1);
-  const rows = Math.floor((h - top - 24) / spacing) + 1; // the grid ends inside the hero
-  const size = Math.min(34, Math.max(18, spacing * 0.18));
+  const size = Math.min(34, Math.max(18, (w - 2 * g) / (cols - 1) * 0.18));
+  // outer diamond edges on the gutters
+  const colStep = (w - 2 * g - size) / (cols - 1);
+  // rows fill [top, floor] evenly, at a pitch close to the column pitch
+  const span = floor - top - size;
+  const rows = span < 0 ? 0 : Math.max(1, Math.round(span / colStep) + 1);
+  const rowStep = rows > 1 ? span / (rows - 1) : 0;
   const r = rng(41);
   const cells: Cell[] = [];
   const grid: string[][] = [];
@@ -94,9 +100,9 @@ function buildCells(w: number, h: number, top: number) {
       grid[row][col] = color;
       const variants = Array.from({ length: VARIANTS }, () => wobblyDiamond(r));
       cells.push({
-        x: g + col * spacing,
-        y: top + row * spacing,
-        size: size * (0.94 + r() * 0.12),
+        x: g + size / 2 + col * colStep,
+        y: top + size / 2 + row * rowStep,
+        size: size * (0.96 + r() * 0.08),
         color,
         variants,
         lengths: variants.map(lengthOf),
@@ -105,14 +111,15 @@ function buildCells(w: number, h: number, top: number) {
         fade: r(),
         boilAt: r() * 0.2,
         v: Math.floor(r() * VARIANTS),
-        order: (col / cols) * 0.55 + (row / rows) * 0.45 + r() * 0.08,
-        excite: 0, o: 0,
+        order: (col / cols) * 0.55 + (row / Math.max(1, rows)) * 0.45 + r() * 0.08,
+        dx: 0, dy: 0, vx: 0, vy: 0, o: 0,
       });
     }
   }
-  return { cells, spacing };
+  return { cells, spacing: colStep };
 }
 
+/* Stroke a polyline up to `upTo` of its length */
 function fillPoly(ctx: CanvasRenderingContext2D, p: Pt[]) {
   ctx.beginPath();
   ctx.moveTo(p[0][0], p[0][1]);
@@ -121,7 +128,6 @@ function fillPoly(ctx: CanvasRenderingContext2D, p: Pt[]) {
   ctx.fill();
 }
 
-/* Stroke a polyline up to `upTo` of its length */
 function strokePartial(ctx: CanvasRenderingContext2D, p: Pt[], upTo: number) {
   ctx.beginPath();
   ctx.moveTo(p[0][0], p[0][1]);
@@ -139,16 +145,8 @@ function strokePartial(ctx: CanvasRenderingContext2D, p: Pt[], upTo: number) {
   ctx.stroke();
 }
 
-export function DiamondField({
-  heroRef,
-  inkColor,
-}: {
-  heroRef: RefObject<HTMLElement | null>;
-  inkColor: string; // colour of the cursor's marker line
-}) {
+export function DiamondField({ heroRef }: { heroRef: RefObject<HTMLElement | null> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const inkRef = useRef(inkColor);
-  inkRef.current = inkColor;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -161,8 +159,18 @@ export function DiamondField({
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     let cells: Cell[] = [];
     let spacing = 120;
-    let W = 0, H = 0, CH = 0;
+    let W = 0, H = 0, CH = 0, floorY = 0;
     let born = performance.now() / 1000;
+    const floorEl = hero.querySelector('[data-grid-floor]') as HTMLElement | null;
+
+    const measureFloor = () => {
+      if (!floorEl) return H - 200;
+      // layout position, ignoring any scroll-driven transform on the way
+      let y = 0;
+      let n: HTMLElement | null = floorEl;
+      while (n && n !== hero) { y += n.offsetTop; n = n.offsetParent as HTMLElement | null; }
+      return y;
+    };
 
     const build = () => {
       W = hero.clientWidth; H = hero.clientHeight;
@@ -171,32 +179,43 @@ export function DiamondField({
       canvas.height = Math.round(CH * dpr);
       canvas.style.width = W + 'px';
       canvas.style.height = CH + 'px';
-      const top = W < 1024 ? 132 : 176; // clear of the nav and logo
-      ({ cells, spacing } = buildCells(W, H, top));
+      const top = W < 1024 ? 112 : 160;           // clear of the nav and logo
+      const g = gutterFor(W);
+      const pitch = (W - 2 * g) / ((W < 640 ? 5 : W < 1024 ? 7 : 10) - 1);
+      floorY = measureFloor();
+      ({ cells, spacing } = buildCells(W, top, floorY - pitch * 0.55));
     };
     build();
 
-    // pointer state, hero-local
-    let px = -9999, py = -9999, lastMove = 0;
-    const trail: { x: number; y: number; t: number }[] = [];
+    // pointer — position and velocity, hero-local
+    let px = -9999, py = -9999, pvx = 0, pvy = 0, lastT = 0, moved = false;
     const onMove = (e: PointerEvent) => {
       const r = hero.getBoundingClientRect();
       const x = e.clientX - r.left, y = e.clientY - r.top;
-      const inside = y >= 0 && y <= r.height && x >= 0 && x <= r.width;
-      px = inside ? x : -9999; py = inside ? y : -9999;
-      lastMove = performance.now() / 1000;
-      if (inside && e.pointerType === 'mouse' && !reduced) trail.push({ x, y, t: lastMove });
+      const now = performance.now();
+      const dt = Math.max(8, now - lastT);
+      if (px > -9000 && now - lastT < 120) {
+        // smoothed velocity in px per frame (~16ms)
+        pvx = pvx * 0.5 + ((x - px) / dt) * 16 * 0.5;
+        pvy = pvy * 0.5 + ((y - py) / dt) * 16 * 0.5;
+      } else { pvx = 0; pvy = 0; }
+      px = x; py = y; lastT = now; moved = true;
     };
+    const onLeave = () => { px = -9999; py = -9999; pvx = pvy = 0; };
     window.addEventListener('pointermove', onMove, { passive: true });
-    window.addEventListener('pointerdown', onMove, { passive: true });
+    document.addEventListener('pointerleave', onLeave);
 
+    let lastW = 0, lastFloor = 0;
     const ro = new ResizeObserver(() => {
-      if (Math.abs(hero.clientWidth - W) > 2 || Math.abs(hero.clientHeight - H) > 80) {
+      const f = measureFloor();
+      if (Math.abs(hero.clientWidth - lastW) > 2 || Math.abs(f - lastFloor) > 4) {
+        lastW = hero.clientWidth; lastFloor = f;
         build();
-        born = performance.now() / 1000 - 10; // no re-draw-in on resize
+        if (performance.now() / 1000 - born > 2) born = performance.now() / 1000 - 10; // no re-draw-in once shown
       }
     });
     ro.observe(hero);
+    if (floorEl) ro.observe(floorEl);
 
     let visible = true;
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { rootMargin: '0px 0px 600px 0px' });
@@ -210,13 +229,17 @@ export function DiamondField({
       const heroRect = hero.getBoundingClientRect();
       const progress = Math.min(1, Math.max(0, -heroRect.top / Math.max(1, heroRect.height)));
 
-      // clear zones around the headline and the action bar
-      const pad = spacing * 0.5;
+      // a row that touches the headline or the action bar is hidden whole
+      const pad = spacing * 0.3;
       const zones: number[][] = [];
       hero.querySelectorAll('[data-avoid]').forEach((n) => {
         const r = n.getBoundingClientRect();
         zones.push([r.left - heroRect.left - pad, r.right - heroRect.left + pad, r.top - heroRect.top - pad, r.bottom - heroRect.top + pad]);
       });
+      const blockedRows = new Set<number>();
+      for (const c of cells) {
+        if (zones.some((z) => c.x > z[0] && c.x < z[1] && c.y > z[2] && c.y < z[3])) blockedRows.add(c.row);
+      }
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, CH);
@@ -224,34 +247,39 @@ export function DiamondField({
       ctx.lineJoin = 'round';
 
       if (document.documentElement.dataset.intro) born = t; // hold the draw-in behind the intro
-      const pointerLive = t - lastMove < 0.6;
-      const R = spacing * 0.9;
       const since = t - born;
+      const R = spacing * 1.25;
+      // a moving cursor pushes; a resting one does nothing
+      const push = moved && !reduced;
+      moved = false;
 
-      // a row that would show only one or two stragglers is hidden whole
-      const inZone = cells.map((c) => zones.some((z) => c.x > z[0] && c.x < z[1] && c.y > z[2] && c.y < z[3]));
-      const shownPerRow = new Map<number, number>();
-      cells.forEach((c, i) => { if (!inZone[i]) shownPerRow.set(c.row, (shownPerRow.get(c.row) || 0) + 1); });
-
-      for (let i = 0; i < cells.length; i++) {
-        const c = cells[i];
-        const hidden = inZone[i] || (shownPerRow.get(c.row) || 0) < 3;
-
-        // pen proximity
-        let near = 0;
-        if (pointerLive && !reduced) {
-          const d = Math.hypot(c.x - px, c.y - py);
-          near = Math.max(0, 1 - d / R);
-          near = near * near * (3 - 2 * near);
+      for (const c of cells) {
+        // spring back to rest, with a little wobble
+        if (!reduced) {
+          if (push) {
+            const d = Math.hypot(c.x + c.dx - px, c.y + c.dy - py);
+            if (d < R) {
+              const f = 1 - d / R;
+              const k = f * f * 0.32;
+              c.vx += pvx * k;
+              c.vy += pvy * k;
+            }
+          }
+          c.vx += -c.dx * 0.06; c.vy += -c.dy * 0.06;
+          c.vx *= 0.84;         c.vy *= 0.84;
+          c.dx += c.vx;         c.dy += c.vy;
+          const lim = spacing * 0.32;
+          const m = Math.hypot(c.dx, c.dy);
+          if (m > lim) { c.dx *= lim / m; c.dy *= lim / m; }
         }
-        c.excite += (near - c.excite) * (near > c.excite ? 0.25 : 0.05);
 
-        // line boil — faster while the pen is near
+        // line boil
         if (!reduced && t >= c.boilAt) {
           c.v = (c.v + 1) % VARIANTS;
-          c.boilAt = t + (c.excite > 0.2 ? 0.08 : 0.16 + Math.random() * 0.06);
+          c.boilAt = t + 0.16 + Math.random() * 0.06;
         }
 
+        const hidden = blockedRows.has(c.row);
         const scrollFade = Math.max(0, 1 - progress * (1.15 + c.fade * 1.3));
         c.o += ((hidden ? 0 : scrollFade) - c.o) * 0.12;
         if (c.o < 0.01) continue;
@@ -261,12 +289,12 @@ export function DiamondField({
         if (drawn <= 0) continue;
 
         const drift = progress * H * 0.42 * c.depth;
-        const s = (c.size / 2) * (1 + c.excite * 0.3) * (1 - progress * 0.3);
+        const s = (c.size / 2) * (1 - progress * 0.3);
         const p = c.variants[c.v];
 
         ctx.save();
         ctx.globalAlpha = c.o;
-        ctx.translate(c.x, c.y + drift);
+        ctx.translate(c.x + c.dx, c.y + c.dy + drift);
         ctx.scale(s, s);
         ctx.strokeStyle = c.color;
         ctx.fillStyle = c.color;
@@ -282,30 +310,15 @@ export function DiamondField({
         }
         ctx.restore();
       }
-
-      // the pen line
-      while (trail.length && t - trail[0].t > 0.9) trail.shift();
-      if (trail.length > 1) {
-        ctx.save();
-        ctx.strokeStyle = inkRef.current;
-        ctx.lineWidth = 2.5;
-        for (let i = 1; i < trail.length; i++) {
-          const a = trail[i - 1], b = trail[i];
-          ctx.globalAlpha = Math.max(0, 1 - (t - b.t) / 0.9) * 0.9;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
+      // velocity decays when the cursor stops sending moves
+      pvx *= 0.6; pvy *= 0.6;
     };
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerdown', onMove);
+      document.removeEventListener('pointerleave', onLeave);
       ro.disconnect();
       io.disconnect();
     };

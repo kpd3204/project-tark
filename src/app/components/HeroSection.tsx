@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import imgRoom from '../../imports/hero/session-room.jpg';
 import imgWriting from '../../imports/hero/writing.jpg';
@@ -22,6 +22,31 @@ const SLIDES = [
 
 const CYCLE_MS = 6500;
 
+const HEADLINE: React.CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontSize: 'clamp(32px, 4.9vw, 84px)',
+  lineHeight: 1.02,
+  letterSpacing: '-0.03em',
+  color: '#FFFFFF',
+  maxWidth: '21em',
+  margin: 0,
+  textShadow: '0 2px 30px rgba(0,0,0,0.25)',
+  textWrap: 'balance',
+};
+
+function Line2({ text, color }: { text: string; color: string }) {
+  return (
+    <>
+      {text.split('तर्क').map((part, i, arr) => (
+        <span key={i}>
+          {part}
+          {i < arr.length - 1 && <span style={{ color, fontFamily: 'var(--font-devanagari)' }}>तर्क</span>}
+        </span>
+      ))}
+    </>
+  );
+}
+
 /* A line that rises out of its own mask.
    The mask keeps extra room so descenders and Devanagari marks never clip. */
 function MaskedLine({ children, delay = 0, light = false }: { children: React.ReactNode; delay?: number; light?: boolean }) {
@@ -44,6 +69,20 @@ export function HeroSection() {
   const [paused, setPaused] = useState(false);
   const isMobile = useIsMobile();
   const heroRef = useRef<HTMLElement>(null);
+
+  /* Reserve exactly the height of the tallest statement at this width, so the
+     headline never jumps between slides and leaves no extra blank space. */
+  const measureRef = useRef<HTMLDivElement>(null);
+  const [reserve, setReserve] = useState(0);
+  useLayoutEffect(() => {
+    const box = measureRef.current;
+    if (!box) return;
+    const measure = () => setReserve(Math.max(...Array.from(box.children).map((c) => (c as HTMLElement).offsetHeight)));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     if (paused) return;
@@ -106,7 +145,7 @@ export function HeroSection() {
       </div>
 
       {/* Hand-drawn diamond grid — over the photo, clear of the headline and actions */}
-      <DiamondField heroRef={heroRef} inkColor={slide.color} />
+      <DiamondField heroRef={heroRef} />
 
       {/* Headline + actions */}
       <motion.div style={{ position: 'relative', zIndex: 3, y: textY, opacity: textOpacity }}>
@@ -114,34 +153,22 @@ export function HeroSection() {
           data-avoid
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          style={{ display: 'inline-block', maxWidth: '100%' }}
+          style={{ display: 'block' }}
         >
-          <div style={{ minHeight: isMobile ? '3.4em' : '2.3em', display: 'flex', alignItems: 'flex-end' }}>
+          <div data-grid-floor style={{ position: 'relative', minHeight: reserve || undefined, display: 'flex', alignItems: 'flex-end' }}>
+            {/* invisible copies of every statement, measured for the reserve */}
+            <div ref={measureRef} aria-hidden="true" style={{ position: 'absolute', left: 0, right: 0, top: 0, visibility: 'hidden', pointerEvents: 'none' }}>
+              {SLIDES.map((s, i) => (
+                <h2 key={i} style={{ ...HEADLINE, position: 'absolute', top: 0, left: 0, right: 0, fontWeight: 400 }}>
+                  <span style={{ display: 'block' }}>{s.line1}</span>
+                  <span style={{ display: 'block', fontWeight: 700 }}><Line2 text={s.line2} color={s.color} /></span>
+                </h2>
+              ))}
+            </div>
             <AnimatePresence mode="wait">
-              <h1
-                key={index}
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(32px, 5.6vw, 88px)',
-                  lineHeight: 1.02,
-                  letterSpacing: '-0.03em',
-                  color: '#FFFFFF',
-                  maxWidth: '13.5em',
-                  margin: 0,
-                  textShadow: '0 2px 30px rgba(0,0,0,0.25)',
-                }}
-              >
+              <h1 key={index} style={HEADLINE}>
                 <MaskedLine light>{slide.line1}</MaskedLine>
-                <MaskedLine delay={0.1}>
-                  {slide.line2.split('तर्क').map((part, i, arr) => (
-                    <span key={i}>
-                      {part}
-                      {i < arr.length - 1 && (
-                        <span style={{ color: slide.color, fontFamily: 'var(--font-devanagari)' }}>तर्क</span>
-                      )}
-                    </span>
-                  ))}
-                </MaskedLine>
+                <MaskedLine delay={0.1}><Line2 text={slide.line2} color={slide.color} /></MaskedLine>
               </h1>
             </AnimatePresence>
           </div>
@@ -175,7 +202,7 @@ export function HeroSection() {
           </div>
 
           {/* Slide markers — five diamonds, one per move colour */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }} role="tablist" aria-label="Hero statements">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginRight: -7 }} role="tablist" aria-label="Hero statements">
             {SLIDES.map((s, i) => (
               <button
                 key={i}
