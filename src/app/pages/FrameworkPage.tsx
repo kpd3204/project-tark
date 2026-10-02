@@ -3,7 +3,21 @@ import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
-import photoBooklets from '../../imports/photos/five-moves-booklets.jpg';
+import photoBooklets from '../../imports/photos/real/five-moves-booklet-grass.jpg';
+import wsOpen from '../../imports/photos/real/ws-reframe-machine.jpg';
+import wsTrace from '../../imports/photos/real/ws-slow-burn.jpg';
+import wsShift from '../../imports/photos/real/ws-walk-a-mile.jpg';
+import wsSurface from '../../imports/photos/real/ws-assumptions.jpg';
+import wsCommit from '../../imports/photos/real/ws-pressure-gauge.jpg';
+
+/* A real worksheet for each move */
+const SHEET: Record<string, { src: string; alt: string; caption: string }> = {
+  OPEN:    { src: wsOpen,    alt: 'The Reframe Machine worksheet: see your problem through five different eyes', caption: 'The Reframe Machine' },
+  TRACE:   { src: wsTrace,   alt: 'The Slow Burn worksheet: rings for what changes this week, this month and this year', caption: 'The Slow Burn' },
+  SHIFT:   { src: wsShift,   alt: 'The Walk a Mile worksheet: I am walking as…', caption: 'Walk a Mile' },
+  SURFACE: { src: wsSurface, alt: 'The Assumption Spotter worksheet with a magnifying glass and “I’m assuming that…” notes', caption: 'The Assumption Spotter' },
+  COMMIT:  { src: wsCommit,  alt: 'The Put It Under Pressure worksheet: a gauge up to evidence, and my position after pressure', caption: 'Put It Under Pressure' },
+};
 
 const moves: {
   hindi: string;
@@ -126,6 +140,12 @@ function Chapter({ move }: { move: typeof moves[0] }) {
           <div className="chapter__hindi deva" lang="hi">{move.hindi}</div>
           <div className="chapter__tagline">{move.tagline}</div>
         </Reveal>
+        <Reveal y={24} delay={0.08} className="chapter__sheet">
+          <figure>
+            <SoftImg src={SHEET[move.english].src} alt={SHEET[move.english].alt} />
+            <figcaption><i aria-hidden="true" />{SHEET[move.english].caption}</figcaption>
+          </figure>
+        </Reveal>
       </div>
 
       <div className="chapter__body">
@@ -177,7 +197,7 @@ export function FrameworkPage() {
             </Reveal>
           </div>
           <Reveal delay={0.1} y={40} className="tk-head__photo">
-            <SoftImg src={photoBooklets} alt="The five TARK move booklets laid out side by side" loading="eager" />
+            <SoftImg src={photoBooklets} alt="The Five Moves, Unlimited Possibilities booklet lying on green leaves" loading="eager" />
             <Buddy color="#DA3832" size={64} className="tk-head__buddy" delay={0.4} />
             <Squiggle kind="loop" width={120} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>

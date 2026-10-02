@@ -2,7 +2,8 @@ import { worksheetKits, type WorksheetKit } from '../data/worksheetKits';
 import { PageFooter } from '../components/PageFooter';
 import { Reveal } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
-import photoWorksheet from '../../imports/photos/worksheet-and-phone.jpg';
+import photoWorksheet from '../../imports/photos/real/student-writing.jpg';
+import photoGuide from '../../imports/photos/real/facilitator-guide.jpg';
 
 const notifyHref = (title: string) =>
   `mailto:project.tark@gmail.com?subject=${encodeURIComponent(`Notify me: ${title}`)}&body=${encodeURIComponent(`Please let me know when the ${title} is ready.`)}`;
@@ -62,7 +63,7 @@ export function WorksheetsPage() {
             </Reveal>
           </div>
           <Reveal delay={0.1} y={40} className="tk-head__photo">
-            <SoftImg src={photoWorksheet} alt="A student filling in a TARK worksheet with a phone beside it" loading="eager" />
+            <SoftImg src={photoWorksheet} alt="A student writing on a TARK worksheet: flip a school rule completely" loading="eager" />
             <Buddy color="#FFD167" size={64} className="tk-head__buddy" delay={0.4} />
             <Squiggle kind="wave" width={130} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>
@@ -91,7 +92,15 @@ export function WorksheetsPage() {
       {/* ── How they work ───────────────────────────────────── */}
       <section className="sec">
         <div className="tk-wrap split">
-          <Reveal><h2 className="display-lg">One move<br />at a time.</h2></Reveal>
+          <div>
+            <Reveal><h2 className="display-lg">One move<br />at a time.</h2></Reveal>
+            <Reveal delay={0.08} className="side-photo">
+              <figure>
+                <SoftImg src={photoGuide} alt="The TARK facilitator guide for teachers and session leaders" />
+                <figcaption><i aria-hidden="true" />Every kit comes with a one-page facilitator guide</figcaption>
+              </figure>
+            </Reveal>
+          </div>
           <ol className="steps" style={{ marginTop: 0 }}>
             {[
               { t: 'Pick a kit',      d: 'Choose the kit that matches your context: classroom, home, or a specific literacy area.', c: '#FFD167' },

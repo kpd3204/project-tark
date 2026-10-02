@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
+import { DocBand } from '../components/ProjectDoc';
 import { PageFooter } from '../components/PageFooter';
 import { AssumptionTicker } from '../components/AssumptionTicker';
 import { HeroSection } from '../components/HeroSection';
@@ -29,9 +30,9 @@ const PILLARS = [
 ];
 
 const STATS: { value?: number; suffix?: string; text?: string; label: string; color: string; tint: string; source: string }[] = [
-  { value: 56, suffix: '%', label: "of Grade 8 students can't read a Grade 2 text.", color: '#FFD167', tint: 'var(--tint-open)',    source: 'ASER 2023' },
-  { text: '1 in 7',         label: 'Indian adolescents experience a mental health condition.', color: '#E27238', tint: 'var(--tint-trace)',   source: 'NIMHANS 2023' },
-  { value: 0, suffix: ' hrs', label: 'mandated in the Indian curriculum for thinking practice.', color: '#4DB49F', tint: 'var(--tint-surface)', source: 'NEP 2020' },
+  { text: '1 in 3',          label: "Class 8 students in rural government schools can't read a Class 2 text.", color: '#FFD167', tint: 'var(--tint-open)',    source: 'ASER 2024' },
+  { value: 37, suffix: '%',  label: 'average Class 9 maths score in the national survey.', color: '#E27238', tint: 'var(--tint-trace)',   source: 'PARAKH 2024' },
+  { text: '1 in 7',          label: '10 to 19 year olds worldwide live with a mental health condition.', color: '#4DB49F', tint: 'var(--tint-surface)', source: 'WHO 2025' },
 ];
 
 const PHOTOS = [
@@ -305,6 +306,9 @@ export function Home() {
       <ToolkitPeek />
       <AssumptionTicker />
       <Why />
+      <section className="sec sec--tight" style={{ background: '#FFFDF8', paddingTop: 0 }}>
+        <div className="tk-wrap"><DocBand /></div>
+      </section>
       <Close />
       <PageFooter />
     </div>

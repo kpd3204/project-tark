@@ -4,7 +4,7 @@ import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, MOVE_COLORS, MOVE_ORDER } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
-import photoSession from '../../imports/photos/presentation-screen.jpg';
+import photoSession from '../../imports/photos/real/zc-session-room.jpg';
 
 const MOVES_APPLIED: Record<string, string> = {
   OPEN: 'Persona and audience work',
@@ -33,7 +33,7 @@ export function CaseStudiesPage() {
             </Reveal>
           </div>
           <Reveal delay={0.1} y={40} className="tk-head__photo">
-            <SoftImg src={photoSession} alt="A TARK session in progress, with the framework on the screen" loading="eager" />
+            <SoftImg src={photoSession} alt="The ZenovoCare team in a TARK session at Studio Carbon" loading="eager" />
             <Buddy color="#465BA4" size={64} className="tk-head__buddy" delay={0.4} />
             <Squiggle kind="zigzag" width={110} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>
