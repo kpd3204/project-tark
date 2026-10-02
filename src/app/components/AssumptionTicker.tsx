@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Tag, Pill } from './play';
 
 const ITEMS = [
   'Hard work always leads to success.',
@@ -14,102 +14,41 @@ const ITEMS = [
   'Reading is less useful than practice.',
 ];
 
-const Diamond = () => (
-  <span
-    aria-hidden="true"
-    style={{
-      display: 'inline-block',
-      width: 5,
-      height: 5,
-      backgroundColor: '#C9C7C1',
-      transform: 'rotate(45deg)',
-      margin: '0 28px',
-      verticalAlign: 'middle',
-      flexShrink: 0,
-    }}
-  />
-);
+const COLORS = ['#FFD167', '#E27238', '#465BA4', '#4DB49F', '#DA3832'];
+const TILTS = [-2.5, 1.5, -1, 2.5, -1.8];
 
-const tickerContent = ITEMS.flatMap((item) => [item, null]);
-
+/* A band of everyday assumptions drifting past as tilted tags.
+   Hover pauses it; the action asks the reader to question them. */
 export function AssumptionTicker() {
   const [paused, setPaused] = useState(false);
 
   return (
-    <div
-      style={{
-        height: 54,
-        backgroundColor: '#F5F4F1',
-        borderTop: '1px solid var(--tk-border)',
-        borderBottom: '1px solid var(--tk-border)',
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-      }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {/* Left label */}
-      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, zIndex: 2, display: 'flex', alignItems: 'stretch' }}>
-        <div style={{ backgroundColor: '#F5F4F1', paddingInline: 'clamp(16px, 3vw, 28px)', display: 'flex', alignItems: 'center', borderRight: '1px solid var(--tk-border)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600, color: '#999999', whiteSpace: 'nowrap' }}>
-            Are these facts?
-          </span>
+    <section className="ticker" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="tk-wrap ticker__head">
+        <h2 className="ticker__title">
+          Are these <Tag bg="#FFD167" color="#1D1B16" tilt={-3}>facts?</Tag>
+        </h2>
+        <Pill to="/framework#open" variant="paper">Question them</Pill>
+      </div>
+
+      <div className="ticker__track" aria-label="Common assumptions">
+        <div className="ticker__run" style={{ animationPlayState: paused ? 'paused' : 'running' }}>
+          {[...ITEMS, ...ITEMS].map((item, i) => {
+            const c = COLORS[i % COLORS.length];
+            return (
+              <Tag
+                key={i}
+                bg={c}
+                color={c === '#FFD167' ? '#1D1B16' : '#FFFFFF'}
+                tilt={TILTS[i % TILTS.length]}
+                className="ticker__tag"
+              >
+                {item}
+              </Tag>
+            );
+          })}
         </div>
-        <div style={{ width: 64, background: 'linear-gradient(to right, #F5F4F1, transparent)' }} />
       </div>
-
-      {/* Right label */}
-      <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, zIndex: 2, display: 'flex', alignItems: 'stretch' }}>
-        <div style={{ width: 64, background: 'linear-gradient(to left, #F5F4F1, transparent)' }} />
-        <Link
-          to="/framework#open"
-          style={{
-            backgroundColor: '#F5F4F1',
-            paddingInline: 'clamp(16px, 3vw, 28px)',
-            display: 'flex', alignItems: 'center',
-            borderLeft: '1px solid var(--tk-border)',
-            textDecoration: 'none',
-            transition: 'background-color 0.25s',
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.backgroundColor = '#1A1A1A';
-            const label = e.currentTarget.querySelector('span') as HTMLElement;
-            if (label) label.style.color = '#FFD167';
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.backgroundColor = '#F5F4F1';
-            const label = e.currentTarget.querySelector('span') as HTMLElement;
-            if (label) label.style.color = '#999999';
-          }}
-        >
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600, color: '#999999', whiteSpace: 'nowrap', transition: 'color 0.25s' }}>
-            Question them →
-          </span>
-        </Link>
-      </div>
-
-      {/* Scrolling track */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          whiteSpace: 'nowrap',
-          animation: 'tk-ticker 64s linear infinite',
-          animationPlayState: paused ? 'paused' : 'running',
-        }}
-      >
-        {[...tickerContent, ...tickerContent].map((item, i) =>
-          item === null ? (
-            <Diamond key={i} />
-          ) : (
-            <span key={i} style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: '#777772' }}>
-              {item}
-            </span>
-          )
-        )}
-      </div>
-    </div>
+    </section>
   );
 }
