@@ -3,7 +3,7 @@ import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
-import photoBooklets from '../../imports/photos/real/five-moves-booklet-grass.jpg';
+import photoBooklets from '../../imports/photos/about/five-moves-booklet.jpg';
 import wsOpen from '../../imports/photos/real/ws-reframe-machine.jpg';
 import wsTrace from '../../imports/photos/real/ws-slow-burn.jpg';
 import wsShift from '../../imports/photos/real/ws-walk-a-mile.jpg';
@@ -197,7 +197,7 @@ export function FrameworkPage() {
             </Reveal>
           </div>
           <Reveal delay={0.1} y={40} className="tk-head__photo">
-            <SoftImg src={photoBooklets} alt="The Five Moves, Unlimited Possibilities booklet lying on green leaves" loading="eager" />
+            <SoftImg src={photoBooklets} alt="The Five Cognitive Moves booklet held open at the OPEN page" loading="eager" />
             <Buddy color="#DA3832" size={64} className="tk-head__buddy" delay={0.4} />
             <Squiggle kind="loop" width={120} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>
@@ -208,8 +208,8 @@ export function FrameworkPage() {
           <Reveal delay={0.15}>
             <nav className="jump" aria-label="Jump to a move">
               {moves.map((m) => (
-                <a key={m.english} href={`#${m.english.toLowerCase()}`} className="jump__item" style={{ backgroundColor: m.color, color: m.ink }}>
-                  <MoveIcon move={m.english} size={26} variant={m.ink === '#FFFFFF' ? 'white' : 'black'} />
+                <a key={m.english} href={`#${m.english.toLowerCase()}`} className="jump__item" style={{ backgroundColor: m.color, color: '#FFFFFF' }}>
+                  <MoveIcon move={m.english} size={26} variant="white" />
                   <span className="jump__name">{m.english}</span>
                   <span className="jump__hindi deva" lang="hi">{m.hindi}</span>
                   <span className="jump__go" aria-hidden="true">↓</span>

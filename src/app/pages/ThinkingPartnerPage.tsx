@@ -169,7 +169,7 @@ export function ThinkingPartnerPage() {
         <div className="tk-wrap home-close__inner">
           <Reveal><p className="home-close__kicker">Ready to begin?</p></Reveal>
           <Reveal delay={0.05}>
-            <h2 className="home-close__title" style={{ fontSize: 'clamp(40px, 6.4vw, 104px)' }}>Bring a real<br />situation.</h2>
+            <h2 className="home-close__title" style={{ fontSize: 'clamp(40px, 6.4vw, 104px)' }}>Bring a<br />real situation.</h2>
           </Reveal>
           <Reveal delay={0.1}>
             <div className="home-close__actions">

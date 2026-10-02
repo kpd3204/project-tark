@@ -22,6 +22,7 @@ const TOOLS = [
   { heading: 'Toolkit',      subtitle: '25 thinking tools',  path: '/toolkit',      color: MOVE_COLORS.SURFACE },
   { heading: 'Worksheets',   subtitle: 'Printable kits',     path: '/worksheets',   color: MOVE_COLORS.TRACE,  soon: true },
   { heading: 'Games',        subtitle: 'Thinking, played',   path: '/games',        color: MOVE_COLORS.OPEN,   soon: true },
+  { heading: 'Activity booklet', subtitle: '25 activities for young adults', path: '/activity-booklet', color: MOVE_COLORS.COMMIT, soon: true },
 ];
 
 const RESEARCH = [
@@ -89,6 +90,7 @@ const MOBILE = [
   { label: 'Thinking Partner', path: '/thinking-partner', color: MOVE_COLORS.SHIFT   },
   { label: 'Worksheets',       path: '/worksheets',       color: MOVE_COLORS.TRACE, soon: true },
   { label: 'Games',            path: '/games',            color: MOVE_COLORS.OPEN,  soon: true },
+  { label: 'Activity booklet', path: '/activity-booklet', color: MOVE_COLORS.COMMIT, soon: true },
   { label: 'Research',         path: '/research',         color: MOVE_COLORS.TRACE   },
   { label: 'Case Studies',     path: '/case-studies',     color: MOVE_COLORS.COMMIT  },
   { label: 'About',            path: '/about',            color: MOVE_COLORS.COMMIT  },
@@ -141,7 +143,7 @@ export function Navigation() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const toolsActive = ['/toolkit', '/worksheets', '/games'].some((p) => pathname.startsWith(p));
+  const toolsActive = ['/toolkit', '/worksheets', '/games', '/activity-booklet'].some((p) => pathname.startsWith(p));
   const researchActive = ['/research', '/case-studies'].some((p) => pathname.startsWith(p));
   const light = overHero && !mobileOpen;
   const v = (c: string, t: string) => ({ ['--c' as string]: c, ['--t' as string]: t });
