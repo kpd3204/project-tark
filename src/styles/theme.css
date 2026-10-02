@@ -59,9 +59,31 @@
   --tk-nav-bg:     rgba(255,255,255,0.92);
   --tk-navy:       #00253E;
 
+  /* Playful system — warm paper, ink, and soft tints of each move */
+  --paper:      #F6F0E4;
+  --paper-2:    #EFE6D4;
+  --ink:        #1D1B16;
+  --ink-2:      #4B463C;   /* body text on paper — 8.6:1 */
+  --ink-3:      #6B6458;   /* labels on paper — 5.3:1 */
+  --line:       #DDD3BF;
+  --tint-open:    #FFEDB8;
+  --tint-trace:   #FAD9C4;
+  --tint-shift:   #D7DDF3;
+  --tint-surface: #CFEDE4;
+  --tint-commit:  #F8D0CC;
+  /* move colours that hold up as text on paper */
+  --text-open:    #8A6400;
+  --text-trace:   #B4521E;
+  --text-shift:   #3A4D93;
+  --text-surface: #237565;
+  --text-commit:  #B8261F;
+  --r-lg: 28px;
+  --r-md: 18px;
+  --r-sm: 10px;
+
   /* Typography */
-  --font-display: 'Human Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-body:    'Human Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body:    'Figtree', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-mono:       'Geist Mono', 'Courier New', monospace;
   --font-devanagari: 'Noto Sans Devanagari', sans-serif;
 

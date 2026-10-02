@@ -71,7 +71,7 @@ export function Root() {
   }, [pathname]);
 
   return (
-    <div style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: 'var(--paper)', minHeight: '100vh' }}>
       {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
       {/* The landing page has its own pen interaction in the hero */}
       {pathname !== '/' && <DiamondCursor />}

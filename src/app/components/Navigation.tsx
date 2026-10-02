@@ -187,7 +187,7 @@ export function Navigation() {
           position: 'fixed',
           top: 0, left: 0, right: 0,
           zIndex: 100,
-          backgroundColor: light ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.92)',
+          backgroundColor: light ? 'rgba(246,240,228,0)' : 'rgba(246,240,228,0.9)',
           backdropFilter: light ? 'none' : 'blur(16px)',
           WebkitBackdropFilter: light ? 'none' : 'blur(16px)',
           borderBottom: light || mobileOpen ? '1px solid transparent' : '1px solid rgba(26,26,26,0.08)',

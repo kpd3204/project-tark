@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { Link } from 'react-router';
 import imgRoom from '../../imports/hero/session-room.jpg';
 import imgWriting from '../../imports/hero/writing.jpg';
 import imgGroup from '../../imports/hero/group-table.jpg';
@@ -9,6 +8,7 @@ import imgDiscussion from '../../imports/hero/discussion.jpg';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { DiamondField } from './DiamondField';
 import { EASE } from './kit';
+import { Pill } from './play';
 
 /* Each phrase is paired with a photograph from a TARK session
    and one of the five move colours. */
@@ -164,13 +164,9 @@ export function HeroSection() {
             borderTop: '1px solid rgba(255,255,255,0.22)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', width: isMobile ? '100%' : 'auto' }}>
-            <Link to="/thinking-partner" className="tk-btn tk-btn--paper" style={{ padding: isMobile ? '15px 20px' : '16px 30px', flex: isMobile ? 1 : undefined }}>
-              Start Thinking →
-            </Link>
-            <Link to="/toolkit" className="tk-btn tk-btn--ghost-light" style={{ padding: isMobile ? '15px 20px' : '16px 30px', flex: isMobile ? 1 : undefined }}>
-              See the Tools
-            </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <Pill to="/thinking-partner" variant="yellow">Start thinking</Pill>
+            <Pill to="/toolkit" variant="ghost-light">See the tools</Pill>
             {!isMobile && (
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgba(255,255,255,0.72)', letterSpacing: '0.14em', textTransform: 'uppercase', marginLeft: 10 }}>
                 Free · No sign-up · Ages 13–22
