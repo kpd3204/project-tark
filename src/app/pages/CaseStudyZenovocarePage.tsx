@@ -6,8 +6,8 @@ import { useIsMobile } from '../hooks/useIsMobile';
 const BORDER = '#E0E0E0';
 
 const MOVES_META = [
-  { key: 'OPEN',    color: '#FFD167', textColor: '#1A1A1A', hindi: 'उलझना'      },
-  { key: 'TRACE',   color: '#E27238', textColor: '#FFFFFF', hindi: 'परखना'       },
+  { key: 'OPEN',    color: '#FFD167', textColor: '#1A1A1A', hindi: 'खुलना'      },
+  { key: 'TRACE',   color: '#E27238', textColor: '#FFFFFF', hindi: 'खोजना'       },
   { key: 'SHIFT',   color: '#465BA4', textColor: '#FFFFFF', hindi: 'बदलना'       },
   { key: 'SURFACE', color: '#4DB49F', textColor: '#FFFFFF', hindi: 'उभरना'       },
   { key: 'COMMIT',  color: '#DA3832', textColor: '#FFFFFF', hindi: 'प्रतिबद्ध' },
@@ -112,7 +112,7 @@ const zenovocare = {
   },
   {
     src: 'https://i.postimg.cc/Ny7xM2Cw/group1.jpg',
-    alt: 'Group session at Studio Carbon — TARK website visible on screen',
+    alt: 'Group session at Studio Carbon, TARK website visible on screen',
     caption: 'Group working session',
     style: {
       width: '100%',
@@ -136,7 +136,7 @@ const zenovocare = {
   },
   {
     src: 'https://i.postimg.cc/3yCZR0SS/discussion.jpg',
-    alt: 'Post-assessment discussion — reviewing findings',
+    alt: 'Post-assessment discussion, reviewing findings',
     caption: 'Post-session debrief',
     style: {
       width: '100%',
@@ -247,7 +247,7 @@ export function CaseStudyZenovocarePage() {
 
   return (
     <>
-      {/* ── SECTION A — HERO ─────────────────────── */}
+      {/* ── SECTION A, HERO ─────────────────────── */}
       <section style={{ backgroundColor: '#1C2B3A', paddingTop: '120px', paddingBottom: '80px', paddingLeft: 'clamp(24px, 6vw, 96px)', paddingRight: 'clamp(24px, 6vw, 96px)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '64px', alignItems: 'start' }}>
@@ -301,7 +301,7 @@ export function CaseStudyZenovocarePage() {
         </div>
       </section>
 
-      {/* ── SECTION B — CONTEXT NARRATIVE ────────── */}
+      {/* ── SECTION B, CONTEXT NARRATIVE ────────── */}
       <section style={{ backgroundColor: '#FFFFFF', padding: 'clamp(48px, 6vw, 80px) clamp(24px, 6vw, 96px)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-display)', color: '#999999', fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 600, marginBottom: '20px' }}>The Session</div>
@@ -322,7 +322,7 @@ export function CaseStudyZenovocarePage() {
         </div>
       </section>
 
-      {/* ── SECTION C — SESSION PHOTOS ───────────── */}
+      {/* ── SECTION C, SESSION PHOTOS ───────────── */}
       <section style={{ backgroundColor: '#F5F4F1' }}>
         {isMobile ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -347,7 +347,7 @@ export function CaseStudyZenovocarePage() {
         )}
       </section>
 
-      {/* ── SECTION D — OVERALL ASSESSMENT ──────── */}
+      {/* ── SECTION D, OVERALL ASSESSMENT ──────── */}
       <section style={{ backgroundColor: '#FFFFFF', padding: 'clamp(48px, 6vw, 80px) clamp(24px, 6vw, 96px)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-display)', color: '#999999', fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 600, marginBottom: '32px' }}>Assessment</div>
@@ -382,7 +382,7 @@ export function CaseStudyZenovocarePage() {
         </div>
       </section>
 
-      {/* ── SECTION E — FIVE MOVE BREAKDOWN ──────── */}
+      {/* ── SECTION E, FIVE MOVE BREAKDOWN ──────── */}
       <section style={{ backgroundColor: '#F5F4F1', padding: 'clamp(48px, 6vw, 80px) clamp(24px, 6vw, 96px)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-display)', color: '#999999', fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 600, marginBottom: '24px' }}>Move-by-Move Assessment</div>
@@ -401,7 +401,7 @@ export function CaseStudyZenovocarePage() {
         </div>
       </section>
 
-      {/* ── SECTION F — WHAT TO DO NEXT ──────────── */}
+      {/* ── SECTION F, WHAT TO DO NEXT ──────────── */}
       <section style={{ backgroundColor: '#1C2B3A', padding: 'clamp(48px, 6vw, 80px) clamp(24px, 6vw, 96px)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }} ref={nextSteps.ref}>
           <div style={{ fontFamily: 'var(--font-display)', color: '#999999', fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 600, marginBottom: '32px' }}>What Comes Next</div>
@@ -434,7 +434,7 @@ export function CaseStudyZenovocarePage() {
         </div>
       </section>
 
-      {/* ── SECTION G — FRAMEWORK CTA ────────────── */}
+      {/* ── SECTION G, FRAMEWORK CTA ────────────── */}
       <section style={{ backgroundColor: '#FFD167', padding: 'clamp(48px, 6vw, 80px) clamp(24px, 6vw, 96px)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 600, color: 'rgba(26,26,26,0.5)', marginBottom: '16px' }}>The Framework</div>
@@ -453,7 +453,7 @@ export function CaseStudyZenovocarePage() {
         </div>
       </section>
 
-      {/* ── SECTION H — BACK NAVIGATION ──────────── */}
+      {/* ── SECTION H, BACK NAVIGATION ──────────── */}
       <section style={{ backgroundColor: '#FFFFFF', padding: 'clamp(32px, 4vw, 48px) clamp(24px, 6vw, 96px)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto', textAlign: 'center' }}>
           <BackLink />

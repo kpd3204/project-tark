@@ -44,7 +44,7 @@ export function Root() {
     try {
       if (sessionStorage.getItem('tk-intro-seen')) return false;
       sessionStorage.setItem('tk-intro-seen', '1');
-    } catch { /* storage unavailable — just play it */ }
+    } catch { /* storage unavailable, just play it */ }
     return true;
   });
   /* Let the page know while the intro covers it (the hero holds its entrance) */

@@ -1,363 +1,194 @@
 import { useState, useEffect, useRef } from 'react';
-import { NavLink, Link, useNavigate, useLocation } from 'react-router';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
+import { NavLink, Link, useLocation } from 'react-router';
 import logoSrc from '../../imports/Asset_23_4x-5.png';
 import logoLightSrc from '../../imports/logo-light.png';
-import { EASE, MOVE_COLORS, Diamond } from './kit';
+import { MOVE_COLORS } from './kit';
+import { Buddy } from './play';
 
-const TOOLS_DROPDOWN = [
-  { heading: 'Toolkit',    subtitle: '25 thinking tools',        path: '/toolkit',    color: MOVE_COLORS.SURFACE },
-  { heading: 'Worksheets', subtitle: '40 printable sheets',      path: '/worksheets', color: MOVE_COLORS.TRACE   },
-  { heading: 'Games',      subtitle: 'WHAT IF? and more',        path: '/games',      color: MOVE_COLORS.OPEN    },
+/* Navigation: logo on the left; on the right, the index sits in a solid
+   rounded pill so it reads the same over photography and over paper.
+   Every link carries a move colour. State changes only when a threshold is
+   crossed, so scrolling never re-renders the bar. */
+
+const LINKS = [
+  { label: 'Framework',        path: '/framework',        color: MOVE_COLORS.OPEN,    tint: 'var(--tint-open)'    },
+  { label: 'Thinking Partner', path: '/thinking-partner', color: MOVE_COLORS.SHIFT,   tint: 'var(--tint-shift)'   },
+  { label: 'Research',         path: '/research',         color: MOVE_COLORS.TRACE,   tint: 'var(--tint-trace)'   },
+  { label: 'About',            path: '/about',            color: MOVE_COLORS.COMMIT,  tint: 'var(--tint-commit)'  },
 ];
 
-const MOBILE_INDEX = [
-  { label: 'Framework',  desc: 'Five moves for thinking better',  path: '/framework',  color: MOVE_COLORS.OPEN    },
-  { label: 'Toolkit',    desc: '25 thinking tools',               path: '/toolkit',    color: MOVE_COLORS.SURFACE },
-  { label: 'Worksheets', desc: 'Print and fill',                  path: '/worksheets', color: MOVE_COLORS.TRACE   },
-  { label: 'Games',      desc: 'The WHAT IF? card game',          path: '/games',      color: MOVE_COLORS.SHIFT   },
-  { label: 'Research',   desc: 'The evidence base',               path: '/research',   color: MOVE_COLORS.SHIFT   },
-  { label: 'About',      desc: 'The project and the people',      path: '/about',      color: MOVE_COLORS.SURFACE },
+const TOOLS = [
+  { heading: 'Toolkit',      subtitle: '25 thinking tools',  path: '/toolkit',      color: MOVE_COLORS.SURFACE },
+  { heading: 'Worksheets',   subtitle: 'Printable kits',     path: '/worksheets',   color: MOVE_COLORS.TRACE,  soon: true },
+  { heading: 'Games',        subtitle: 'Thinking, played',   path: '/games',        color: MOVE_COLORS.OPEN,   soon: true },
+  { heading: 'Case Studies', subtitle: 'TARK in the field',  path: '/case-studies', color: MOVE_COLORS.COMMIT },
 ];
 
-/* ── Desktop nav link with underline that draws in ───────────── */
-function TopLink({ label, path, light = false }: { label: string; path: string; light?: boolean }) {
-  const ink = light ? '#FFFFFF' : '#1A1A1A';
-  const dim = light ? 'rgba(255,255,255,0.78)' : 'rgba(26,26,26,0.7)';
-  return (
-    <NavLink to={path} style={{ textDecoration: 'none' }}>
-      {({ isActive }) => (
-        <span
-          style={{
-            position: 'relative',
-            display: 'inline-block',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 12,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            fontWeight: 600,
-            color: isActive ? ink : dim,
-            paddingBottom: 5,
-            backgroundImage: `linear-gradient(${ink}, ${ink})`,
-            backgroundSize: isActive ? '100% 1.5px' : '0% 1.5px',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'left bottom',
-            transition: 'color 0.25s, background-size 0.4s cubic-bezier(0.22,1,0.36,1)',
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.color = ink;
-            (e.currentTarget as HTMLElement).style.backgroundSize = '100% 1.5px';
-          }}
-          onMouseLeave={(e) => {
-            if (!isActive) {
-              (e.currentTarget as HTMLElement).style.color = dim;
-              (e.currentTarget as HTMLElement).style.backgroundSize = '0% 1.5px';
-            }
-          }}
-        >
-          {label}
-        </span>
-      )}
-    </NavLink>
-  );
-}
+const MOBILE = [
+  { label: 'Framework',        path: '/framework',        color: MOVE_COLORS.OPEN    },
+  { label: 'Toolkit',          path: '/toolkit',          color: MOVE_COLORS.SURFACE },
+  { label: 'Thinking Partner', path: '/thinking-partner', color: MOVE_COLORS.SHIFT   },
+  { label: 'Worksheets',       path: '/worksheets',       color: MOVE_COLORS.TRACE, soon: true },
+  { label: 'Games',            path: '/games',            color: MOVE_COLORS.OPEN,  soon: true },
+  { label: 'Case Studies',     path: '/case-studies',     color: MOVE_COLORS.COMMIT  },
+  { label: 'Research',         path: '/research',         color: MOVE_COLORS.TRACE   },
+  { label: 'About',            path: '/about',            color: MOVE_COLORS.COMMIT  },
+];
 
-/* ── Tools dropdown ──────────────────────────────────────────── */
-function ToolsDropdown({ onClose }: { onClose: () => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8, clipPath: 'inset(0 0 100% 0)' }}
-      animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
-      exit={{ opacity: 0, y: 4, clipPath: 'inset(0 0 100% 0)' }}
-      transition={{ duration: 0.35, ease: EASE }}
-      style={{
-        position: 'absolute',
-        top: '100%',
-        right: -22,
-        width: 264,
-        backgroundColor: '#FFFFFF',
-        border: '1px solid var(--tk-border)',
-        boxShadow: '0 24px 48px -24px rgba(26,26,26,0.18)',
-        zIndex: 200,
-        padding: '8px 0',
-      }}
-    >
-      {TOOLS_DROPDOWN.map((item, i) => (
-        <motion.div
-          key={item.path}
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.35, delay: 0.06 + i * 0.05, ease: EASE }}
-        >
-          <Link
-            to={item.path}
-            onClick={onClose}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-              padding: '13px 22px',
-              textDecoration: 'none',
-              transition: 'background-color 0.2s, padding-left 0.25s cubic-bezier(0.22,1,0.36,1)',
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.backgroundColor = '#F5F4F1';
-              el.style.paddingLeft = '28px';
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.backgroundColor = 'transparent';
-              el.style.paddingLeft = '22px';
-            }}
-          >
-            <Diamond color={item.color} size={7} />
-            <div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2 }}>
-                {item.heading}
-              </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.06em', color: '#6B6B66', marginTop: 3 }}>
-                {item.subtitle}
-              </div>
-            </div>
-          </Link>
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-}
+/* Pages that still open on a dark band: the mark switches to its light
+   version while that band is behind the bar. */
+const DARK_TOP = ['/framework', '/thinking-partner', '/toolkit', '/research', '/about'];
 
-/* ── Main navigation ─────────────────────────────────────────── */
-export function Navigation() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [toolsOpen, setToolsOpen]   = useState(false);
-  const [hidden, setHidden]         = useState(false);
-  const [scrolled, setScrolled]     = useState(false);
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const toolsRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  const lastY = useRef(0);
-
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    const prev = lastY.current;
-    lastY.current = y;
-    setScrolled(y > 24);
-    if (mobileOpen || toolsOpen) { setHidden(false); return; }
-    if (y < 120) { setHidden(false); return; }
-    setHidden(y > prev && y - prev > 2);
-  });
-
+function useScrollFlags(pathname: string) {
+  const [overHero, setOverHero] = useState(pathname === '/');
+  const [scrolled, setScrolled] = useState(false);
+  const [darkTop, setDarkTop] = useState(false);
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (toolsRef.current && !toolsRef.current.contains(e.target as Node)) setToolsOpen(false);
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const hero = pathname === '/' && y < window.innerHeight - 90;
+      setOverHero((v) => (v === hero ? v : hero));
+      const s = y > 8;
+      setScrolled((v) => (v === s ? v : s));
+      const d = DARK_TOP.includes(pathname) && y < 300;
+      setDarkTop((v) => (v === d ? v : d));
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
+    read();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [pathname]);
+  return { overHero, scrolled, darkTop };
+}
+
+export function Navigation() {
+  const { pathname } = useLocation();
+  const { overHero, scrolled, darkTop } = useScrollFlags(pathname);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const closeTimer = useRef<number>(0);
+  const toolsRef = useRef<HTMLDivElement>(null);
+
+  const openTools = () => { window.clearTimeout(closeTimer.current); setToolsOpen(true); };
+  const closeToolsSoon = () => { window.clearTimeout(closeTimer.current); closeTimer.current = window.setTimeout(() => setToolsOpen(false), 160); };
 
   useEffect(() => { setMobileOpen(false); setToolsOpen(false); }, [pathname]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setToolsOpen(false); setMobileOpen(false); } };
+    const onDown = (e: MouseEvent) => { if (toolsRef.current && !toolsRef.current.contains(e.target as Node)) setToolsOpen(false); };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('mousedown', onDown);
+    return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('mousedown', onDown); };
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const toolsActive = ['/toolkit', '/worksheets', '/games'].some((p) => pathname.startsWith(p));
-
-  /* Over the home hero the bar turns transparent and light */
-  const [heroH, setHeroH] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 800));
-  useEffect(() => {
-    const onResize = () => setHeroH(window.innerHeight);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-  const [overHero, setOverHero] = useState(pathname === '/');
-  useMotionValueEvent(scrollY, 'change', (y) => setOverHero(pathname === '/' && y < heroH - 68));
-  useEffect(() => { setOverHero(pathname === '/' && window.scrollY < heroH - 68); }, [pathname, heroH]);
-  const light = overHero && !mobileOpen && !toolsOpen;
-  const ink = light ? '#FFFFFF' : '#1A1A1A';
+  const toolsActive = ['/toolkit', '/worksheets', '/games', '/case-studies'].some((p) => pathname.startsWith(p));
+  const light = overHero && !mobileOpen;
+  const v = (c: string, t: string) => ({ ['--c' as string]: c, ['--t' as string]: t });
 
   return (
     <>
-      <motion.nav
-        animate={{ y: hidden ? '-101%' : '0%' }}
-        transition={{ duration: 0.45, ease: EASE }}
-        style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0,
-          zIndex: 100,
-          backgroundColor: light ? 'rgba(246,240,228,0)' : 'rgba(246,240,228,0.9)',
-          backdropFilter: light ? 'none' : 'blur(16px)',
-          WebkitBackdropFilter: light ? 'none' : 'blur(16px)',
-          borderBottom: light || mobileOpen ? '1px solid transparent' : '1px solid rgba(26,26,26,0.08)',
-          transition: 'background-color 0.4s, border-color 0.4s',
-        }}
-      >
-        <div
-          className={light ? 'h-[80px] lg:h-[112px]' : 'h-[68px]'}
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            paddingInline: 'var(--gutter)',
-            transition: 'height 0.45s cubic-bezier(0.22,1,0.36,1)',
-          }}
-        >
-          {/* Left — the mark. Over the home hero it sits large, like a masthead. */}
-          <button
-            onClick={() => navigate('/')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
-            aria-label="Project TARK — home"
-          >
-            <img
-              src={light ? logoLightSrc : logoSrc}
-              alt="Project तर्क"
-              className={light ? 'h-[30px] lg:h-[46px]' : 'h-[24px] lg:h-[30px]'}
-              style={{ width: 'auto', display: 'block', transition: 'height 0.45s cubic-bezier(0.22,1,0.36,1)' }}
-            />
-          </button>
+      <header className={`nav ${light ? 'nav--hero' : ''} ${scrolled && !light && !darkTop ? 'nav--solid' : ''}`}>
+        <Link to="/" className="nav__logo" aria-label="Project तर्क home">
+          <img src={light || (darkTop && !mobileOpen) ? logoLightSrc : logoSrc} alt="Project तर्क" />
+        </Link>
 
-          {/* Right — the index */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 34 }}>
-            {/* Desktop — only once there is genuinely room for the full row */}
-            <div className="hidden lg:flex items-center" style={{ gap: 34 }}>
-              <TopLink label="Framework" path="/framework" light={light} />
+        {/* Desktop index */}
+        <nav className="nav__pill" aria-label="Main">
+          <NavLink to="/framework" className={({ isActive }) => `nav__link ${isActive ? 'is-active' : ''}`} style={v(LINKS[0].color, LINKS[0].tint)}>
+            <span className="nav__dot" aria-hidden="true" />Framework
+          </NavLink>
 
-              <div
-                ref={toolsRef}
-                style={{ position: 'relative' }}
-                onMouseEnter={() => setToolsOpen(true)}
-                onMouseLeave={() => setToolsOpen(false)}
-              >
-                <button
-                  onClick={() => setToolsOpen((v) => !v)}
-                  aria-expanded={toolsOpen}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.14em',
-                    textTransform: 'uppercase', fontWeight: 600,
-                    color: toolsOpen || toolsActive ? ink : light ? 'rgba(255,255,255,0.78)' : 'rgba(26,26,26,0.7)',
-                    padding: '22px 0',
-                    transition: 'color 0.25s',
-                  }}
-                >
-                  Tools
-                  <span
-                    style={{
-                      width: 6, height: 6,
-                      transform: `rotate(45deg) scale(${toolsOpen ? 1.3 : 1})`,
-                      backgroundColor: toolsOpen || toolsActive ? ink : light ? 'rgba(255,255,255,0.7)' : '#8A8A85',
-                      display: 'inline-block',
-                      transition: 'transform 0.3s cubic-bezier(0.22,1,0.36,1), background-color 0.25s',
-                    }}
-                  />
-                </button>
-                <AnimatePresence>
-                  {toolsOpen && <ToolsDropdown onClose={() => setToolsOpen(false)} />}
-                </AnimatePresence>
-              </div>
-
-              <TopLink label="Thinking Partner" path="/thinking-partner" light={light} />
-              <TopLink label="Research" path="/research" light={light} />
-              <TopLink label="About" path="/about" light={light} />
-
-              {/* The hero carries its own call to action; the bar picks it up after */}
-              {!light && (
-                <Link to="/thinking-partner" className="tk-btn tk-btn--ink" style={{ padding: '13px 24px' }}>
-                  Start Thinking →
-                </Link>
-              )}
-            </div>
-
-            {/* Mobile toggle */}
+          <div ref={toolsRef} className="nav__tools" onMouseEnter={openTools} onMouseLeave={closeToolsSoon}>
             <button
-              className="lg:hidden flex flex-col items-end justify-center"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                minWidth: 44, minHeight: 44, gap: 5, padding: '8px 0 8px 8px',
-              }}
+              type="button"
+              className={`nav__link ${toolsActive ? 'is-active' : ''} ${toolsOpen ? 'is-open' : ''}`}
+              style={v(MOVE_COLORS.SURFACE, 'var(--tint-surface)')}
+              aria-expanded={toolsOpen}
+              aria-haspopup="true"
+              onClick={() => setToolsOpen((o) => !o)}
             >
-              <motion.span animate={{ rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 3.5 : 0 }} style={{ display: 'block', height: 1.5, width: 22, backgroundColor: ink, transformOrigin: 'center', transition: 'background-color 0.3s' }} />
-              <motion.span animate={{ rotate: mobileOpen ? -45 : 0, y: mobileOpen ? -3.5 : 0, width: mobileOpen ? 22 : 14 }} style={{ display: 'block', height: 1.5, width: 14, backgroundColor: ink, transformOrigin: 'center', transition: 'background-color 0.3s' }} />
+              <span className="nav__dot" aria-hidden="true" />Tools
+              <span className="nav__caret" aria-hidden="true" />
             </button>
-          </div>
-        </div>
-      </motion.nav>
 
-      {/* ── Mobile overlay — editorial index ─────────────────── */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ clipPath: 'inset(0 0 100% 0)' }}
-            animate={{ clipPath: 'inset(0 0 0% 0)' }}
-            exit={{ clipPath: 'inset(0 0 100% 0)' }}
-            transition={{ duration: 0.55, ease: EASE }}
-            style={{
-              position: 'fixed', inset: 0, zIndex: 90,
-              backgroundColor: '#F5F4F1',
-              display: 'flex', flexDirection: 'column',
-              paddingTop: 68,
-            }}
-          >
-            <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-              {MOBILE_INDEX.map((item, i) => (
-                <motion.div
-                  key={item.path}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.15 + i * 0.05, ease: EASE }}
-                  style={{ borderBottom: '1px solid var(--tk-border)' }}
-                >
-                  <NavLink
-                    to={item.path}
-                    onClick={() => setMobileOpen(false)}
-                    style={{
-                      display: 'flex', alignItems: 'baseline', gap: 16,
-                      padding: '20px var(--gutter)',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', color: '#999999', minWidth: 24 }}>
-                      {String(i + 1).padStart(2, '0')}
+            <div className={`nav__menu ${toolsOpen ? 'is-open' : ''}`} role="menu">
+              {TOOLS.map((t) => (
+                <Link key={t.path} to={t.path} className="nav__item" role="menuitem" tabIndex={toolsOpen ? 0 : -1} onClick={() => setToolsOpen(false)}>
+                  <Buddy color={t.color} size={40} />
+                  <span className="nav__item-text">
+                    <span className="nav__item-title">
+                      {t.heading}
+                      {t.soon && <span className="soon">Soon</span>}
                     </span>
-                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(26px, 7vw, 40px)', fontWeight: 700, letterSpacing: '-0.02em', color: '#1A1A1A', lineHeight: 1 }}>
-                      {item.label}
-                    </span>
-                    <Diamond color={item.color} size={7} style={{ marginLeft: 'auto' }} />
-                  </NavLink>
-                </motion.div>
-              ))}
-
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 + MOBILE_INDEX.length * 0.05, ease: EASE }}
-                style={{ padding: '28px var(--gutter)' }}
-              >
-                <Link to="/thinking-partner" onClick={() => setMobileOpen(false)} className="tk-btn tk-btn--ink" style={{ width: '100%', padding: '18px 24px' }}>
-                  Start Thinking →
+                    <span className="nav__item-sub">{t.subtitle}</span>
+                  </span>
+                  <span className="nav__item-go" aria-hidden="true">→</span>
                 </Link>
-              </motion.div>
+              ))}
             </div>
+          </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              style={{ padding: '16px var(--gutter) 24px', borderTop: '1px solid var(--tk-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          {LINKS.slice(1).map((l) => (
+            <NavLink key={l.path} to={l.path} className={({ isActive }) => `nav__link ${isActive ? 'is-active' : ''}`} style={v(l.color, l.tint)}>
+              <span className="nav__dot" aria-hidden="true" />{l.label}
+            </NavLink>
+          ))}
+
+          <Link to="/thinking-partner" className="nav__cta">
+            Start thinking <span className="nav__cta-arrow" aria-hidden="true">→</span>
+          </Link>
+        </nav>
+
+        {/* Mobile trigger */}
+        <button
+          type="button"
+          className="nav__menu-btn"
+          aria-expanded={mobileOpen}
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          onClick={() => setMobileOpen((o) => !o)}
+        >
+          <span>{mobileOpen ? 'Close' : 'Menu'}</span>
+          <span className={`nav__burger ${mobileOpen ? 'is-x' : ''}`} aria-hidden="true"><i /><i /></span>
+        </button>
+      </header>
+
+      {/* Mobile overlay */}
+      <div className={`mnav ${mobileOpen ? 'is-open' : ''}`} aria-hidden={!mobileOpen}>
+        <nav className="mnav__list" aria-label="Mobile">
+          {MOBILE.map((m, i) => (
+            <NavLink
+              key={m.path}
+              to={m.path}
+              className="mnav__link"
+              style={{ ['--c' as string]: m.color, transitionDelay: mobileOpen ? `${60 + i * 35}ms` : '0ms' }}
+              tabIndex={mobileOpen ? 0 : -1}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#999999' }}>
-                Project तर्क · 2026
-              </span>
-              <span style={{ display: 'flex', gap: 6 }}>
-                {Object.values(MOVE_COLORS).map((c) => <Diamond key={c} color={c} size={6} />)}
-              </span>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <span className="mnav__diamond" aria-hidden="true" />
+              {m.label}
+              {m.soon && <span className="soon">Soon</span>}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="mnav__foot">
+          <Link to="/thinking-partner" className="pill pill--ink" tabIndex={mobileOpen ? 0 : -1}>
+            <span>Start thinking</span><span className="pill__arrow" aria-hidden="true">→</span>
+          </Link>
+          <a href="https://www.instagram.com/project.tark/" target="_blank" rel="noopener noreferrer" className="mnav__ig" tabIndex={mobileOpen ? 0 : -1}>@project.tark</a>
+        </div>
+      </div>
     </>
   );
 }

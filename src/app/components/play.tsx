@@ -1,4 +1,4 @@
-/* play — the playful layer of the TARK identity.
+/* play, the playful layer of the TARK identity.
    Buddy:    a TARK diamond with eyes that follow the pointer and blink.
    Squiggle: a hand-drawn line that draws itself when it scrolls into view.
    Tag:      a tilted colour label.
@@ -98,14 +98,14 @@ export function Buddy({
   );
 }
 
-/* ── Squiggle — hand-drawn strokes ───────────────────────────── */
+/* ── Squiggle, hand-drawn strokes ───────────────────────────── */
 const SQUIGGLES = {
   loop:   { vb: '0 0 160 70',  d: 'M6 52 C 26 10, 58 8, 62 34 C 66 58, 34 62, 40 38 C 46 14, 92 8, 108 30 C 120 46, 134 50, 154 30' },
   arrow:  { vb: '0 0 120 90',  d: 'M8 82 C 12 40, 40 14, 96 14 M80 2 L 98 14 L 82 28' },
   zigzag: { vb: '0 0 150 50',  d: 'M4 40 L 22 10 L 40 40 L 58 10 L 76 40 L 94 10 L 112 40 L 130 10 L 146 34' },
   wave:   { vb: '0 0 180 40',  d: 'M4 24 C 24 4, 40 4, 56 22 S 92 40, 110 20 S 146 4, 176 22' },
   spiral: { vb: '0 0 90 90',   d: 'M46 46 C 52 42, 54 52, 46 54 C 36 56, 34 40, 46 36 C 62 32, 66 56, 48 64 C 26 72, 18 40, 36 26 C 56 12, 82 30, 78 54' },
-  underline: { vb: '0 0 300 24', d: 'M4 16 C 60 6, 140 4, 200 10 S 280 18, 296 8' },
+  underline: { vb: '0 0 300 24', d: 'M4 15 C 70 9, 170 8, 296 12' },
 } as const;
 
 export type SquiggleKind = keyof typeof SQUIGGLES;
@@ -136,7 +136,8 @@ export function Squiggle({
         strokeWidth={stroke}
         strokeLinecap="round"
         strokeLinejoin="round"
-        vectorEffect="non-scaling-stroke"
+        // a stretched underline must not use non-scaling-stroke, or the draw-in dash is mis-measured
+        vectorEffect={kind === 'underline' ? undefined : 'non-scaling-stroke'}
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true, margin: '0px 0px -10% 0px' }}
@@ -146,7 +147,7 @@ export function Squiggle({
   );
 }
 
-/* ── Tag — a tilted colour label ─────────────────────────────── */
+/* ── Tag, a tilted colour label ─────────────────────────────── */
 export function Tag({
   children,
   bg,
@@ -169,7 +170,7 @@ export function Tag({
   );
 }
 
-/* ── Pill — rounded button with a round arrow ────────────────── */
+/* ── Pill, rounded button with a round arrow ────────────────── */
 export function Pill({
   children,
   to,

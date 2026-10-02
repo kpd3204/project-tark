@@ -5,7 +5,7 @@ import { PageFooter } from '../components/PageFooter';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { EASE, Reveal, LineReveal, SectionHead, Diamond } from '../components/kit';
 
-/* 5 move colours — sections are identified only by colour, not by name */
+/* 5 move colours, sections are identified only by colour, not by name */
 const SECTIONS = [
   {
     color: '#FFD167', textColor: '#1A1A1A',
@@ -15,7 +15,7 @@ const SECTIONS = [
     ],
     citations: [
       { author: 'ASER Centre', year: '2023', title: 'Annual Status of Education Report 2023', synthesis: 'Persistent learning poverty despite record enrollment. 56% of Grade 8 students cannot read a Grade 2-level text, a signal that correct-answer thinking dominates at the expense of genuine comprehension.', url: 'https://asercentre.org/aser-2023/' },
-      { author: 'NEP 2020 Analysis', year: '2020', title: 'National Education Policy — Implementation Review', synthesis: "Critical thinking is named as a goal in India's NEP 2020, yet zero curriculum hours are explicitly mandated for speculative or reflective practice. Intent without structure produces no change.", url: 'https://www.education.gov.in/nep/about-nep' },
+      { author: 'NEP 2020 Analysis', year: '2020', title: 'National Education Policy: Implementation Review', synthesis: "Critical thinking is named as a goal in India's NEP 2020, yet zero curriculum hours are explicitly mandated for speculative or reflective practice. Intent without structure produces no change.", url: 'https://www.education.gov.in/nep/about-nep' },
     ],
   },
   {
@@ -25,7 +25,7 @@ const SECTIONS = [
       { stat: '3.5×', label: 'higher dropout rate among students with low classroom agency', source: 'UDISE+ 2022–23' },
     ],
     citations: [
-      { author: 'NCERT', year: '2022', title: 'National Survey of Teachers on Curriculum Flexibility', synthesis: '76% of surveyed teachers report that existing syllabi leave little room for open-ended discussion. The constraint is systemic, not attitudinal — teachers want to; the structure does not allow it.', url: 'https://ncert.nic.in/' },
+      { author: 'NCERT', year: '2022', title: 'National Survey of Teachers on Curriculum Flexibility', synthesis: '76% of surveyed teachers report that existing syllabi leave little room for open-ended discussion. The constraint is systemic, not attitudinal, teachers want to; the structure does not allow it.', url: 'https://ncert.nic.in/' },
       { author: 'UDISE+', year: '2022', title: 'Unified District Information System for Education (2022–23)', synthesis: 'Students reporting low classroom agency drop out at 3.5× the rate of engaged peers. Disengagement is predictable, and preventable, when traced to its structural causes.', url: 'https://udiseplus.gov.in/' },
     ],
   },
@@ -37,7 +37,7 @@ const SECTIONS = [
     ],
     citations: [
       { author: 'World Economic Forum', year: '2025', title: 'Future of Jobs Report 2025', synthesis: 'Critical and creative thinking top the global skills agenda for 2030. Automation will reshape work fundamentally; perspective-shifting and alternative generation are the distinctly human competitive advantage.', url: 'https://www.weforum.org/reports/the-future-of-jobs-report-2025/' },
-      { author: 'PISA / OECD', year: '2022', title: 'PISA 2022 Results — Creative Thinking', synthesis: 'Finland and Estonia, which centre speculative and collaborative learning, lead global rankings. Alternative approaches to curriculum design produce measurably different outcomes across socioeconomic groups.', url: 'https://www.oecd.org/pisa/' },
+      { author: 'PISA / OECD', year: '2022', title: 'PISA 2022 Results: Creative Thinking', synthesis: 'Finland and Estonia, which centre speculative and collaborative learning, lead global rankings. Alternative approaches to curriculum design produce measurably different outcomes across socioeconomic groups.', url: 'https://www.oecd.org/pisa/' },
     ],
   },
   {
@@ -59,7 +59,7 @@ const SECTIONS = [
     ],
     citations: [
       { author: 'Sailer, M. et al.', year: '2025', title: 'Cambridge Systematic Review: Gamification in Education', synthesis: 'Gamification elements, especially those framing choices as consequential, significantly increase intrinsic motivation and commitment. Structure turns intention into action across diverse learning contexts.', url: 'https://www.cambridge.org/' },
-      { author: 'Education Endowment Foundation', year: '2023', title: 'Metacognition and Self-Regulated Learning — Guidance Report', synthesis: 'Students who explicitly articulate what they intend to do with new thinking demonstrate 2.1× greater skill transfer to novel contexts. Commitment is not a soft finish, it is where learning becomes practice.', url: 'https://educationendowmentfoundation.org.uk/' },
+      { author: 'Education Endowment Foundation', year: '2023', title: 'Metacognition and Self-Regulated Learning: Guidance Report', synthesis: 'Students who explicitly articulate what they intend to do with new thinking demonstrate 2.1× greater skill transfer to novel contexts. Commitment is not a soft finish, it is where learning becomes practice.', url: 'https://educationendowmentfoundation.org.uk/' },
     ],
   },
 ];
@@ -127,7 +127,7 @@ function ResearchSection({ s, index }: { s: typeof SECTIONS[0]; index: number })
 
   return (
     <div>
-      {/* Colour band — evidence in numbers */}
+      {/* Colour band, evidence in numbers */}
       <div style={{ backgroundColor: s.color }}>
         <div className="tk-wrap" style={{ paddingBlock: 'clamp(36px, 4.5vw, 64px)' }}>
           <div
@@ -242,7 +242,7 @@ export function ResearchPage() {
           <SectionHead label="Global Comparison" />
           <Reveal delay={0.1}>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 15.5, color: '#555555', lineHeight: 1.7, maxWidth: '56ch', margin: 'clamp(24px, 3vw, 40px) 0 clamp(28px, 3.5vw, 44px)' }}>
-              How major education systems approach speculative and reflective thinking — and where India sits in that landscape.
+              How major education systems approach speculative and reflective thinking, and where India sits in that landscape.
             </p>
           </Reveal>
 

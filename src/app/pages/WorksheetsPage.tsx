@@ -164,7 +164,7 @@ export function WorksheetsPage() {
 
   return (
     <>
-      {/* ── HEADER — paper, editorial ───────────────────────── */}
+      {/* ── HEADER, paper, editorial ───────────────────────── */}
       <header style={{ paddingTop: 'clamp(128px, 18vh, 192px)', paddingBottom: 'clamp(40px, 5vw, 72px)' }}>
         <div className="tk-wrap">
           <Reveal y={16}>
@@ -262,7 +262,7 @@ export function WorksheetsPage() {
           </div>
           <div>
             {[
-              { n: '01', title: 'Pick a kit',      body: 'Choose the kit that matches your context — classroom, home, or a specific literacy area.' },
+              { n: '01', title: 'Pick a kit',      body: 'Choose the kit that matches your context: classroom, home, or a specific literacy area.' },
               { n: '02', title: 'Choose a move',   body: "Each kit covers all five TARK moves. Start with OPEN if you're new to the framework." },
               { n: '03', title: 'Run the session', body: 'Worksheets are self-contained. Facilitators get a one-page guide. Students need only a pen.' },
               { n: '04', title: 'Reflect',         body: 'Every worksheet ends with a reflection prompt that surfaces metacognitive awareness.' },

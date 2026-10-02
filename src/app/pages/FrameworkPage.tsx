@@ -36,7 +36,7 @@ const moves: {
     ],
   },
   {
-    hindi: 'पता लगाना',
+    hindi: 'खोजना',
     english: 'TRACE',
     color: '#E27238',
     number: '02',
@@ -45,7 +45,7 @@ const moves: {
     questionHi: 'यह विचार कहाँ से आया?',
     whatItIs: 'Find out where it came from.',
     inPlainLanguage:
-      'Every belief, every rule, every norm — has a history. Someone decided it. Someone benefited from it. TRACE is the move that asks: who decided this, when, and why? Once you know the origin of an idea, you can decide whether you actually agree with it, or whether you just inherited it.',
+      'Every belief, every rule, every norm has a history. Someone decided it. Someone benefited from it. TRACE is the move that asks: who decided this, when, and why? Once you know the origin of an idea, you can decide whether you actually agree with it, or whether you just inherited it.',
     whenToUse: [
       'When something feels "just true."',
       'When a rule exists but nobody explains why.',
@@ -62,7 +62,7 @@ const moves: {
     questionHi: 'यह एक अलग दुनिया में कैसा दिखेगा?',
     whatItIs: 'What if the rules were different?',
     inPlainLanguage:
-      'The way things are is not the only way they could be. SHIFT is the move that picks up the situation and puts it in a completely different world — different rules, different people, different time. What changes? What stays the same? What does that reveal about the situation you started with?',
+      'The way things are is not the only way they could be. SHIFT is the move that picks up the situation and puts it in a completely different world, different rules, different people, different time. What changes? What stays the same? What does that reveal about the situation you started with?',
     whenToUse: [
       "When you're stuck in one framing.",
       'When all your options feel the same.',
@@ -70,7 +70,7 @@ const moves: {
     ],
   },
   {
-    hindi: 'उभारना',
+    hindi: 'उभरना',
     english: 'SURFACE',
     color: '#4DB49F',
     number: '04',
@@ -87,7 +87,7 @@ const moves: {
     ],
   },
   {
-    hindi: 'प्रतिबद्ध होना',
+    hindi: 'प्रतिबद्ध',
     english: 'COMMIT',
     color: '#DA3832',
     number: '05',
@@ -134,7 +134,7 @@ function MoveChapter({ move, index }: { move: typeof moves[0]; index: number }) 
           alignItems: 'start',
         }}
       >
-        {/* Left rail — sticky identity */}
+        {/* Left rail, sticky identity */}
         <div style={isMobile ? {} : { position: 'sticky', top: 100 }}>
           <Reveal y={20}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.2em', color: '#BBBBBB', marginBottom: 24 }}>
@@ -161,7 +161,7 @@ function MoveChapter({ move, index }: { move: typeof moves[0]; index: number }) 
           </Reveal>
         </div>
 
-        {/* Right — the chapter body */}
+        {/* Right, the chapter body */}
         <div>
           <Reveal delay={0.05}>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 2.8vw, 40px)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.015em', color: '#1A1A1A', margin: 0, maxWidth: '24ch' }}>
@@ -175,7 +175,7 @@ function MoveChapter({ move, index }: { move: typeof moves[0]; index: number }) 
             </p>
           </Reveal>
 
-          {/* When to use — list */}
+          {/* When to use, list */}
           <Reveal delay={0.12}>
             <div style={{ marginTop: 'clamp(36px, 4vw, 56px)' }}>
               <div className="tk-eyebrow" style={{ marginBottom: 8 }}>When to use it</div>
@@ -197,7 +197,7 @@ function MoveChapter({ move, index }: { move: typeof moves[0]; index: number }) 
             </div>
           </Reveal>
 
-          {/* The question it asks — set like a pull quote */}
+          {/* The question it asks, set like a pull quote */}
           <Reveal delay={0.14}>
             <figure style={{ margin: 0, marginTop: 'clamp(40px, 5vw, 64px)', paddingLeft: 'clamp(20px, 2.5vw, 36px)', borderLeft: `3px solid ${move.color}` }}>
               <div className="tk-eyebrow" style={{ marginBottom: 16 }}>The question it asks</div>
@@ -231,7 +231,7 @@ export function FrameworkPage() {
 
   return (
     <>
-      {/* ── HEADER — dark, editorial ───────────────────────── */}
+      {/* ── HEADER, dark, editorial ───────────────────────── */}
       <header className="tk-grain" style={{ backgroundColor: '#1A1A1A', paddingTop: 'clamp(128px, 18vh, 200px)', paddingBottom: 'clamp(56px, 7vw, 104px)' }}>
         <div className="tk-wrap">
           <Reveal y={16}>
@@ -262,7 +262,7 @@ export function FrameworkPage() {
           >
             <Reveal delay={0.3}>
               <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.62)', fontSize: 'var(--text-lede)', lineHeight: 1.7, margin: 0 }}>
-                Not rules, not steps — five ways of looking at any situation differently.
+                Not rules, not steps. Five ways of looking at any situation differently.
                 Use any one of them. Use one at a time. Come back to others when you need them.
               </p>
             </Reveal>
@@ -289,7 +289,7 @@ export function FrameworkPage() {
         </div>
       </header>
 
-      {/* ── INTRO NOTES — three hairline columns ───────────── */}
+      {/* ── INTRO NOTES, three hairline columns ───────────── */}
       <section style={{ backgroundColor: '#F5F4F1', borderBottom: '1px solid var(--tk-border)' }}>
         <div className="tk-wrap" style={{ paddingBlock: 'clamp(40px, 5vw, 72px)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)' }}>

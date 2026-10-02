@@ -1,7 +1,7 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { MOVE_ORDER, MOVE_COLORS } from './kit';
 
-/* DiamondField — hand-drawn TARK diamonds over the hero photography.
+/* DiamondField, hand-drawn TARK diamonds over the hero photography.
    · One shape: a solid diamond with a hand-drawn, marker-like edge.
      Orientation never changes; size is even across the grid.
    · The grid's outer diamond edges sit exactly on the page gutters (in line
@@ -10,8 +10,8 @@ import { MOVE_ORDER, MOVE_COLORS } from './kit';
      A row that would touch a [data-avoid] element is hidden whole.
    · Line boil: each diamond cycles a few hand-drawn variants (~6 fps).
    · Diamonds draw themselves in on load: outline first, then the fill.
-   · Pointer: diamonds near the cursor are nudged the way it is moving —
-     harder for faster strokes — then spring back with a soft wobble.
+   · Pointer: diamonds near the cursor are nudged the way it is moving , 
+     harder for faster strokes, then spring back with a soft wobble.
    · Scroll: diamonds drift at different depths and fade into the page.
    Everything renders to one canvas in a single rAF loop. */
 
@@ -187,7 +187,7 @@ export function DiamondField({ heroRef }: { heroRef: RefObject<HTMLElement | nul
     };
     build();
 
-    // pointer — position and velocity, hero-local
+    // pointer, position and velocity, hero-local
     let px = -9999, py = -9999, pvx = 0, pvy = 0, lastT = 0, moved = false;
     const onMove = (e: PointerEvent) => {
       const r = hero.getBoundingClientRect();

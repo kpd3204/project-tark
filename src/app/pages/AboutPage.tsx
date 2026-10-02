@@ -10,7 +10,7 @@ import { EASE, Reveal, LineReveal, SectionHead, Diamond } from '../components/ki
 const principles = [
   { label: 'Design principle', text: 'A system for thinking, not a website for reading.', color: '#E27238' },
   { label: 'Audience',         text: 'Indian adolescents aged 13–22, educators, researchers, and institutions engaging with cognitive pedagogy.', color: '#465BA4' },
-  { label: 'What TARK is not', text: 'A curriculum replacement. A political position. A quick fix. It is a cognitive infrastructure project — patient, rigorous, and long-term.', color: '#4DB49F' },
+  { label: 'What TARK is not', text: 'A curriculum replacement. A political position. A quick fix. It is a cognitive infrastructure project: patient, rigorous, and long-term.', color: '#4DB49F' },
 ];
 
 const teamEntries = [
@@ -69,7 +69,7 @@ export function AboutPage() {
             <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.62)', fontSize: 'var(--text-lede)', lineHeight: 1.75, maxWidth: '52ch', margin: 'clamp(28px, 3.5vw, 48px) 0 0' }}>
               TARK is a cognitive pedagogy framework developing Speculative Thinking as
               foundational infrastructure for Indian youth. It proposes five recursive cognitive
-              moves — practised, not performed — that build the capacity to think when answers
+              moves (practised, not performed) that build the capacity to think when answers
               are not given.
             </p>
           </Reveal>

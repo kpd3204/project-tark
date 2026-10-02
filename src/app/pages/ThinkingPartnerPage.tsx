@@ -38,7 +38,7 @@ const HOW_IT_WORKS = [
 ];
 
 const WHAT_MAKES = [
-  'It asks questions — it never tells you what to think.',
+  'It asks questions. It never tells you what to think.',
   'It applies one of five moves to your specific situation.',
   'It slows you down intentionally. That is the point.',
   'You can return with the same situation and see new angles.',
@@ -56,14 +56,14 @@ const WAYS = [
   {
     n: '02',
     name: 'ChatGPT',
-    desc: 'The TARK GPT — the same five moves, inside ChatGPT',
+    desc: 'The TARK GPT: the same five moves, inside ChatGPT',
     href: CHATGPT_URL,
     color: '#4DB49F',
   },
   {
     n: '03',
     name: 'Gemini Gem',
-    desc: 'The TARK Gem — carry the framework into Google Gemini',
+    desc: 'The TARK Gem: carry the framework into Google Gemini',
     href: GEMINI_URL,
     color: '#465BA4',
   },
@@ -76,7 +76,7 @@ const WAYS = [
   },
 ];
 
-/* One way to think — an editorial chooser row */
+/* One way to think, an editorial chooser row */
 function WayRow({ way }: { way: typeof WAYS[0] }) {
   const [hovered, setHovered] = useState(false);
   const disabled = !way.href;
@@ -165,7 +165,7 @@ export function ThinkingPartnerPage() {
 
   return (
     <div style={{ backgroundColor: '#FFFFFF' }}>
-      {/* ── HERO — navy, focused ─────────────────────────────── */}
+      {/* ── HERO, navy, focused ─────────────────────────────── */}
       <section
         className="tk-grain"
         style={{
@@ -225,10 +225,10 @@ export function ThinkingPartnerPage() {
         </div>
       </section>
 
-      {/* ── FIVE MOVES — applied ─────────────────────────────── */}
+      {/* ── FIVE MOVES, applied ─────────────────────────────── */}
       <section style={{ backgroundColor: '#F5F4F1', paddingBlock: 'var(--space-block)', borderBottom: '1px solid var(--tk-border)' }}>
         <div className="tk-wrap">
-          <SectionHead label="The five moves — applied to your situation" />
+          <SectionHead label="The five moves, applied to your situation" />
           <div
             style={{
               display: 'grid',

@@ -9,7 +9,7 @@ export function CaseStudiesPage() {
 
   return (
     <>
-      {/* ── HEADER — OPEN yellow ────────────────────────────── */}
+      {/* ── HEADER, OPEN yellow ────────────────────────────── */}
       <header style={{ backgroundColor: '#FFD167', paddingTop: 'clamp(128px, 18vh, 192px)', paddingBottom: 'clamp(48px, 6vw, 88px)' }}>
         <div className="tk-wrap">
           <Reveal y={16}>
@@ -57,7 +57,7 @@ export function CaseStudiesPage() {
                     gap: 0,
                   }}
                 >
-                  {/* Left — narrative */}
+                  {/* Left, narrative */}
                   <div style={{ padding: 'clamp(28px, 4vw, 64px)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
                       <Diamond color="#1A1A1A" size={7} />
@@ -93,7 +93,7 @@ export function CaseStudiesPage() {
                     </div>
                   </div>
 
-                  {/* Right — moves applied */}
+                  {/* Right, moves applied */}
                   <div
                     style={{
                       borderLeft: isMobile ? 'none' : '1px solid var(--tk-border)',
