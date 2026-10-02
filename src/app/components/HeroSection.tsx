@@ -1,96 +1,26 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import imgCapsule from '../../imports/photos/time-capsule-letter.jpg';
-import imgClassroom from '../../imports/photos/classroom-workshop.jpg';
-import imgBooklets from '../../imports/photos/five-moves-booklets.jpg';
-import imgButterfly from '../../imports/photos/butterfly-effect-group.jpg';
-import imgTeam from '../../imports/photos/team-thinking-partner.jpg';
-import filmSrc from '../../imports/hero-media/film.mp4';
-import filmWebm from '../../imports/hero-media/film.webm';
 import sessionSrc from '../../imports/hero-media/session.mp4';
 import sessionWebm from '../../imports/hero-media/session.webm';
 import sessionPoster from '../../imports/hero-media/session.jpg';
-import filmPoster from '../../imports/hero-media/film.jpg';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { DiamondField } from './DiamondField';
 import { EASE } from './kit';
 import { Pill } from './play';
 
-/* Each phrase is paired with a photograph from a TARK session
-   and one of the five move colours. */
+/* Each phrase is paired with one of the five move colours. */
 const SLIDES = [
-  { line1: 'Indian adolescents grow up around answers.', line2: 'तर्क begins with questions.',      img: imgCapsule,    pos: '50% 40%', color: '#FFD167' },
-  { line1: 'Thoughts are often given.',                  line2: 'तर्क lets you rearrange them.',    img: imgClassroom,  pos: '50% 55%', color: '#E27238' },
-  { line1: 'Ideas come pre-shaped.',                     line2: 'तर्क reshapes them.',              img: imgBooklets,   pos: '55% 45%', color: '#4DB49F' },
-  { line1: 'We hold on to first thoughts.',              line2: 'तर्क revisits them.',              img: imgButterfly,  pos: '50% 50%', color: '#7B8FD6' },
-  { line1: 'We look for the right answer.',              line2: 'तर्क looks for better questions.', img: imgTeam,       pos: '50% 45%', color: '#F0675F' },
+  { line1: 'Indian adolescents grow up around answers.', line2: 'तर्क begins with questions.', color: '#FFD167' },
+  { line1: 'Thoughts are often given.',                  line2: 'तर्क lets you rearrange them.', color: '#E27238' },
+  { line1: 'Ideas come pre-shaped.',                     line2: 'तर्क reshapes them.', color: '#4DB49F' },
+  { line1: 'We hold on to first thoughts.',              line2: 'तर्क revisits them.', color: '#7B8FD6' },
+  { line1: 'We look for the right answer.',              line2: 'तर्क looks for better questions.', color: '#F0675F' },
 ];
 
 const CYCLE_MS = 6500;
 
-/* Hero background: 'video' (the session video), 'clips' (twelve short
-   clips), 'film' (the square loop) or 'photos'. Preview another with
-   ?hero=clips, ?hero=film or ?hero=photos. */
-type HeroMedia = 'video' | 'clips' | 'film' | 'photos';
-const DEFAULT_MEDIA: HeroMedia = 'video';
-function heroMedia(): HeroMedia {
-  try {
-    const q = new URLSearchParams(window.location.search).get('hero');
-    if (q === 'video' || q === 'clips' || q === 'film' || q === 'photos') return q;
-  } catch { /* no window */ }
-  return DEFAULT_MEDIA;
-}
-
-const clipFiles = import.meta.glob('../../imports/hero-media/clip-*.mp4', { eager: true, import: 'default' }) as Record<string, string>;
-const webmFiles = import.meta.glob('../../imports/hero-media/clip-*.webm', { eager: true, import: 'default' }) as Record<string, string>;
-const posterFiles = import.meta.glob('../../imports/hero-media/clip-*.jpg', { eager: true, import: 'default' }) as Record<string, string>;
-const CLIPS = Object.keys(clipFiles).sort().map((k) => ({ src: clipFiles[k], webm: webmFiles[k.replace('.mp4', '.webm')], poster: posterFiles[k.replace('.mp4', '.jpg')] }));
-const CLIP_MS = 3400;
-
-/* All clips stay mounted and preloaded; only the visible one plays,
-   so every change is a clean crossfade with no loading gap. */
-function ClipReel({ reduced }: { reduced: boolean }) {
-  const [active, setActive] = useState(0);
-  const refs = useRef<(HTMLVideoElement | null)[]>([]);
-  useEffect(() => {
-    if (reduced) return;
-    const id = setInterval(() => setActive((a) => (a + 1) % CLIPS.length), CLIP_MS);
-    return () => clearInterval(id);
-  }, [reduced]);
-  useEffect(() => {
-    refs.current.forEach((v, i) => {
-      if (!v) return;
-      if (i === active && !reduced) { v.currentTime = 0; v.play().catch(() => {}); }
-      else if (i !== (active - 1 + CLIPS.length) % CLIPS.length) v.pause();
-    });
-  }, [active, reduced]);
-  return (
-    <>
-      {CLIPS.map((c, i) => (
-        <video
-          key={c.src}
-          ref={(el) => { refs.current[i] = el; }}
-          poster={c.poster}
-          muted
-          loop
-          playsInline
-          preload={i < 3 ? 'auto' : 'metadata'}
-          aria-hidden="true"
-          style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block',
-            opacity: i === active ? 1 : 0,
-            transition: 'opacity 1s ease',
-          }}
-        >
-          <source src={c.src} type="video/mp4" />
-          <source src={c.webm} type="video/webm" />
-        </video>
-      ))}
-    </>
-  );
-}
-
-function Film({ reduced, mp4, webm, poster }: { reduced: boolean; mp4: string; webm: string; poster: string }) {
+/* Hero background: the session video, looping behind the diamond grid. */
+function SessionVideo({ reduced, mp4, webm, poster }: { reduced: boolean; mp4: string; webm: string; poster: string }) {
   return reduced ? (
     <img src={poster} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
   ) : (
@@ -146,7 +76,6 @@ function MaskedLine({ children, delay = 0, light = false }: { children: React.Re
 
 export function HeroSection() {
   const [index, setIndex] = useState(0);
-  const [media] = useState<HeroMedia>(heroMedia);
   const [reduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [paused, setPaused] = useState(false);
   const isMobile = useIsMobile();
@@ -172,17 +101,11 @@ export function HeroSection() {
     return () => clearTimeout(id);
   }, [index, paused]);
 
-  // preload the rest of the photographs once the first has painted
-  useEffect(() => {
-    if (media !== 'photos') return;
-    const t = setTimeout(() => SLIDES.slice(1).forEach((s) => { const i = new Image(); i.src = s.img; }), 1200);
-    return () => clearTimeout(t);
-  }, []);
 
   // 0 at the top of the page → 1 once the hero has scrolled away
   const { scrollY } = useScroll();
   const scrollYProgress = useTransform(scrollY, (y) => Math.min(1, Math.max(0, y / (heroRef.current?.offsetHeight || window.innerHeight))));
-  const photoScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const mediaScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
   const veil = useTransform(scrollYProgress, [0, 1], [0, 0.55]);
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '-8%']);
   const textOpacity = useTransform(scrollYProgress, [0, 0.38], [1, 0]);
@@ -205,23 +128,10 @@ export function HeroSection() {
         paddingBottom: 'clamp(28px, 3.4vw, 48px)',
       }}
     >
-      {/* Photography, crossfades with each phrase, slow push-in */}
+      {/* Session video, slow push-in on scroll */}
       <div className="tk-grain" style={{ position: 'absolute', inset: 0, overflow: 'hidden', backgroundColor: '#141414', zIndex: 0 }}>
-        <motion.div style={{ position: 'absolute', inset: 0, scale: photoScale }}>
-          {media === 'clips' && <ClipReel reduced={reduced} />}
-          {media === 'video' && <Film reduced={reduced} mp4={sessionSrc} webm={sessionWebm} poster={sessionPoster} />}
-          {media === 'film' && <Film reduced={reduced} mp4={filmSrc} webm={filmWebm} poster={filmPoster} />}
-          {media === 'photos' && <AnimatePresence initial={false}>
-            <motion.img
-              key={index}
-              src={slide.img}
-              alt=""
-              initial={{ opacity: 0, scale: 1.07 }}
-              animate={{ opacity: 1, scale: 1, transition: { opacity: { duration: 1.2, ease: 'easeOut' }, scale: { duration: CYCLE_MS / 1000 + 1.5, ease: 'linear' } } }}
-              exit={{ opacity: 0, transition: { duration: 1.2, delay: 0.2 } }}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: slide.pos, display: 'block' }}
-            />
-          </AnimatePresence>}
+        <motion.div style={{ position: 'absolute', inset: 0, scale: mediaScale }}>
+          <SessionVideo reduced={reduced} mp4={sessionSrc} webm={sessionWebm} poster={sessionPoster} />
         </motion.div>
         {/* Grade: a calm overall tint, deeper at the base for the headline */}
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(12,12,12,0.34)' }} />
