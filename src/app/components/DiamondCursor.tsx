@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 
-/* DiamondCursor: a small rounded diamond under the pointer, and a larger
-   diamond ring that follows on a spring and tilts with the movement.
-   Over links the ring opens up and takes a soft fill; over anything tagged
-   with a move it takes that move's colour; on dark backgrounds it turns
-   light. Everything moves by transform in one animation frame loop, and the
-   background is only measured when the element under the pointer changes. */
+/* DiamondCursor: a diamond under the pointer with a trail of five small
+   diamonds in the move colours. Each trail diamond chases the one in front
+   on a soft spring, so the trail flows evenly at any frame rate; it grows
+   with speed and fades away when the pointer rests. Everything moves by
+   transform in one animation frame loop, and the background is only
+   measured when the element under the pointer changes. */
 
 const MOVE_COLORS: Record<string, string> = {
   open:    '#FFD167',
@@ -14,10 +14,10 @@ const MOVE_COLORS: Record<string, string> = {
   surface: '#4DB49F',
   commit:  '#DA3832',
 };
+const TRAIL = ['#FFD167', '#E27238', '#465BA4', '#4DB49F', '#DA3832'];
 const INK = '#1D1B16';
-const PAPER = '#F6F0E4';
+const LIGHT = 'rgba(246,240,228,0.92)';
 
-/* Walk up from an element to the first opaque background; true if dark */
 function isBgDark(el: Element): boolean {
   let node: Element | null = el;
   for (let i = 0; i < 20 && node && node !== document.documentElement; i++) {
@@ -32,25 +32,25 @@ function isBgDark(el: Element): boolean {
 }
 
 export function DiamondCursor() {
-  const dotRef  = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLDivElement>(null);
+  const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     if (window.matchMedia('(hover: none)').matches || window.innerWidth < 1024) return;
-    const dot = dotRef.current, ring = ringRef.current;
-    if (!dot || !ring) return;
+    const head = headRef.current;
+    const trail = trailRefs.current.filter(Boolean) as HTMLDivElement[];
+    if (!head || trail.length !== TRAIL.length) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const styleEl = document.createElement('style');
     styleEl.textContent = '@media (min-width: 1024px) and (hover: hover) { html, html * { cursor: none !important; } input, textarea, select, [contenteditable] { cursor: text !important; } }';
     document.head.appendChild(styleEl);
 
-    let px = -100, py = -100;          // pointer
-    let rx = -100, ry = -100;          // ring position
-    let vx = 0, vy = 0;                // ring velocity
-    let tilt = 0;
-    let ringScale = 1, ringTarget = 1;
-    let dotScale = 1, dotTarget = 1;
+    let px = -100, py = -100, lastPx = -100, lastPy = -100;
+    const pts = TRAIL.map(() => ({ x: -100, y: -100 }));
+    let speed = 0;            // smoothed pointer speed, px per frame
+    let trailAlpha = 0;
+    let headScale = 1, headTarget = 1;
     let pressed = false, visible = false, hidden = false;
     let lastTarget: Element | null = null;
     let raf = 0;
@@ -58,63 +58,73 @@ export function DiamondCursor() {
     const setState = (target: Element) => {
       if (target === lastTarget) return;
       lastTarget = target;
-      const field = target.closest('input, textarea, select, [contenteditable="true"]');
-      hidden = !!field;
+      hidden = !!target.closest('input, textarea, select, [contenteditable="true"]');
       const moveEl = target.closest('[data-move]') as HTMLElement | null;
       const linkEl = target.closest('a, button, [role="button"], label, summary');
-      const dark = isBgDark(target);
-      const ink = dark ? PAPER : INK;
+      const ink = isBgDark(target) ? LIGHT : INK;
       const moveColor = moveEl ? MOVE_COLORS[moveEl.dataset.move?.toLowerCase() || ''] : '';
 
       if (moveColor) {
-        ring.style.borderColor = ink;
-        ring.style.backgroundColor = moveColor + 'B3';
-        dot.style.backgroundColor = ink;
-        ringTarget = 1.6; dotTarget = 0.7;
+        head.style.backgroundColor = moveColor;
+        head.style.borderColor = ink;
+        headTarget = 1.5;
       } else if (linkEl) {
-        ring.style.borderColor = ink;
-        ring.style.backgroundColor = dark ? 'rgba(246,240,228,0.16)' : 'rgba(29,27,22,0.08)';
-        dot.style.backgroundColor = ink;
-        ringTarget = 1.6; dotTarget = 0.7;
+        head.style.backgroundColor = ink;
+        head.style.borderColor = ink;
+        headTarget = 1.5;
       } else {
-        ring.style.borderColor = dark ? 'rgba(246,240,228,0.55)' : 'rgba(29,27,22,0.35)';
-        ring.style.backgroundColor = 'transparent';
-        dot.style.backgroundColor = ink;
-        ringTarget = 1; dotTarget = 1;
+        head.style.backgroundColor = 'transparent';
+        head.style.borderColor = ink;
+        headTarget = 1;
       }
     };
 
     const tick = () => {
-      // ring follows on a spring; the dot sits exactly on the pointer
-      if (reduced) { rx = px; ry = py; vx = vy = 0; }
-      else {
-        vx = (vx + (px - rx) * 0.22) * 0.62;
-        vy = (vy + (py - ry) * 0.22) * 0.62;
-        rx += vx; ry += vy;
-      }
-      const speed = Math.max(-1, Math.min(1, vx / 40));
-      tilt += (speed * 18 - tilt) * 0.2;
-      ringScale += ((pressed ? ringTarget * 0.8 : ringTarget) - ringScale) * 0.2;
-      dotScale += ((pressed ? dotTarget * 1.4 : dotTarget) - dotScale) * 0.25;
+      // pointer speed, smoothed so the trail breathes rather than flickers
+      const d = Math.hypot(px - lastPx, py - lastPy);
+      lastPx = px; lastPy = py;
+      speed += (d - speed) * 0.15;
 
-      const show = visible && !hidden ? '1' : '0';
-      dot.style.opacity = show;
-      ring.style.opacity = show;
-      dot.style.transform = `translate3d(${px}px, ${py}px, 0) rotate(45deg) scale(${dotScale.toFixed(3)})`;
-      ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0) rotate(${(45 + tilt).toFixed(2)}deg) scale(${ringScale.toFixed(3)})`;
+      // trail: each diamond chases the one in front
+      let lx = px, ly = py;
+      for (let i = 0; i < pts.length; i++) {
+        const k = reduced ? 1 : 0.42 - i * 0.03;
+        pts[i].x += (lx - pts[i].x) * k;
+        pts[i].y += (ly - pts[i].y) * k;
+        lx = pts[i].x; ly = pts[i].y;
+      }
+
+      const alphaTarget = visible && !hidden && speed > 0.6 ? 1 : 0;
+      trailAlpha += (alphaTarget - trailAlpha) * (alphaTarget ? 0.18 : 0.06);
+      const grow = 1 + Math.min(speed / 30, 0.5);
+
+      headScale += ((pressed ? headTarget * 0.75 : headTarget) - headScale) * 0.25;
+      head.style.opacity = visible && !hidden ? '1' : '0';
+      head.style.transform = `translate3d(${px}px, ${py}px, 0) rotate(45deg) scale(${headScale.toFixed(3)})`;
+
+      trail.forEach((el, i) => {
+        const p = pts[i];
+        el.style.opacity = (trailAlpha * (1 - i * 0.12)).toFixed(3);
+        el.style.transform = `translate3d(${p.x.toFixed(2)}px, ${p.y.toFixed(2)}px, 0) rotate(45deg) scale(${(grow * (1 - i * 0.1)).toFixed(3)})`;
+      });
+
       raf = requestAnimationFrame(tick);
     };
 
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === 'touch') return;
       px = e.clientX; py = e.clientY;
-      if (!visible) { visible = true; rx = px; ry = py; }
+      if (!visible) {
+        visible = true;
+        lastPx = px; lastPy = py;
+        pts.forEach((p) => { p.x = px; p.y = py; });
+      }
       setState(e.target as Element);
     };
     const onDown = () => { pressed = true; };
     const onUp = () => { pressed = false; };
     const onLeave = () => { visible = false; };
-    const onScroll = () => { lastTarget = null; }; // the element under the pointer may change
+    const onScroll = () => { lastTarget = null; };
 
     document.addEventListener('pointermove', onMove, { passive: true });
     document.addEventListener('pointerdown', onDown, { passive: true });
@@ -136,8 +146,16 @@ export function DiamondCursor() {
 
   return (
     <>
-      <div ref={ringRef} className="cur-ring" aria-hidden="true" />
-      <div ref={dotRef} className="cur-dot" aria-hidden="true" />
+      {TRAIL.map((c, i) => (
+        <div
+          key={c}
+          ref={(el) => { trailRefs.current[i] = el; }}
+          className="cur-trail"
+          style={{ backgroundColor: c, zIndex: 99990 - i }}
+          aria-hidden="true"
+        />
+      ))}
+      <div ref={headRef} className="cur-head" aria-hidden="true" />
     </>
   );
 }

@@ -25,9 +25,9 @@ const TOOLS = [
 ];
 
 const RESEARCH = [
-  { heading: 'The evidence', subtitle: 'Why TARK exists',    path: '/research',     color: MOVE_COLORS.TRACE },
+  { heading: 'Evidence'    , subtitle: 'Why TARK exists',    path: '/research',     color: MOVE_COLORS.TRACE },
   { heading: 'Case Studies', subtitle: 'TARK in the field',  path: '/case-studies', color: MOVE_COLORS.COMMIT },
-  { heading: 'The document', subtitle: 'The full project, in one file', path: DOC_URL, color: MOVE_COLORS.SHIFT, external: true },
+  { heading: 'Document', subtitle: 'The full project, in one file', path: DOC_URL, color: MOVE_COLORS.SHIFT, external: true },
 ];
 
 type MenuItem = { heading: string; subtitle: string; path: string; color: string; soon?: boolean; external?: boolean };
@@ -210,7 +210,7 @@ export function Navigation() {
           <Link to="/thinking-partner" className="pill pill--ink" tabIndex={mobileOpen ? 0 : -1}>
             <span>Start thinking</span><span className="pill__arrow" aria-hidden="true">→</span>
           </Link>
-          <a href={DOC_URL} target="_blank" rel="noopener noreferrer" className="mnav__doc" tabIndex={mobileOpen ? 0 : -1}>The project document ↗</a>
+          <a href={DOC_URL} target="_blank" rel="noopener noreferrer" className="mnav__doc" tabIndex={mobileOpen ? 0 : -1}>Project document ↗</a>
           <a href="https://www.instagram.com/project.tark/" target="_blank" rel="noopener noreferrer" className="mnav__ig" tabIndex={mobileOpen ? 0 : -1}>@project.tark</a>
         </div>
       </div>

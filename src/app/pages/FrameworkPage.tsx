@@ -185,7 +185,7 @@ export function FrameworkPage() {
       <header className="tk-head">
         <div className="tk-wrap tk-head__grid">
           <div>
-            <Reveal><Tag bg="#FFD167" color="#1D1B16" tilt={-3}>The framework</Tag></Reveal>
+            <Reveal><Tag bg="#FFD167" color="#1D1B16" tilt={-3}>Framework</Tag></Reveal>
             <Reveal delay={0.05}>
               <h1 className="display-xl tk-head__title">
                 Five moves<br />

@@ -101,7 +101,7 @@ export function ToolkitPage() {
       <header className="tk-head">
         <div className="tk-wrap tk-head__grid">
           <div>
-            <Reveal><Tag bg="#4DB49F" tilt={-3}>The toolkit</Tag></Reveal>
+            <Reveal><Tag bg="#4DB49F" tilt={-3}>Toolkit</Tag></Reveal>
             <Reveal delay={0.05}>
               <h1 className="display-xl tk-head__title">
                 Pick a tool.<br />
