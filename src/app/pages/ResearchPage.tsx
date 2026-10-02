@@ -1,7 +1,7 @@
 import { PageFooter } from '../components/PageFooter';
 import { Reveal } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
-import photoWorkshop from '../../imports/photos/university-workshop.jpg';
+import photoWorkshop from '../../imports/photos/real/commit-booklet.jpg';
 
 /* Five bodies of evidence, each keyed to a move colour */
 const SECTIONS = [
@@ -156,7 +156,7 @@ export function ResearchPage() {
             </Reveal>
           </div>
           <Reveal delay={0.1} y={40} className="tk-head__photo">
-            <SoftImg src={photoWorkshop} alt="Students at a TARK workshop working through the five moves" loading="eager" />
+            <SoftImg src={photoWorkshop} alt="The COMMIT booklet held open among bougainvillea flowers" loading="eager" />
             <Buddy color="#FFD167" size={64} className="tk-head__buddy" delay={0.4} />
             <Squiggle kind="wave" width={140} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>

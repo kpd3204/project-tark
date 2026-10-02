@@ -8,7 +8,7 @@ import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, EASE } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
 import photoDomino from '../../imports/photos/domino-qr-closeup.jpg';
-import photoWorksheet from '../../imports/photos/worksheet-and-phone.jpg';
+import photoWorksheet from '../../imports/photos/real/ws-feelings-circle.jpg';
 
 type MoveData = typeof toolsData[0];
 type Tool = MoveData['tools'][0];
@@ -235,7 +235,7 @@ export function ToolkitPage() {
       <section className="howto">
         <div className="tk-wrap howto__grid">
           <Reveal y={40} className="howto__photo">
-            <SoftImg src={photoWorksheet} alt="A student filling in a TARK worksheet with a phone beside it" />
+            <SoftImg src={photoWorksheet} alt="A printed TARK worksheet with its how-to-use notes and prompts" />
           </Reveal>
           <div>
             <Reveal><h2 className="display-lg">How a tool works</h2></Reveal>

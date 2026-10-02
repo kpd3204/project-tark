@@ -5,7 +5,18 @@ import { PageFooter } from '../components/PageFooter';
 import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, EASE } from '../components/kit';
-import { Buddy, Squiggle, Tag, Pill } from '../components/play';
+import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
+import zcRoom from '../../imports/photos/real/zc-session-room.jpg';
+import zcTable from '../../imports/photos/real/zc-session-table.jpg';
+import zcLap from '../../imports/photos/real/zc-writing-lap.jpg';
+import zcDesk from '../../imports/photos/real/zc-writing-desk.jpg';
+
+const SESSION = [
+  { src: zcRoom,  alt: 'The ZenovoCare team gathered around the table at Studio Carbon', caption: 'The kickoff', area: 'a' },
+  { src: zcTable, alt: 'Working through the moves together around the studio table', caption: 'Working the moves together', area: 'b' },
+  { src: zcLap,   alt: 'A participant filling in a TARK worksheet on their lap', caption: 'Worksheets in use', area: 'c' },
+  { src: zcDesk,  alt: 'A participant writing on TARK worksheets at a desk', caption: 'One move at a time', area: 'd' },
+];
 
 const MOVES_META: { key: MoveKey; color: string; tint: string; ink: string; hindi: string }[] = [
   { key: 'OPEN',    color: '#FFD167', tint: 'var(--tint-open)',    ink: '#1D1B16', hindi: 'खुलना' },
@@ -200,6 +211,22 @@ export function CaseStudyZenovocarePage() {
               </div>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ── Session photos ──────────────────────────────────── */}
+      <section className="sec sec--tight">
+        <div className="tk-wrap">
+          <div className="process">
+            {SESSION.map((p, i) => (
+              <Reveal key={p.caption} delay={i * 0.06} y={32} className={`process__item process__item--${p.area}`}>
+                <figure>
+                  <SoftImg src={p.src} alt={p.alt} />
+                  <figcaption><i aria-hidden="true" />{p.caption}</figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

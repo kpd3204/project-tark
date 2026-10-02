@@ -1467,3 +1467,16 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .cur-dot { z-index: 99999; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 2.5px; background: #1D1B16; transition: background-color 0.2s, opacity 0.2s; }
 .cur-ring { z-index: 99998; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 8px; border: 1.5px solid rgba(29,27,22,0.35); transition: border-color 0.25s, background-color 0.25s, opacity 0.2s; }
 @media (hover: none), (max-width: 1023px) { .cur-dot, .cur-ring { display: none; } }
+
+/* Framework: a real worksheet under each move */
+.chapter__sheet { margin-top: 14px; --crop: corners; }
+.chapter__sheet figure { margin: 0; }
+.chapter__sheet img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.chapter__sheet figcaption { display: flex; align-items: center; gap: 10px; font-family: var(--font-body); font-weight: 600; font-size: 14.5px; color: var(--ink-2); margin-top: 10px; }
+.chapter__sheet figcaption i { width: 9px; height: 9px; border-radius: 2px; transform: rotate(45deg); background: var(--c); }
+@media (max-width: 959px) { .chapter__sheet img { aspect-ratio: 16 / 10; } }
+.side-photo { margin-top: clamp(28px, 3vw, 44px); --crop: all; }
+.side-photo figure { margin: 0; }
+.side-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.side-photo figcaption { display: flex; align-items: center; gap: 10px; font-family: var(--font-body); font-weight: 600; font-size: 14.5px; color: var(--ink-2); margin-top: 10px; }
+.side-photo figcaption i { width: 9px; height: 9px; border-radius: 2px; transform: rotate(45deg); background: #E27238; }
