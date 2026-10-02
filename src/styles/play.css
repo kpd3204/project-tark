@@ -1439,8 +1439,8 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .thanks { display: grid; gap: clamp(28px, 3vw, 44px); }
 .thanks .mini-head { display: flex; align-items: center; gap: 10px; color: var(--ink); }
 .thanks .mini-head i { width: 10px; height: 10px; border-radius: 2px; transform: rotate(45deg); }
-.thanks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 clamp(16px, 2vw, 32px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
-.thanks li { padding: 12px 0; border-top: 1.5px solid var(--line); font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+.thanks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 clamp(16px, 2vw, 32px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.thanks li { white-space: nowrap; padding: 12px 0; border-top: 1.5px solid var(--line); font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
 .thanks strong { font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
 .thanks li span { font-family: var(--font-body); font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
 
@@ -1461,3 +1461,9 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
   transform: scale(0);
   will-change: transform;
 }
+
+/* ═══ Cursor ═══════════════════════════════════════════════════ */
+.cur-dot, .cur-ring { position: fixed; left: 0; top: 0; pointer-events: none; opacity: 0; will-change: transform; }
+.cur-dot { z-index: 99999; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 2.5px; background: #1D1B16; transition: background-color 0.2s, opacity 0.2s; }
+.cur-ring { z-index: 99998; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 8px; border: 1.5px solid rgba(29,27,22,0.35); transition: border-color 0.25s, background-color 0.25s, opacity 0.2s; }
+@media (hover: none), (max-width: 1023px) { .cur-dot, .cur-ring { display: none; } }

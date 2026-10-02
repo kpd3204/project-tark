@@ -9,71 +9,71 @@ const SECTIONS = [
     title: 'Learning, measured', tint: 'var(--tint-open)',
     color: '#FFD167', textColor: '#1A1A1A',
     stats: [
-      { stat: '56%',   label: 'of Grade 8 students cannot read a Grade 2 text', source: 'ASER 2023' },
-      { stat: '0 hrs', label: 'mandated for speculative thinking in the Indian curriculum', source: 'NEP 2020' },
+      { stat: '1 in 3', label: 'Class 8 students in rural government schools cannot read a Class 2 level text', source: 'ASER 2024' },
+      { stat: '37%',    label: 'average Class 9 score in mathematics in the national achievement survey', source: 'PARAKH 2024' },
     ],
     citations: [
-      { author: 'ASER Centre', year: '2023', title: 'Annual Status of Education Report 2023', synthesis: 'Persistent learning poverty despite record enrollment. 56% of Grade 8 students cannot read a Grade 2-level text, a signal that correct-answer thinking dominates at the expense of genuine comprehension.', url: 'https://asercentre.org/aser-2023/' },
-      { author: 'NEP 2020 Analysis', year: '2020', title: 'National Education Policy: Implementation Review', synthesis: "Critical thinking is named as a goal in India's NEP 2020, yet zero curriculum hours are explicitly mandated for speculative or reflective practice. Intent without structure produces no change.", url: 'https://www.education.gov.in/nep/about-nep' },
+      { author: 'ASER Centre', year: '2025', title: 'Annual Status of Education Report (Rural) 2024', synthesis: 'In rural government schools, 67.5% of Class 8 students could read a Class 2 level text in 2024, up from 66.2% in 2022 but still below 69% in 2018. Basic reading is far from secure by the end of middle school.', url: 'https://asercentre.org/wp-content/uploads/2022/12/ASER-2024-National-findings.pdf' },
+      { author: 'NCERT', year: '2025', title: 'PARAKH Rashtriya Sarvekshan 2024', synthesis: 'India’s national achievement survey found average Class 9 scores of 37% in mathematics, 40% in science, 40% in social science and 54% in language, with scores falling as students move up through school.', url: 'https://parakh.ncert.gov.in/' },
     ],
   },
   {
-    title: 'Room to think', tint: 'var(--tint-trace)',
+    title: 'Beyond the basics', tint: 'var(--tint-trace)',
     color: '#E27238', textColor: '#FFFFFF',
     stats: [
-      { stat: '76%',  label: 'of teachers report limited time for open-ended discussion', source: 'NCERT Survey 2022' },
-      { stat: '3.5×', label: 'higher dropout rate among students with low classroom agency', source: 'UDISE+ 2022–23' },
+      { stat: '25%',   label: 'of 14 to 18 year olds cannot fluently read a Class 2 text in their regional language', source: 'ASER 2023' },
+      { stat: '11.5%', label: 'of students drop out at the secondary level', source: 'UDISE+ 2024–25' },
     ],
     citations: [
-      { author: 'NCERT', year: '2022', title: 'National Survey of Teachers on Curriculum Flexibility', synthesis: '76% of surveyed teachers report that existing syllabi leave little room for open-ended discussion. The constraint is systemic, not attitudinal, teachers want to; the structure does not allow it.', url: 'https://ncert.nic.in/' },
-      { author: 'UDISE+', year: '2022', title: 'Unified District Information System for Education (2022–23)', synthesis: 'Students reporting low classroom agency drop out at 3.5× the rate of engaged peers. Disengagement is predictable, and preventable, when traced to its structural causes.', url: 'https://udiseplus.gov.in/' },
+      { author: 'ASER Centre', year: '2024', title: 'ASER 2023: Beyond Basics', synthesis: 'Surveying 34,745 young people aged 14 to 18 across 28 districts, ASER found about a quarter cannot fluently read a Class 2 text in their regional language, and only 43.3% can solve a three-digit by one-digit division.', url: 'https://asercentre.org/wp-content/uploads/2022/12/ASER-2023_Main-findings-1.pdf' },
+      { author: 'Ministry of Education', year: '2025', title: 'UDISE+ 2024–25', synthesis: 'The secondary dropout rate fell from 14.1% in 2023–24 to 11.5% in 2024–25, with wide gaps between states: several report rates above 16%.', url: 'https://udiseplus.gov.in/' },
     ],
   },
   {
     title: 'The future of work', tint: 'var(--tint-shift)',
     color: '#465BA4', textColor: '#FFFFFF',
     stats: [
-      { stat: '#1',   label: 'Critical thinking ranked the top skill needed globally by 2030', source: 'WEF Future of Jobs 2025' },
-      { stat: '40%+', label: 'of current jobs estimated automatable within a decade', source: 'WEF 2025' },
+      { stat: '7 in 10', label: 'employers say analytical thinking is essential, the top core skill', source: 'WEF Future of Jobs 2025' },
+      { stat: '39%',     label: 'of workers’ core skills are expected to change by 2030', source: 'WEF Future of Jobs 2025' },
     ],
     citations: [
-      { author: 'World Economic Forum', year: '2025', title: 'Future of Jobs Report 2025', synthesis: 'Critical and creative thinking top the global skills agenda for 2030. Automation will reshape work fundamentally; perspective-shifting and alternative generation are the distinctly human competitive advantage.', url: 'https://www.weforum.org/reports/the-future-of-jobs-report-2025/' },
-      { author: 'PISA / OECD', year: '2022', title: 'PISA 2022 Results: Creative Thinking', synthesis: 'Finland and Estonia, which centre speculative and collaborative learning, lead global rankings. Alternative approaches to curriculum design produce measurably different outcomes across socioeconomic groups.', url: 'https://www.oecd.org/pisa/' },
+      { author: 'World Economic Forum', year: '2025', title: 'Future of Jobs Report 2025', synthesis: 'Analytical thinking remains the top core skill, with seven in ten employers calling it essential, followed by resilience, flexibility and agility. Employers expect 39% of core skills to change by 2030.', url: 'https://www.weforum.org/publications/the-future-of-jobs-report-2025/in-full/3-skills-outlook/' },
+      { author: 'OECD', year: '2024', title: 'PISA 2022 Results (Volume III): Creative Minds, Creative Schools', synthesis: 'The first PISA test of creative thinking placed Singapore, Korea, Canada, Australia and Finland among the top performers. In Singapore, more than half of 15 year olds reached the highest levels.', url: 'https://www.oecd.org/en/publications/pisa-results-2022-volume-iii-factsheets_041a90f1-en/singapore_3e8ab415-en.html' },
     ],
   },
   {
     title: 'Thinking about thinking', tint: 'var(--tint-surface)',
     color: '#4DB49F', textColor: '#FFFFFF',
     stats: [
-      { stat: 'd = 0.69', label: 'Effect size of metacognitive strategies, among the highest of any educational intervention', source: 'Hattie 2009' },
-      { stat: '1 in 7', label: 'Indian adolescents experience a mental health condition, most unsurfaced', source: 'NIMHANS 2023' },
+      { stat: 'd = 0.69', label: 'effect size of metacognitive strategies, well above the 0.40 of a typical year', source: 'Hattie 2009' },
+      { stat: '7.3%',     label: 'of Indian 13 to 17 year olds live with a mental disorder', source: 'NMHS 2015–16' },
     ],
     citations: [
-      { author: 'Hattie, J.', year: '2009', title: 'Visible Learning: A Synthesis of Over 800 Meta-Analyses', synthesis: 'Across 800+ meta-analyses covering millions of students, metacognitive and self-regulation strategies produce an effect size of d = 0.69, one of the highest-ranking interventions in all of educational research.', url: 'https://visible-learning.org/' },
-      { author: 'NIMHANS', year: '2023', title: 'National Mental Health Survey of School Students', synthesis: '1 in 7 Indian adolescents experience a diagnosable mental health condition. Most go unnamed and unaddressed. Teaching students to observe and name their own thinking also teaches them to surface what they carry.', url: 'https://nimhans.ac.in/research/' },
+      { author: 'Hattie, J.', year: '2009', title: 'Visible Learning: A Synthesis of Over 800 Meta-Analyses Relating to Achievement', synthesis: 'Across more than 800 meta-analyses, metacognitive strategies showed an effect size of 0.69, well above the 0.40 that Hattie treats as a typical year of growth.', url: 'https://en.wikipedia.org/wiki/Visible_learning' },
+      { author: 'NIMHANS', year: '2016', title: 'National Mental Health Survey of India, 2015–16', synthesis: 'Mental disorders were found in 7.3% of 13 to 17 year olds, nearly equal across genders: an estimated 9.8 million young Indians in need of active intervention.', url: 'https://mohfw.gov.in/sites/default/files/National%20Mental%20Health%20Survey%2C%202015-16%20-%20Summary%20Report_0.pdf' },
     ],
   },
   {
     title: 'From insight to action', tint: 'var(--tint-commit)',
     color: '#DA3832', textColor: '#FFFFFF',
     stats: [
-      { stat: '+34%', label: 'improvement in intrinsic motivation from commitment-framed learning contexts', source: 'Sailer et al. 2025' },
-      { stat: '2.1×', label: 'greater skill transfer when learners articulate a commitment to act on insight', source: 'EEF 2023' },
+      { stat: '+7',       label: 'months of additional progress from teaching metacognition and self-regulation', source: 'EEF Toolkit' },
+      { stat: 'g = 0.49', label: 'effect of gamified learning on cognitive outcomes', source: 'Sailer and Homner 2020' },
     ],
     citations: [
-      { author: 'Sailer, M. et al.', year: '2025', title: 'Cambridge Systematic Review: Gamification in Education', synthesis: 'Gamification elements, especially those framing choices as consequential, significantly increase intrinsic motivation and commitment. Structure turns intention into action across diverse learning contexts.', url: 'https://www.cambridge.org/' },
-      { author: 'Education Endowment Foundation', year: '2023', title: 'Metacognition and Self-Regulated Learning: Guidance Report', synthesis: 'Students who explicitly articulate what they intend to do with new thinking demonstrate 2.1× greater skill transfer to novel contexts. Commitment is not a soft finish, it is where learning becomes practice.', url: 'https://educationendowmentfoundation.org.uk/' },
+      { author: 'Education Endowment Foundation', year: '2024', title: 'Teaching and Learning Toolkit: Metacognition and self-regulation', synthesis: 'Teaching pupils to plan, monitor and evaluate their own learning adds an average of seven months’ progress over a year, one of the highest-impact, lowest-cost approaches in the Toolkit.', url: 'https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/metacognition-and-self-regulation' },
+      { author: 'Sailer, M. and Homner, L.', year: '2020', title: 'The Gamification of Learning: a Meta-analysis', synthesis: 'Gamification had small but significant effects on cognitive (g = 0.49), motivational (g = 0.36) and behavioural (g = 0.25) learning outcomes. Game fiction, and combining competition with collaboration, worked best. Educational Psychology Review 32, 77–112.', url: 'https://opus.bibliothek.uni-augsburg.de/opus4/frontdoor/index/index/docId/109056' },
     ],
   },
 ];
 
 const comparativeSystems = [
-  { system: 'Finland',          approach: 'Phenomenon-based learning',    level: 'High',     note: 'No standardised exams until 18; student-directed inquiry is core curriculum.' },
-  { system: 'Estonia',          approach: 'Digital + critical thinking',   level: 'High',     note: 'Ranked #1 in Europe (PISA 2022); integrates philosophical reasoning.' },
-  { system: 'Singapore',        approach: 'Mastery + structured inquiry',  level: 'Medium',   note: '"Teach Less, Learn More" policy since 2004.' },
+  { system: 'Finland',          approach: 'Phenomenon-based learning',    level: 'High',     note: 'No national standardised tests before the matriculation exam at the end of upper secondary.' },
+  { system: 'Estonia',          approach: 'Digital + critical thinking',   level: 'High',     note: 'Highest-scoring European system in PISA 2022 maths, reading and science.' },
+  { system: 'Singapore',        approach: 'Mastery + structured inquiry',  level: 'Medium',   note: '“Teach Less, Learn More”, introduced in 2004, to make room for deeper learning.' },
   { system: 'Japan',            approach: 'Collaborative problem-solving', level: 'Medium',   note: 'Reform toward active learning ongoing.' },
-  { system: 'South Korea',      approach: 'Exam-driven rote',              level: 'Low',      note: 'Highest private tutoring expenditure globally.' },
-  { system: 'India (NEP 2020)', approach: 'Competency-based (stated)',     level: 'Emerging', note: 'Critical thinking listed as goal; structured implementation in progress.' },
+  { system: 'South Korea',      approach: 'Exam-driven rote',              level: 'Low',      note: 'Among the highest private tutoring spending in the world.' },
+  { system: 'India (NEP 2020)', approach: 'Competency-based (stated)',     level: 'Emerging', note: 'NEP 2020 asks for content to be cut to its core to make space for critical thinking (§4.5).' },
 ];
 
 const levelColor: Record<string, string> = {
@@ -167,6 +167,7 @@ export function ResearchPage() {
       <section className="sec sec--cream">
         <div className="tk-wrap">
           {SECTIONS.map((s, i) => <EvidenceBlock key={s.title} s={s} index={i} />)}
+          <p className="fine" style={{ marginTop: 32 }}>Every figure links to its original source. Last checked October 2026.</p>
         </div>
       </section>
 
@@ -183,7 +184,7 @@ export function ResearchPage() {
             <div className="cmp__row cmp__row--head" role="row">
               <span role="columnheader">System</span>
               <span role="columnheader">Approach</span>
-              <span role="columnheader">Speculative thinking</span>
+              <span role="columnheader">Room for open thinking*</span>
             </div>
             {comparativeSystems.map((row, i) => (
               <Reveal key={row.system} delay={i * 0.04} y={12}>
@@ -202,6 +203,7 @@ export function ResearchPage() {
               </Reveal>
             ))}
           </div>
+          <p className="fine">* TARK’s reading of each system, based on the policies noted. Not a ranking.</p>
         </div>
       </section>
 

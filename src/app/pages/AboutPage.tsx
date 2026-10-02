@@ -31,7 +31,7 @@ const TEAM = [
   { role: 'Author and framework design', name: 'Kalpak Doshi',            color: '#FFD167' },
   { role: 'Mentor',                      name: 'Swapnil Soni',            color: '#E27238' },
   { role: 'Institute mentor',            name: 'Prof. Saurabh Vyas',      color: '#465BA4' },
-  { role: 'Institution',                 name: 'GLS Institute of Design', color: '#4DB49F' },
+  { role: 'Institution',                 name: 'GLS Faculty of Design', color: '#4DB49F' },
   { role: 'Studio',                      name: 'Studio Carbon',           color: '#DA3832' },
   { role: 'Published',                   name: 'July 2026',               color: '#FFD167' },
 ];
@@ -41,7 +41,7 @@ const THANKS: { group: string; color: string; people: string[] }[] = [
   {
     group: 'Institutions', color: '#FFD167',
     people: [
-      'GLS Institute of Design',
+      'GLS Faculty of Design',
       'Studio Carbon',
       'IIT Centre for Creative Learning',
     ],
@@ -218,13 +218,6 @@ export function AboutPage() {
           <div>
             <Reveal><Tag bg="#E27238" tilt={-3}>Mentorship</Tag></Reveal>
             <Reveal delay={0.05}><h2 className="display-lg mentor__title">Thought through, together</h2></Reveal>
-            <Reveal delay={0.1}>
-              <p className="lede" style={{ maxWidth: '40ch' }}>
-                Kalpak Doshi created Project <span className="deva" lang="hi">तर्क</span> as a graduation
-                project at GLS Institute of Design. Swapnil Soni mentored the work, with Prof. Saurabh Vyas
-                as institute mentor.
-              </p>
-            </Reveal>
             <Reveal delay={0.15}>
               <div className="mentor__names">
                 <div><span className="mini-head">Author</span><strong>Kalpak Doshi</strong></div>
