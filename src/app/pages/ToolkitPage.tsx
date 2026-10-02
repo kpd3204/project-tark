@@ -6,7 +6,7 @@ import { PageFooter } from '../components/PageFooter';
 import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, EASE } from '../components/kit';
-import { Buddy, Squiggle, Tag, Pill } from '../components/play';
+import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
 import photoDomino from '../../imports/photos/domino-qr-closeup.jpg';
 import photoWorksheet from '../../imports/photos/worksheet-and-phone.jpg';
 
@@ -116,12 +116,11 @@ export function ToolkitPage() {
                 <div><strong>{TOTAL}</strong><span>tools</span></div>
                 <div><strong>5</strong><span>moves</span></div>
                 <div><strong>1</strong><span>page each</span></div>
-                <div><strong>₹0</strong><span>always free</span></div>
               </div>
             </Reveal>
           </div>
           <Reveal delay={0.1} y={40} className="tk-head__photo">
-            <img src={photoDomino} alt="The Domino worksheet, with its QR code being scanned to open the AI Thinking Partner" />
+            <SoftImg src={photoDomino} alt="The Domino worksheet, with its QR code being scanned to open the AI Thinking Partner" loading="eager" />
             <Buddy color="#E27238" size={64} className="tk-head__buddy" delay={0.4} />
             <Squiggle kind="spiral" width={84} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>
@@ -236,7 +235,7 @@ export function ToolkitPage() {
       <section className="howto">
         <div className="tk-wrap howto__grid">
           <Reveal y={40} className="howto__photo">
-            <img src={photoWorksheet} alt="A student filling in a TARK worksheet with a phone beside it" loading="lazy" />
+            <SoftImg src={photoWorksheet} alt="A student filling in a TARK worksheet with a phone beside it" />
           </Reveal>
           <div>
             <Reveal><h2 className="display-lg">How a tool works</h2></Reveal>
