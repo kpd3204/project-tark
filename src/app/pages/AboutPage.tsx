@@ -174,8 +174,8 @@ export function AboutPage() {
           <Reveal>
             <nav className="jump" style={{ marginTop: 0 }} aria-label="The five moves">
               {MOVES.map((m) => (
-                <Link key={m.key} to={`/framework#${m.key.toLowerCase()}`} className="jump__item" style={{ backgroundColor: m.color, color: m.ink }}>
-                  <MoveIcon move={m.key} size={26} variant={m.ink === '#FFFFFF' ? 'white' : 'black'} />
+                <Link key={m.key} to={`/framework#${m.key.toLowerCase()}`} className="jump__item" style={{ backgroundColor: m.color, color: '#FFFFFF' }}>
+                  <MoveIcon move={m.key} size={26} variant="white" />
                   <span className="jump__name">{m.key}</span>
                   <span className="jump__hindi deva" lang="hi">{m.hindi}</span>
                   <span className="jump__go" aria-hidden="true">→</span>

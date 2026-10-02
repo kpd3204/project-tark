@@ -55,7 +55,6 @@ function Manifesto() {
         <Reveal>
           <p className="home-eyebrow">
             <span lang="hi" className="deva">तर्क</span> (tark): Sanskrit-rooted Hindi for <em>reasoning, logic, deliberation</em>
-            <Squiggle kind="arrow" width={64} color="var(--ink-3)" stroke={2} className="home-eyebrow__arrow" />
           </p>
         </Reveal>
 

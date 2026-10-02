@@ -7,7 +7,7 @@ import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, EASE } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
-import photoDomino from '../../imports/photos/domino-qr-closeup.jpg';
+import photoDomino from '../../imports/photos/about/thinking-toolkit-cards.jpg';
 import photoWorksheet from '../../imports/photos/real/ws-feelings-circle.jpg';
 
 type MoveData = typeof toolsData[0];
@@ -43,7 +43,7 @@ function ToolCard({ tool, move, index }: { tool: Tool; move: MoveData; index: nu
         <span className="tcard__icon" aria-hidden="true"><MoveIcon move={move.key as MoveKey} size={28} variant="color" /></span>
       </div>
       <h3 className="tcard__name">
-        <Link to={href} className="tcard__link">{tool.name}</Link>
+        <Link to={href} className="tcard__link">{tool.name.replace(/-/g, '\u2011')}</Link>
       </h3>
       <p className="tcard__tag">{tool.tagline}</p>
       <div className="tcard__chips">
@@ -120,7 +120,7 @@ export function ToolkitPage() {
             </Reveal>
           </div>
           <Reveal delay={0.1} y={40} className="tk-head__photo">
-            <SoftImg src={photoDomino} alt="The Domino worksheet, with its QR code being scanned to open the AI Thinking Partner" loading="eager" />
+            <SoftImg src={photoDomino} alt="The Project TARK Thinking Toolkit: a ring of printed tool cards fanned out" loading="eager" />
             <Buddy color="#E27238" size={64} className="tk-head__buddy" delay={0.4} />
             <Squiggle kind="spiral" width={84} color="var(--ink)" className="tk-head__sq" delay={0.5} />
           </Reveal>

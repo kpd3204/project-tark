@@ -5,6 +5,9 @@ import imgClassroom from '../../imports/photos/classroom-workshop.jpg';
 import imgBooklets from '../../imports/photos/five-moves-booklets.jpg';
 import imgButterfly from '../../imports/photos/butterfly-effect-group.jpg';
 import imgTeam from '../../imports/photos/team-thinking-partner.jpg';
+import filmSrc from '../../imports/hero-media/film.mp4';
+import filmWebm from '../../imports/hero-media/film.webm';
+import filmPoster from '../../imports/hero-media/film.jpg';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { DiamondField } from './DiamondField';
 import { EASE } from './kit';
@@ -21,6 +24,79 @@ const SLIDES = [
 ];
 
 const CYCLE_MS = 6500;
+
+/* Hero background: 'clips' (twelve short session clips), 'film' (one loop)
+   or 'photos'. Preview another with ?hero=film or ?hero=photos. */
+type HeroMedia = 'clips' | 'film' | 'photos';
+const DEFAULT_MEDIA: HeroMedia = 'clips';
+function heroMedia(): HeroMedia {
+  try {
+    const q = new URLSearchParams(window.location.search).get('hero');
+    if (q === 'clips' || q === 'film' || q === 'photos') return q;
+  } catch { /* no window */ }
+  return DEFAULT_MEDIA;
+}
+
+const clipFiles = import.meta.glob('../../imports/hero-media/clip-*.mp4', { eager: true, import: 'default' }) as Record<string, string>;
+const webmFiles = import.meta.glob('../../imports/hero-media/clip-*.webm', { eager: true, import: 'default' }) as Record<string, string>;
+const posterFiles = import.meta.glob('../../imports/hero-media/clip-*.jpg', { eager: true, import: 'default' }) as Record<string, string>;
+const CLIPS = Object.keys(clipFiles).sort().map((k) => ({ src: clipFiles[k], webm: webmFiles[k.replace('.mp4', '.webm')], poster: posterFiles[k.replace('.mp4', '.jpg')] }));
+const CLIP_MS = 3400;
+
+/* All clips stay mounted and preloaded; only the visible one plays,
+   so every change is a clean crossfade with no loading gap. */
+function ClipReel({ reduced }: { reduced: boolean }) {
+  const [active, setActive] = useState(0);
+  const refs = useRef<(HTMLVideoElement | null)[]>([]);
+  useEffect(() => {
+    if (reduced) return;
+    const id = setInterval(() => setActive((a) => (a + 1) % CLIPS.length), CLIP_MS);
+    return () => clearInterval(id);
+  }, [reduced]);
+  useEffect(() => {
+    refs.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === active && !reduced) { v.currentTime = 0; v.play().catch(() => {}); }
+      else if (i !== (active - 1 + CLIPS.length) % CLIPS.length) v.pause();
+    });
+  }, [active, reduced]);
+  return (
+    <>
+      {CLIPS.map((c, i) => (
+        <video
+          key={c.src}
+          ref={(el) => { refs.current[i] = el; }}
+          poster={c.poster}
+          muted
+          loop
+          playsInline
+          preload={i < 3 ? 'auto' : 'metadata'}
+          aria-hidden="true"
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+            opacity: i === active ? 1 : 0,
+            transition: 'opacity 1s ease',
+          }}
+        >
+          <source src={c.src} type="video/mp4" />
+          <source src={c.webm} type="video/webm" />
+        </video>
+      ))}
+    </>
+  );
+}
+
+function Film({ reduced }: { reduced: boolean }) {
+  return reduced ? (
+    <img src={filmPoster} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+  ) : (
+    <video poster={filmPoster} autoPlay muted loop playsInline preload="auto" aria-hidden="true"
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}>
+      <source src={filmSrc} type="video/mp4" />
+      <source src={filmWebm} type="video/webm" />
+    </video>
+  );
+}
 
 const HEADLINE: React.CSSProperties = {
   fontFamily: 'var(--font-display)',
@@ -66,6 +142,8 @@ function MaskedLine({ children, delay = 0, light = false }: { children: React.Re
 
 export function HeroSection() {
   const [index, setIndex] = useState(0);
+  const [media] = useState<HeroMedia>(heroMedia);
+  const [reduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [paused, setPaused] = useState(false);
   const isMobile = useIsMobile();
   const heroRef = useRef<HTMLElement>(null);
@@ -92,6 +170,7 @@ export function HeroSection() {
 
   // preload the rest of the photographs once the first has painted
   useEffect(() => {
+    if (media !== 'photos') return;
     const t = setTimeout(() => SLIDES.slice(1).forEach((s) => { const i = new Image(); i.src = s.img; }), 1200);
     return () => clearTimeout(t);
   }, []);
@@ -125,7 +204,9 @@ export function HeroSection() {
       {/* Photography, crossfades with each phrase, slow push-in */}
       <div className="tk-grain" style={{ position: 'absolute', inset: 0, overflow: 'hidden', backgroundColor: '#141414', zIndex: 0 }}>
         <motion.div style={{ position: 'absolute', inset: 0, scale: photoScale }}>
-          <AnimatePresence initial={false}>
+          {media === 'clips' && <ClipReel reduced={reduced} />}
+          {media === 'film' && <Film reduced={reduced} />}
+          {media === 'photos' && <AnimatePresence initial={false}>
             <motion.img
               key={index}
               src={slide.img}
@@ -135,7 +216,7 @@ export function HeroSection() {
               exit={{ opacity: 0, transition: { duration: 1.2, delay: 0.2 } }}
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: slide.pos, display: 'block' }}
             />
-          </AnimatePresence>
+          </AnimatePresence>}
         </motion.div>
         {/* Grade: a calm overall tint, deeper at the base for the headline */}
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(12,12,12,0.34)' }} />
