@@ -152,7 +152,7 @@ function ToolkitPeek() {
       <div className="tk-wrap">
         <div className="toolkit-panel">
           <div className="toolkit-panel__intro">
-            <Tag bg="#1D1B16" tilt={-3}>The toolkit</Tag>
+            <Tag bg="#1D1B16" tilt={-3}>Toolkit</Tag>
             <h2 className="display-lg">Stuck? <br />There’s a tool for that.</h2>
             <p className="lede">Every tool is a one-page structure for a specific kind of stuck. Printable, free, and it works with the AI Thinking Partner.</p>
             <div className="toolkit-counters">

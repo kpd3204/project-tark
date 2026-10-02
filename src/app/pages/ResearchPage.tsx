@@ -140,7 +140,7 @@ export function ResearchPage() {
       <header className="tk-head">
         <div className="tk-wrap tk-head__grid">
           <div>
-            <Reveal><Tag bg="#E27238" tilt={-3}>The evidence</Tag></Reveal>
+            <Reveal><Tag bg="#E27238" tilt={-3}>Evidence</Tag></Reveal>
             <Reveal delay={0.05}>
               <h1 className="display-xl tk-head__title">
                 Why thinking<br />

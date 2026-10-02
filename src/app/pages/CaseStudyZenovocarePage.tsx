@@ -12,7 +12,7 @@ import zcLap from '../../imports/photos/real/zc-writing-lap.jpg';
 import zcDesk from '../../imports/photos/real/zc-writing-desk.jpg';
 
 const SESSION = [
-  { src: zcRoom,  alt: 'The ZenovoCare team gathered around the table at Studio Carbon', caption: 'The kickoff', area: 'a' },
+  { src: zcRoom,  alt: 'The ZenovoCare team gathered around the table at Studio Carbon', caption: 'Kickoff', area: 'a' },
   { src: zcTable, alt: 'Working through the moves together around the studio table', caption: 'Working the moves together', area: 'b' },
   { src: zcLap,   alt: 'A participant filling in a TARK worksheet on their lap', caption: 'Worksheets in use', area: 'c' },
   { src: zcDesk,  alt: 'A participant writing on TARK worksheets at a desk', caption: 'One move at a time', area: 'd' },
@@ -197,7 +197,7 @@ export function CaseStudyZenovocarePage() {
       {/* ── The session ─────────────────────────────────────── */}
       <section className="sec sec--cream">
         <div className="tk-wrap narrow">
-          <Reveal><h2 className="display-lg">The session</h2></Reveal>
+          <Reveal><h2 className="display-lg">Session</h2></Reveal>
           <Reveal delay={0.05}><p className="body-lg">{zenovocare.description}</p></Reveal>
           <Reveal delay={0.1}>
             <div className="duo">
