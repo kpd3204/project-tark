@@ -38,17 +38,21 @@ export function Buddy({
   style,
   className,
   delay = 0,
+  glance = false,
 }: {
   color: string;
   size?: number;
   style?: CSSProperties;
   className?: string;
   delay?: number;
+  /* look left and right on a loop instead of following the pointer */
+  glance?: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const pupils = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
+    if (glance) return;
     bindPointer();
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return;
@@ -67,7 +71,7 @@ export function Buddy({
     };
     lookers.add(look);
     return () => { lookers.delete(look); };
-  }, []);
+  }, [glance]);
 
   const ink = INK_ON[color] || '#1D1B16';
 
@@ -75,7 +79,7 @@ export function Buddy({
     <motion.span
       ref={ref}
       aria-hidden="true"
-      className={`buddy ${className || ''}`}
+      className={`buddy ${glance ? 'buddy--glance' : ''} ${className || ''}`}
       initial={{ scale: 0, rotate: -12 }}
       whileInView={{ scale: 1, rotate: 0 }}
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
