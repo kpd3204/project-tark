@@ -65,10 +65,10 @@ p, li, dd, figcaption, blockquote, .lede, .cite__text, .tcard__tag, .tool-row__t
 /* Glancing eyes: a look to the left, then the right, then back */
 .buddy--glance .buddy__pupil { animation: buddy-glance 1.6s 0.55s ease-in-out infinite; }
 @keyframes buddy-glance {
-  0%, 12%   { transform: translateX(0); }
-  24%, 42%  { transform: translateX(-34%); }
-  56%, 76%  { transform: translateX(34%); }
-  88%, 100% { transform: translateX(0); }
+  0%, 12%   { transform: translate3d(0, 0, 0); }
+  24%, 42%  { transform: translate3d(-34%, 0, 0); }
+  56%, 76%  { transform: translate3d(34%, 0, 0); }
+  88%, 100% { transform: translate3d(0, 0, 0); }
 }
 @media (prefers-reduced-motion: reduce) { .buddy--glance .buddy__pupil { animation: none; } }
 .buddy--inline { width: 0.78em; height: 0.78em; vertical-align: -0.1em; margin: 0 0.02em; }
@@ -1540,7 +1540,16 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
   .home-close__tags .tag { font-size: 0.6em; }
 }
 
-/* ═══ Preloader ════════════════════════════════════════════════ */
-.intro { position: fixed; inset: 0; z-index: 9999; background: var(--paper); display: grid; place-items: center; }
-.intro__inner { display: flex; flex-direction: column; align-items: center; gap: clamp(18px, 2.4vw, 28px); }
+/* ═══ Preloader ═══════════════════════════════════════════════ */
+.intro { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; pointer-events: none; overflow: hidden; }
+.intro__paper {
+  position: absolute; left: 50%; top: 50%;
+  /* a square that, turned 45°, still covers the corners of any screen */
+  width: calc((100vw + 100vh) * 0.75); height: calc((100vw + 100vh) * 0.75);
+  margin: calc((100vw + 100vh) * -0.375) 0 0 calc((100vw + 100vh) * -0.375);
+  border-radius: 6%;
+  background: var(--paper);
+  will-change: transform;
+}
+.intro__buddy-wrap { position: relative; will-change: transform, opacity; }
 .intro__buddy { width: clamp(96px, 11vw, 140px); height: clamp(96px, 11vw, 140px); }
