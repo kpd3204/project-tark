@@ -1608,4 +1608,38 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .dice-teaser .tag { font-size: 18px; }
 .dice-teaser__title { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 4.4vw, 64px); line-height: 1; letter-spacing: -0.03em; margin: 22px 0 14px; }
 .dice-teaser__die { display: grid; place-items: center; padding-block: 20px; text-decoration: none; }
-.dice-teaser__die 
+/* ═══ Tool detail ══════════════════════════════════════════════ */
+.tool-move { display: inline-flex; align-items: center; gap: 10px; background: var(--c); color: #FFFFFF; border-radius: 999px; padding: 8px 16px 8px 10px; text-decoration: none; }
+.tool-move strong { font-family: var(--font-display); font-weight: 800; font-size: 16px; letter-spacing: 0.02em; }
+.tool-move .deva { font-weight: 600; font-size: 15px; }
+.tool-page .tk-head__title { font-size: clamp(34px, 5vw, 80px); overflow-wrap: anywhere; }
+@media (min-width: 1000px) { .tool-page .tk-head__grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); } }
+.tool-tp-wrap { margin-top: clamp(14px, 1.6vw, 20px); }
+.tool-facts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 22px; }
+.tool-card { position: relative; display: flex; flex-direction: column; background: var(--c); color: #FFFFFF; border-radius: var(--r-lg); padding: clamp(22px, 2.6vw, 36px); min-height: clamp(320px, 30vw, 440px); }
+.tool-card__top { display: flex; justify-content: space-between; align-items: flex-start; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.95; }
+.tool-card__icon { width: clamp(110px, 12vw, 160px); height: clamp(110px, 12vw, 160px); margin: auto 0 22px; }
+.tool-card__icon > * { width: 100% !important; height: 100% !important; }
+.tool-card__move { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 3vw, 44px); letter-spacing: -0.02em; line-height: 1; }
+.tool-card__move .deva { font-weight: 600; font-size: 0.6em; margin-left: 6px; }
+.tool-card__tag { font-family: var(--font-body); font-weight: 700; font-size: 16px; margin-top: 8px; }
+.tool-lead { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 2.6vw, 36px); line-height: 1.12; letter-spacing: -0.02em; margin: 0; max-width: 24ch; }
+.tool-steps { list-style: none; margin: 0; padding: 0; }
+.tool-steps li { display: flex; align-items: flex-start; gap: 16px; padding: 18px 0; border-top: 1.5px solid var(--line); }
+.tool-steps li .ev__num { color: #FFFFFF; flex-shrink: 0; }
+.tool-steps p { font-family: var(--font-body); font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; margin: 12px 0 0; }
+.tool-example { position: relative; background: var(--t); border-radius: var(--r-lg); padding: clamp(24px, 3vw, 44px); padding-right: clamp(80px, 9vw, 130px); }
+.tool-example p { font-family: var(--font-body); font-weight: 600; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.5; margin: 6px 0 0; max-width: 60ch; }
+.tool-example__buddy { position: absolute; right: clamp(20px, 2.6vw, 36px); top: clamp(20px, 2.6vw, 36px); }
+.tool-tp { background: var(--ink); color: #FFFFFF; border-radius: clamp(24px, 3vw, 40px); padding: clamp(24px, 4vw, 56px); }
+.tool-tp .mini-head { color: rgba(255,255,255,0.6); }
+.tool-tp__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+.tool-tp__title { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 3vw, 44px); letter-spacing: -0.025em; line-height: 1.05; margin: 0 0 10px; }
+.tool-tp__note { font-family: var(--font-body); font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.72); margin: 0; max-width: 52ch; }
+.tool-tp__prompt { white-space: pre-wrap; font-family: var(--font-mono); font-size: clamp(14px, 1.2vw, 16px); line-height: 1.65; background: rgba(255,255,255,0.08); border-radius: var(--r-md); padding: 18px 20px; margin: 24px 0 18px; color: #FFFFFF; }
+.tool-tp__links { font-family: var(--font-body); font-size: 15px; color: rgba(255,255,255,0.72); margin: 0; }
+.tool-tp__links a { color: #FFD167; }
+.tool-more { background: #FFFFFF; border-radius: var(--r-lg); padding: 6px clamp(8px, 1.4vw, 18px); }
+@media (max-width: 599px) {
+  .tool-example { padding-right: 22px; padding-top: 84px; }
+}
