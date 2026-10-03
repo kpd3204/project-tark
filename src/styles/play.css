@@ -62,6 +62,15 @@ p, li, dd, figcaption, blockquote, .lede, .cite__text, .tcard__tag, .tool-row__t
   0%, 94%, 100% { transform: scaleY(1); }
   96%           { transform: scaleY(0.1); }
 }
+/* Glancing eyes: a look to the left, then the right, then back */
+.buddy--glance .buddy__pupil { animation: buddy-glance 1.6s 0.55s ease-in-out infinite; }
+@keyframes buddy-glance {
+  0%, 12%   { transform: translateX(0); }
+  24%, 42%  { transform: translateX(-34%); }
+  56%, 76%  { transform: translateX(34%); }
+  88%, 100% { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) { .buddy--glance .buddy__pupil { animation: none; } }
 .buddy--inline { width: 0.78em; height: 0.78em; vertical-align: -0.1em; margin: 0 0.02em; }
 .buddy--letter { width: 0.64em; height: 0.64em; vertical-align: -0.04em; margin: 0 -0.02em; }
 

@@ -43,7 +43,7 @@ export function IntroAnimation({ onComplete }: { onComplete: () => void }) {
           animate={{ y: [70, -18, 0], scale: [0.3, 1.1, 1], rotate: [-20, 6, 0], opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.12, ease: EASE, times: [0, 0.6, 1] }}
         >
-          <Buddy color={color} size={0} className="intro__buddy" />
+          <Buddy color={color} size={0} className="intro__buddy" glance />
         </motion.div>
       </motion.div>
     </motion.div>
