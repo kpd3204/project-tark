@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Buddy, Tag } from './play';
+import { Buddy } from './play';
 
 /* Preloader: one diamond buddy hops in on paper, in a brand colour picked
-   at random each time, the wordmark settles under it, then the paper closes
+   at random each time, then the paper closes
    into a diamond at the centre of the screen, the same gesture as the page
    transitions. */
 
@@ -44,14 +44,6 @@ export function IntroAnimation({ onComplete }: { onComplete: () => void }) {
           transition={{ duration: 0.8, delay: 0.12, ease: EASE, times: [0, 0.6, 1] }}
         >
           <Buddy color={color} size={0} className="intro__buddy" />
-        </motion.div>
-        <motion.div
-          className="intro__word"
-          initial={{ y: 18, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
-        >
-          Project <Tag bg={color} color="#FFFFFF" tilt={-3} className="tag--word deva">तर्क</Tag>
         </motion.div>
       </motion.div>
     </motion.div>
