@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Buddy } from './play';
 
-/* Preloader: one diamond buddy springs in on paper, in a brand colour
+/* Preloader: one diamond buddy eases in on paper, in a brand colour
    picked at random each time, glances left and right, then the paper
    closes into a diamond at the centre of the screen, the same gesture as
    the page transitions. Everything moves by transform and opacity only,
@@ -17,8 +17,8 @@ export function IntroAnimation({ onComplete }: { onComplete: () => void }) {
 
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const t1 = setTimeout(() => setClosing(true), reduced ? 500 : 1900);
-    const t2 = setTimeout(() => onComplete(), reduced ? 800 : 2650);
+    const t1 = setTimeout(() => setClosing(true), reduced ? 500 : 2100);
+    const t2 = setTimeout(() => onComplete(), reduced ? 800 : 2850);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [onComplete]);
 
@@ -33,13 +33,13 @@ export function IntroAnimation({ onComplete }: { onComplete: () => void }) {
       />
       <motion.div
         className="intro__buddy-wrap"
-        initial={{ y: 48, scale: 0.5, opacity: 0 }}
+        initial={{ y: 30, scale: 0.4, rotate: -18, opacity: 0 }}
         animate={closing
-          ? { y: 0, scale: 0, opacity: 0 }
-          : { y: 0, scale: 1, opacity: 1 }}
+          ? { y: 0, scale: 0, rotate: 0, opacity: 0 }
+          : { y: 0, scale: 1, rotate: 0, opacity: 1 }}
         transition={closing
           ? { duration: 0.55, ease: CLOSE_EASE }
-          : { type: 'spring', stiffness: 320, damping: 17, mass: 0.9, delay: 0.12, opacity: { duration: 0.25, delay: 0.12 } }}
+          : { type: 'spring', stiffness: 85, damping: 14, mass: 1, delay: 0.3, opacity: { duration: 0.7, delay: 0.3, ease: 'easeOut' } }}
       >
         <Buddy color={color} size={0} className="intro__buddy" glance pop={false} />
       </motion.div>
