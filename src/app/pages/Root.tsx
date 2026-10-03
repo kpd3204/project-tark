@@ -22,6 +22,7 @@ const PAGE_COLOR: Record<string, string> = {
   '/worksheets':       '#E27238',
   '/games':            '#FFD167',
   '/activity-booklet': '#4DB49F',
+  '/dice':             '#465BA4',
   '/case-studies':     '#DA3832',
   '/research':         '#E27238',
   '/about':            '#465BA4',

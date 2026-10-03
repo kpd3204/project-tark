@@ -1553,3 +1553,74 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 }
 .intro__buddy-wrap { position: relative; will-change: transform, opacity; }
 .intro__buddy { width: clamp(96px, 11vw, 140px); height: clamp(96px, 11vw, 140px); }
+
+/* ═══ Thinking dice ════════════════════════════════════════════ */
+.die { --s: clamp(150px, 20vw, 230px); width: var(--s); height: var(--s); perspective: 1100px; }
+.die__tilt { width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateX(-16deg) rotateY(24deg); }
+.die__cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; will-change: transform; }
+.die__core { position: absolute; left: 9%; top: 9%; width: 82%; height: 82%; background: #E9E1D1; }
+.die--spin .die__cube { animation: die-idle 9s linear infinite; }
+@keyframes die-idle { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+.die__face {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: #FFFDF8;
+  border-radius: 18%;
+  box-shadow: inset 0 0 0 1.5px rgba(29,27,22,0.08), inset 0 -10px 24px rgba(29,27,22,0.06);
+  backface-visibility: hidden;
+}
+.die__icon { width: 46%; height: 46%; }
+.die__icon > * { width: 100% !important; height: 100% !important; }
+.die__stamp { width: 60%; height: 60%; color: #465BA4; transform: rotate(-8deg); }
+.stamp { display: block; width: 100%; height: 100%; overflow: visible; }
+.stamp__text { font-family: var(--font-mono); font-weight: 700; font-size: 21px; letter-spacing: 0.1em; fill: currentColor; }
+.stamp--flat { width: 104px; height: 104px; color: #465BA4; transform: rotate(-8deg); }
+
+.dice-head { padding-top: clamp(104px, 11vw, 140px); padding-bottom: clamp(48px, 6vw, 88px); }
+.dice-play { display: grid; gap: clamp(28px, 5vw, 72px); align-items: center; }
+.dice-left .tk-head__title { font-size: clamp(40px, 5.2vw, 84px); }
+@media (min-width: 960px) { .dice-play { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); } }
+.dice-stage { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: clamp(70px, 8vw, 120px); }
+.dice-grab { cursor: grab; touch-action: none; outline: none; border-radius: 24px; }
+.dice-grab:active { cursor: grabbing; }
+.dice-grab:focus-visible { box-shadow: 0 0 0 3px var(--ink); }
+.dice-shadow { width: calc(var(--s, 200px) * 0.9); max-width: 210px; height: 18px; border-radius: 50%; background: radial-gradient(closest-side, rgba(29,27,22,0.9), transparent); margin-top: 18px; }
+.dice-hint { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--ink-3); margin: 6px 0 4px; }
+.dice-roll[disabled] { opacity: 0.7; cursor: default; }
+
+.dice-result { display: flex; flex-direction: column; gap: 14px; }
+.dice-card { background: #FFFFFF; border-radius: var(--r-lg); padding: clamp(22px, 2.8vw, 38px); }
+.dice-card--empty { background: #FFFDF8; border: 2px dashed var(--line); }
+.dice-card__big { font-family: var(--font-display); font-weight: 800; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.15; letter-spacing: -0.02em; margin: 4px 0 10px; }
+.dice-card__small { font-family: var(--font-body); font-size: 15px; color: var(--ink-2); margin: 0; }
+.dice-card__move { display: inline-flex; align-items: center; gap: 10px; color: #FFFFFF; border-radius: 999px; padding: 8px 16px 8px 10px; }
+.dice-card__move strong { font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: 0.01em; }
+.dice-card__move .deva { font-weight: 600; font-size: 16px; }
+.dice-card__q { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 3.2vw, 46px); line-height: 1.06; letter-spacing: -0.025em; margin: 20px 0 24px; }
+.dice-card__apply { background: rgba(255,255,255,0.7); border-radius: var(--r-md); padding: 16px 18px; }
+.dice-card__situation { font-family: var(--font-body); font-weight: 700; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.4; margin: 2px 0 8px; }
+.dice-card__row { display: flex; gap: 14px; }
+.dice-own input { width: 100%; margin-top: 10px; border: 1.5px solid var(--line); background: #FFFFFF; border-radius: 999px; padding: 10px 16px; font-family: var(--font-body); font-size: 15px; color: var(--ink); outline: none; }
+.dice-own input:focus { border-color: var(--ink); }
+.dice-card__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.dice-pick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.dice-pick__btn { display: inline-flex; align-items: center; gap: 8px; border: none; border-radius: 999px; padding: 10px 16px 10px 10px; color: #FFFFFF; font-family: var(--font-display); font-weight: 800; font-size: 15px; cursor: pointer; transition: transform 0.25s var(--ease); }
+.dice-pick__btn:hover { transform: translateY(-2px); }
+.dice-collect { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--font-body); font-size: 14.5px; color: var(--ink-2); }
+.dice-collect__row { display: flex; gap: 10px; }
+.dice-collect__row i { display: block; width: 14px; height: 14px; border-radius: 3px; border: 2px solid; transform: rotate(45deg); }
+
+.face-card { height: 100%; display: flex; flex-direction: column; gap: 10px; color: #FFFFFF; border-radius: var(--r-lg); padding: clamp(20px, 2.2vw, 28px); min-height: 190px; }
+.face-card > :first-child { margin-bottom: auto; }
+.face-card strong { font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.01em; margin-top: 24px; }
+.face-card strong .deva { font-weight: 600; font-size: 0.8em; margin-left: 4px; }
+.face-card p { font-family: var(--font-body); font-weight: 600; font-style: italic; font-size: 16px; line-height: 1.4; margin: 0; }
+.face-card--wild { background: #FFFFFF; color: var(--ink); }
+
+/* Home teaser */
+.dice-teaser { display: grid; gap: clamp(28px, 4vw, 64px); align-items: center; background: var(--tint-shift); border-radius: clamp(24px, 3vw, 40px); padding: clamp(26px, 4.4vw, 72px); overflow: hidden; }
+@media (min-width: 900px) { .dice-teaser { grid-template-columns: 1.2fr 0.8fr; } }
+.dice-teaser .tag { font-size: 18px; }
+.dice-teaser__title { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 4.4vw, 64px); line-height: 1; letter-spacing: -0.03em; margin: 22px 0 14px; }
+.dice-teaser__die { display: grid; place-items: center; padding-block: 20px; text-decoration: none; }
+.dice-teaser__die .die { --s: clamp(130px, 15vw, 190px); }

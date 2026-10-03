@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { DocBand } from '../components/ProjectDoc';
+import { Die } from '../components/Dice';
 import { PageFooter } from '../components/PageFooter';
 import { AssumptionTicker } from '../components/AssumptionTicker';
 import { HeroSection } from '../components/HeroSection';
@@ -306,7 +307,20 @@ export function Home() {
       <AssumptionTicker />
       <Why />
       <section className="sec sec--tight" style={{ background: '#FFFDF8', paddingTop: 0 }}>
-        <div className="tk-wrap"><DocBand /></div>
+        <div className="tk-wrap">
+          <Reveal>
+            <div className="dice-teaser">
+              <div>
+                <Tag bg="#465BA4" tilt={-3}>Thinking Dice</Tag>
+                <h2 className="dice-teaser__title">Stuck? Roll for a move.</h2>
+                <p className="lede" style={{ maxWidth: '40ch' }}>A 3D version of the TARK dice. Flick it, see which move it lands on, and try that move on a real situation.</p>
+                <div style={{ marginTop: 26 }}><Pill to="/dice" variant="ink">Roll the dice</Pill></div>
+              </div>
+              <Link to="/dice" className="dice-teaser__die" aria-label="Open the thinking dice"><Die spin /></Link>
+            </div>
+          </Reveal>
+          <div style={{ marginTop: 'clamp(16px, 2vw, 24px)' }}><DocBand /></div>
+        </div>
       </section>
       <Close />
       <PageFooter />
