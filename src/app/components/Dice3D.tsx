@@ -20,8 +20,8 @@ const FACES: { key: FaceKey; up: THREE.Euler; top: THREE.Vector3 }[] = [
   { key: 'TRACE',   up: new THREE.Euler(0, 0, Math.PI / 2),  top: new THREE.Vector3(0, 1, 0) },
   { key: 'SURFACE', up: new THREE.Euler(0, 0, -Math.PI / 2), top: new THREE.Vector3(0, 1, 0) },
   { key: 'OPEN',    up: new THREE.Euler(0, 0, 0),            top: new THREE.Vector3(0, 0, -1) },
-  { key: 'WILD',    up: new THREE.Euler(Math.PI, 0, 0),      top: new THREE.Vector3(0, 0, 1) },
-  { key: 'SHIFT',   up: new THREE.Euler(-Math.PI / 2, 0, 0), top: new THREE.Vector3(0, 1, 0) },
+  { key: 'WILD',    up: new THREE.Euler(Math.PI, 0, 0),      top: new THREE.Vector3(0, 0, -1) },
+  { key: 'SHIFT',   up: new THREE.Euler(-Math.PI / 2, 0, 0), top: new THREE.Vector3(0, -1, 0) },
   { key: 'COMMIT',  up: new THREE.Euler(Math.PI / 2, 0, 0),  top: new THREE.Vector3(0, 1, 0) },
 ];
 /* `top` is the direction, on the cube, that the printed artwork's top edge
@@ -37,6 +37,9 @@ const restYaw = (face: number) => {
 const SIZE = 1.6;
 const PAPER = '#FBF8F1';
 const TEX = 512;
+/* the dice rests turned an eighth of a turn to the viewer, so the artwork is
+   printed turned the other way: the result face then reads exactly like the logo */
+const ART_TURN = -Math.PI / 4;
 /* how far above its frame the dice may leap, as a share of the frame's height */
 const LEAP_ROOM = 0.7;
 
@@ -87,10 +90,16 @@ function iconTexture(move: MoveKey, done: () => void) {
   const sized = withNs.replace(/<svg /, `<svg width="${Math.round(512 * ratio)}" height="512" `).replace(/ style="[^"]*"/, '');
   const img = new Image();
   img.onload = () => {
-    const box = TEX * 0.6;
+    const box = TEX * 0.52;
     const w = ratio >= 1 ? box : box * ratio;
     const h = ratio >= 1 ? box / ratio : box;
-    const place = (c: CanvasRenderingContext2D) => c.drawImage(img, (TEX - w) / 2, (TEX - h) / 2, w, h);
+    const place = (c: CanvasRenderingContext2D) => {
+      c.save();
+      c.translate(TEX / 2, TEX / 2);
+      c.rotate(ART_TURN);
+      c.drawImage(img, -w / 2, -h / 2, w, h);
+      c.restore();
+    };
     place(ctx);
     const b = bumpFrom(place);
     bumpCanvas.getContext('2d', { willReadFrequently: true })!.drawImage(b, 0, 0);
@@ -107,7 +116,7 @@ function drawStamp(ctx: CanvasRenderingContext2D) {
   const c = TEX / 2;
   ctx.save();
   ctx.translate(c, c);
-  ctx.rotate((-8 * Math.PI) / 180);
+  ctx.rotate(ART_TURN + (-8 * Math.PI) / 180);
   ctx.strokeStyle = blue;
   ctx.lineWidth = 16;
   ctx.beginPath();
