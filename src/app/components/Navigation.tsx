@@ -20,15 +20,16 @@ const LINKS = [
 
 const TOOLS = [
   { heading: 'Toolkit',      subtitle: '25 thinking tools',  path: '/toolkit',      color: MOVE_COLORS.SURFACE },
+  { heading: 'Thinking Dice', subtitle: 'Roll for a move',   path: '/dice',         color: MOVE_COLORS.SHIFT },
   { heading: 'Worksheets',   subtitle: 'Printable kits',     path: '/worksheets',   color: MOVE_COLORS.TRACE,  soon: true },
   { heading: 'Games',        subtitle: 'Thinking, played',   path: '/games',        color: MOVE_COLORS.OPEN,   soon: true },
-  { heading: 'Activity booklet', subtitle: '25 activities for young adults', path: '/activity-booklet', color: MOVE_COLORS.COMMIT, soon: true },
+  { heading: 'Activity Booklet', subtitle: '25 activities for young adults', path: '/activity-booklet', color: MOVE_COLORS.COMMIT, soon: true },
 ];
 
 const RESEARCH = [
   { heading: 'Evidence'    , subtitle: 'Why TARK exists',    path: '/research',     color: MOVE_COLORS.TRACE },
   { heading: 'Case Studies', subtitle: 'TARK in the field',  path: '/case-studies', color: MOVE_COLORS.COMMIT },
-  { heading: 'Document', subtitle: 'The full project, in one file', path: DOC_URL, color: MOVE_COLORS.SHIFT, external: true },
+  { heading: 'Project Document', subtitle: 'The full project, in one file', path: DOC_URL, color: MOVE_COLORS.SHIFT, external: true },
 ];
 
 type MenuItem = { heading: string; subtitle: string; path: string; color: string; soon?: boolean; external?: boolean };
@@ -87,10 +88,11 @@ function MenuLink({ label, color, tint, items, active, id, open, setOpen }: {
 const MOBILE = [
   { label: 'Framework',        path: '/framework',        color: MOVE_COLORS.OPEN    },
   { label: 'Toolkit',          path: '/toolkit',          color: MOVE_COLORS.SURFACE },
+  { label: 'Thinking Dice',    path: '/dice',             color: MOVE_COLORS.SHIFT   },
   { label: 'Thinking Partner', path: '/thinking-partner', color: MOVE_COLORS.SHIFT   },
   { label: 'Worksheets',       path: '/worksheets',       color: MOVE_COLORS.TRACE, soon: true },
   { label: 'Games',            path: '/games',            color: MOVE_COLORS.OPEN,  soon: true },
-  { label: 'Activity booklet', path: '/activity-booklet', color: MOVE_COLORS.COMMIT, soon: true },
+  { label: 'Activity Booklet', path: '/activity-booklet', color: MOVE_COLORS.COMMIT, soon: true },
   { label: 'Research',         path: '/research',         color: MOVE_COLORS.TRACE   },
   { label: 'Case Studies',     path: '/case-studies',     color: MOVE_COLORS.COMMIT  },
   { label: 'About',            path: '/about',            color: MOVE_COLORS.COMMIT  },
@@ -143,7 +145,7 @@ export function Navigation() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const toolsActive = ['/toolkit', '/worksheets', '/games', '/activity-booklet'].some((p) => pathname.startsWith(p));
+  const toolsActive = ['/toolkit', '/dice', '/worksheets', '/games', '/activity-booklet'].some((p) => pathname.startsWith(p));
   const researchActive = ['/research', '/case-studies'].some((p) => pathname.startsWith(p));
   const light = overHero && !mobileOpen;
   const v = (c: string, t: string) => ({ ['--c' as string]: c, ['--t' as string]: t });
@@ -212,7 +214,7 @@ export function Navigation() {
           <Link to="/thinking-partner" className="pill pill--ink" tabIndex={mobileOpen ? 0 : -1}>
             <span>Start thinking</span><span className="pill__arrow" aria-hidden="true">→</span>
           </Link>
-          <a href={DOC_URL} target="_blank" rel="noopener noreferrer" className="mnav__doc" tabIndex={mobileOpen ? 0 : -1}>Project document ↗</a>
+          <a href={DOC_URL} target="_blank" rel="noopener noreferrer" className="mnav__doc" tabIndex={mobileOpen ? 0 : -1}>Project Document ↗</a>
           <a href="https://www.instagram.com/project.tark/" target="_blank" rel="noopener noreferrer" className="mnav__ig" tabIndex={mobileOpen ? 0 : -1}>@project.tark</a>
         </div>
       </div>

@@ -6,7 +6,7 @@ export const DOC_URL = 'https://drive.google.com/file/d/1zmcBUGDYryq3EhvoEP7cRfv
 
 const STRIPES = ['#FFD167', '#E27238', '#465BA4', '#4DB49F', '#DA3832'];
 
-export function DocBand({ kicker = 'Final document' }: { kicker?: string }) {
+export function DocBand({ kicker = 'Final Document' }: { kicker?: string }) {
   return (
     <Reveal>
       <a className="doc" href={DOC_URL} target="_blank" rel="noopener noreferrer">

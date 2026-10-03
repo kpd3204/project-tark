@@ -231,7 +231,7 @@ export function AboutPage() {
           <Reveal y={40}>
             <figure className="jury">
               <SoftImg src={photoJury} alt="Kalpak Doshi presenting Project TARK to the final jury, with the worksheet kits on screen and booklets and cards on the table" />
-              <figcaption><i aria-hidden="true" />Presenting Project <span className="deva" lang="hi">तर्क</span> to the final jury</figcaption>
+              <figcaption><i aria-hidden="true" /><span>Presenting Project <span className="deva" lang="hi">तर्क</span> to the final jury</span></figcaption>
             </figure>
           </Reveal>
         </div>

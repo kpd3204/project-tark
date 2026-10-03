@@ -24,7 +24,7 @@ export function ActivityBookletPage() {
           <div>
             <Reveal>
               <div className="tag-row">
-                <Tag bg="#4DB49F" tilt={-3}>Activity booklet</Tag>
+                <Tag bg="#4DB49F" tilt={-3}>Activity Booklet</Tag>
                 <span className="soon">Soon</span>
               </div>
             </Reveal>

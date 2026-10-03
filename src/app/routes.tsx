@@ -8,6 +8,7 @@ import { ToolDetailPage } from './pages/ToolDetailPage';
 import { WorksheetsPage } from './pages/WorksheetsPage';
 import { GamesPage } from './pages/GamesPage';
 import { ActivityBookletPage } from './pages/ActivityBookletPage';
+import { DicePage } from './pages/DicePage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { CaseStudyZenovocarePage } from './pages/CaseStudyZenovocarePage';
 import { ResearchPage } from './pages/ResearchPage';
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
       { path: 'toolkit/:move/:toolSlug',           Component: ToolDetailPage          },
       { path: 'worksheets',                        Component: WorksheetsPage          },
       { path: 'games',                             Component: GamesPage               },
+      { path: 'dice',                              Component: DicePage                },
       { path: 'activity-booklet',                  Component: ActivityBookletPage     },
       { path: 'case-studies',                      Component: CaseStudiesPage         },
       { path: 'case-studies/zenovocare',           Component: CaseStudyZenovocarePage },

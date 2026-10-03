@@ -8,9 +8,10 @@ const EXPLORE = [
   { label: 'Framework',        path: '/framework'        },
   { label: 'Thinking Partner', path: '/thinking-partner' },
   { label: 'Toolkit',          path: '/toolkit'          },
+  { label: 'Thinking Dice',    path: '/dice'             },
   { label: 'Worksheets',       path: '/worksheets',  soon: true },
   { label: 'Games',            path: '/games',       soon: true },
-  { label: 'Activity booklet', path: '/activity-booklet', soon: true },
+  { label: 'Activity Booklet', path: '/activity-booklet', soon: true },
 ];
 const ABOUT = [
   { label: 'Case Studies', path: '/case-studies' },
@@ -46,7 +47,7 @@ export function PageFooter() {
           <nav className="footer__col" aria-label="About">
             <h3>Project</h3>
             {ABOUT.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
-            <a href={DOC_URL} target="_blank" rel="noopener noreferrer">Project document ↗</a>
+            <a href={DOC_URL} target="_blank" rel="noopener noreferrer">Project Document ↗</a>
           </nav>
 
           <div className="footer__col">
