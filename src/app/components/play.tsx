@@ -39,6 +39,7 @@ export function Buddy({
   className,
   delay = 0,
   glance = false,
+  pop = true,
 }: {
   color: string;
   size?: number;
@@ -47,6 +48,8 @@ export function Buddy({
   delay?: number;
   /* look left and right on a loop instead of following the pointer */
   glance?: boolean;
+  /* the built-in pop-in on scroll; off when the parent animates the entrance */
+  pop?: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const pupils = useRef<(HTMLSpanElement | null)[]>([]);
@@ -80,8 +83,8 @@ export function Buddy({
       ref={ref}
       aria-hidden="true"
       className={`buddy ${glance ? 'buddy--glance' : ''} ${className || ''}`}
-      initial={{ scale: 0, rotate: -12 }}
-      whileInView={{ scale: 1, rotate: 0 }}
+      initial={pop ? { scale: 0, rotate: -12 } : false}
+      whileInView={pop ? { scale: 1, rotate: 0 } : undefined}
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
       transition={{ type: 'spring', stiffness: 260, damping: 16, delay }}
       style={{ ...(size ? { width: size, height: size } : {}), ...style }}
