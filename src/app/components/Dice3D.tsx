@@ -41,6 +41,22 @@ function baseFace(ctx: CanvasRenderingContext2D) {
   ctx.fillRect(0, 0, TEX, TEX);
 }
 
+/* A bump map made from what is printed on a face: the print sits slightly
+   pressed into the plastic, so it catches light like a real dice */
+function bumpFrom(draw: (ctx: CanvasRenderingContext2D) => void) {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = TEX;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
+  draw(ctx);
+  ctx.globalCompositeOperation = 'source-in';
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0, 0, TEX, TEX);
+  ctx.globalCompositeOperation = 'destination-over';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, TEX, TEX);
+  return canvas;
+}
+
 function iconTexture(move: MoveKey, done: () => void) {
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = TEX;
@@ -49,6 +65,9 @@ function iconTexture(move: MoveKey, done: () => void) {
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
+  const bumpCanvas = document.createElement('canvas');
+  bumpCanvas.width = bumpCanvas.height = TEX;
+  const bump = new THREE.CanvasTexture(bumpCanvas);
   const markup = renderToStaticMarkup(<MoveIcon move={move} size={256} variant="color" />);
   const svg = (markup.match(/<svg[\s\S]*<\/svg>/) || [''])[0];
   const vb = (svg.match(/viewBox="([^"]+)"/) || [])[1]?.split(/\s+/).map(Number) || [0, 0, 1, 1];
@@ -57,15 +76,53 @@ function iconTexture(move: MoveKey, done: () => void) {
   const sized = withNs.replace(/<svg /, `<svg width="${Math.round(512 * ratio)}" height="512" `).replace(/ style="[^"]*"/, '');
   const img = new Image();
   img.onload = () => {
-    const box = TEX * 0.54;
+    const box = TEX * 0.6;
     const w = ratio >= 1 ? box : box * ratio;
     const h = ratio >= 1 ? box / ratio : box;
-    ctx.drawImage(img, (TEX - w) / 2, (TEX - h) / 2, w, h);
+    const place = (c: CanvasRenderingContext2D) => c.drawImage(img, (TEX - w) / 2, (TEX - h) / 2, w, h);
+    place(ctx);
+    const b = bumpFrom(place);
+    bumpCanvas.getContext('2d', { willReadFrequently: true })!.drawImage(b, 0, 0);
     tex.needsUpdate = true;
+    bump.needsUpdate = true;
     done();
   };
   img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(sized);
-  return tex;
+  return { tex, bump };
+}
+
+function drawStamp(ctx: CanvasRenderingContext2D) {
+  const blue = '#465BA4';
+  const c = TEX / 2;
+  ctx.save();
+  ctx.translate(c, c);
+  ctx.rotate((-8 * Math.PI) / 180);
+  ctx.strokeStyle = blue;
+  ctx.lineWidth = 16;
+  ctx.beginPath();
+  ctx.arc(0, 0, TEX * 0.38, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = blue;
+  ctx.font = '700 48px "Geist Mono", ui-monospace, monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const arc = (text: string, radius: number, top: boolean) => {
+    const step = 0.215;
+    const n = text.length;
+    for (let i = 0; i < n; i++) {
+      const off = (i - (n - 1) / 2) * step;
+      const a = top ? -Math.PI / 2 + off : Math.PI / 2 - off;
+      ctx.save();
+      ctx.translate(Math.cos(a) * radius, Math.sin(a) * radius);
+      ctx.rotate(top ? a + Math.PI / 2 : a - Math.PI / 2);
+      ctx.fillText(text[i], 0, 0);
+      ctx.restore();
+    }
+  };
+  arc('THINKING', TEX * 0.27, true);
+  arc('IN PROGRESS', TEX * 0.27, false);
+  [-40, 0, 40].forEach((x) => { ctx.beginPath(); ctx.arc(x, 0, 12, 0, Math.PI * 2); ctx.fill(); });
+  ctx.restore();
 }
 
 function stampTexture(done: () => void) {
@@ -75,44 +132,19 @@ function stampTexture(done: () => void) {
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
+  const bumpCanvas = document.createElement('canvas');
+  bumpCanvas.width = bumpCanvas.height = TEX;
+  const bump = new THREE.CanvasTexture(bumpCanvas);
   const draw = () => {
     baseFace(ctx);
-    const blue = '#465BA4';
-    const c = TEX / 2;
-    ctx.save();
-    ctx.translate(c, c);
-    ctx.rotate((-8 * Math.PI) / 180);
-    ctx.strokeStyle = blue;
-    ctx.lineWidth = 16;
-    ctx.beginPath();
-    ctx.arc(0, 0, TEX * 0.36, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.fillStyle = blue;
-    ctx.font = '700 46px "Geist Mono", ui-monospace, monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const arc = (text: string, radius: number, top: boolean) => {
-      const step = 0.215;
-      const n = text.length;
-      for (let i = 0; i < n; i++) {
-        const off = (i - (n - 1) / 2) * step;
-        const a = top ? -Math.PI / 2 + off : Math.PI / 2 - off;
-        ctx.save();
-        ctx.translate(Math.cos(a) * radius, Math.sin(a) * radius);
-        ctx.rotate(top ? a + Math.PI / 2 : a - Math.PI / 2);
-        ctx.fillText(text[i], 0, 0);
-        ctx.restore();
-      }
-    };
-    arc('THINKING', TEX * 0.255, true);
-    arc('IN PROGRESS', TEX * 0.255, false);
-    [-38, 0, 38].forEach((x) => { ctx.beginPath(); ctx.arc(x, 0, 11, 0, Math.PI * 2); ctx.fill(); });
-    ctx.restore();
+    drawStamp(ctx);
+    bumpCanvas.getContext('2d', { willReadFrequently: true })!.drawImage(bumpFrom(drawStamp), 0, 0);
     tex.needsUpdate = true;
+    bump.needsUpdate = true;
     done();
   };
-  (document.fonts?.load('700 46px "Geist Mono"') ?? Promise.resolve()).then(draw, draw);
-  return tex;
+  (document.fonts?.load('700 48px "Geist Mono"') ?? Promise.resolve()).then(draw, draw);
+  return { tex, bump };
 }
 
 /* A soft round blot, used for the contact shadow under the dice */
@@ -158,8 +190,8 @@ export const Dice3D = forwardRef<Dice3DHandle, {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMapping = THREE.NeutralToneMapping;
+    renderer.toneMappingExposure = 1.0;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.VSMShadowMap;
     el.appendChild(renderer.domElement);
@@ -168,16 +200,16 @@ export const Dice3D = forwardRef<Dice3DHandle, {
     const pmrem = new THREE.PMREMGenerator(renderer);
     const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
     scene.environment = env;
-    scene.environmentIntensity = 0.55;
+    scene.environmentIntensity = 0.42;
 
     const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-    if (idle) { camera.position.set(0, 3.0, 6.2); camera.lookAt(0, 0.15, 0); }
-    else { camera.position.set(0, 5.4, 7.6); camera.lookAt(0, 0.55, 0); }
+    if (idle) { camera.position.set(0, 2.9, 6.6); camera.lookAt(0, 0.1, 0); }
+    else { camera.position.set(0, 4.6, 7.0); camera.lookAt(0, 0.5, 0); }
 
     /* light */
-    scene.add(new THREE.HemisphereLight(0xfffaf0, 0xd9cdb5, 0.9));
-    const key = new THREE.DirectionalLight(0xfff6e8, 2.2);
-    key.position.set(2.8, 7, 3.6);
+    scene.add(new THREE.HemisphereLight(0xfffaf0, 0xcfc2a8, 0.75));
+    const key = new THREE.DirectionalLight(0xfff6e8, 1.7);
+    key.position.set(3.4, 5.2, 4.2);
     key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
     key.shadow.camera.near = 1;
@@ -207,13 +239,17 @@ export const Dice3D = forwardRef<Dice3DHandle, {
     /* the dice */
     let dirty = true;
     const markDirty = () => { dirty = true; };
-    const materials = FACES.map((f) => new THREE.MeshPhysicalMaterial({
-      map: f.key === 'WILD' ? stampTexture(markDirty) : iconTexture(f.key, markDirty),
-      roughness: 0.42,
-      clearcoat: 0.55,
-      clearcoatRoughness: 0.32,
-      sheen: 0.15,
-    }));
+    const materials = FACES.map((f) => {
+      const { tex, bump } = f.key === 'WILD' ? stampTexture(markDirty) : iconTexture(f.key, markDirty);
+      return new THREE.MeshPhysicalMaterial({
+        map: tex,
+        bumpMap: bump,
+        bumpScale: 1.6,
+        roughness: 0.48,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.35,
+      });
+    });
     const dice = new THREE.Mesh(new RoundedBoxGeometry(SIZE, SIZE, SIZE, 8, SIZE * 0.14), materials);
     dice.castShadow = true;
     scene.add(dice);
@@ -223,7 +259,7 @@ export const Dice3D = forwardRef<Dice3DHandle, {
         .multiply(new THREE.Quaternion().setFromEuler(FACES[face].up));
 
     // start resting with OPEN up, turned a little so three faces show
-    dice.quaternion.copy(restQuat(2, 0.55));
+    dice.quaternion.copy(restQuat(2, Math.PI / 4));
 
     /* sizing */
     const resize = () => {
@@ -255,7 +291,8 @@ export const Dice3D = forwardRef<Dice3DHandle, {
     const roll = (push = 0) => {
       if (anim) return;
       const face = Math.floor(Math.random() * FACES.length);
-      const yaw = 0.35 + (Math.random() - 0.5) * 0.5;
+      // a three-quarter turn, so the top and two sides show evenly
+      const yaw = Math.PI / 4 + (Math.random() - 0.5) * 0.18;
       const q1 = restQuat(face, yaw);
       if (reduced) { dice.quaternion.copy(q1); dirty = true; settleRef.current?.(FACES[face].key); return; }
       startRef.current?.();
@@ -352,7 +389,7 @@ export const Dice3D = forwardRef<Dice3DHandle, {
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerup', onUp);
       canvas.removeEventListener('pointercancel', onUp);
-      materials.forEach((m) => { m.map?.dispose(); m.dispose(); });
+      materials.forEach((m) => { m.map?.dispose(); m.bumpMap?.dispose(); m.dispose(); });
       dice.geometry.dispose();
       env.dispose();
       pmrem.dispose();
