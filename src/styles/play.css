@@ -63,7 +63,7 @@ p, li, dd, figcaption, blockquote, .lede, .cite__text, .tcard__tag, .tool-row__t
   96%           { transform: scaleY(0.1); }
 }
 /* Glancing eyes: a look to the left, then the right, then back */
-.buddy--glance .buddy__pupil { animation: buddy-glance 1.6s 0.55s ease-in-out infinite; }
+.buddy--glance .buddy__pupil { animation: buddy-glance 1.6s 0.9s ease-in-out infinite; }
 @keyframes buddy-glance {
   0%, 12%   { transform: translate3d(0, 0, 0); }
   24%, 42%  { transform: translate3d(-34%, 0, 0); }
