@@ -16,18 +16,29 @@ export type FaceKey = MoveKey | 'WILD';
 
 /* BoxGeometry material order is +x, -x, +y, -y, +z, -z. Each entry also
    holds the rotation that turns that face to point up. */
-const FACES: { key: FaceKey; up: THREE.Euler }[] = [
-  { key: 'TRACE',   up: new THREE.Euler(0, 0, Math.PI / 2) },
-  { key: 'SURFACE', up: new THREE.Euler(0, 0, -Math.PI / 2) },
-  { key: 'OPEN',    up: new THREE.Euler(0, 0, 0) },
-  { key: 'WILD',    up: new THREE.Euler(Math.PI, 0, 0) },
-  { key: 'SHIFT',   up: new THREE.Euler(-Math.PI / 2, 0, 0) },
-  { key: 'COMMIT',  up: new THREE.Euler(Math.PI / 2, 0, 0) },
+const FACES: { key: FaceKey; up: THREE.Euler; top: THREE.Vector3 }[] = [
+  { key: 'TRACE',   up: new THREE.Euler(0, 0, Math.PI / 2),  top: new THREE.Vector3(0, 1, 0) },
+  { key: 'SURFACE', up: new THREE.Euler(0, 0, -Math.PI / 2), top: new THREE.Vector3(0, 1, 0) },
+  { key: 'OPEN',    up: new THREE.Euler(0, 0, 0),            top: new THREE.Vector3(0, 0, -1) },
+  { key: 'WILD',    up: new THREE.Euler(Math.PI, 0, 0),      top: new THREE.Vector3(0, 0, 1) },
+  { key: 'SHIFT',   up: new THREE.Euler(-Math.PI / 2, 0, 0), top: new THREE.Vector3(0, 1, 0) },
+  { key: 'COMMIT',  up: new THREE.Euler(Math.PI / 2, 0, 0),  top: new THREE.Vector3(0, 1, 0) },
 ];
+/* `top` is the direction, on the cube, that the printed artwork's top edge
+   faces. When a face lands up, the dice turns so that edge points away
+   from the viewer, a quarter turn off square, so every icon reads the
+   right way round rather than sideways or upside down. */
+const restYaw = (face: number) => {
+  const t = FACES[face].top.clone().applyEuler(FACES[face].up);
+  // turn the artwork's top to point away (-z), then a further eighth turn for the three-quarter view
+  return Math.atan2(-t.x, -t.z) + Math.PI - Math.PI / 4;
+};
 
 const SIZE = 1.6;
 const PAPER = '#FBF8F1';
 const TEX = 512;
+/* how far above its frame the dice may leap, as a share of the frame's height */
+const LEAP_ROOM = 0.7;
 
 /* ── Face textures ─────────────────────────────────────────────── */
 function baseFace(ctx: CanvasRenderingContext2D) {
@@ -185,6 +196,7 @@ export const Dice3D = forwardRef<Dice3DHandle, {
     const el = host.current;
     if (!el) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ROOM = idle ? 0 : LEAP_ROOM;
 
     /* renderer, scene, camera */
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -259,14 +271,17 @@ export const Dice3D = forwardRef<Dice3DHandle, {
         .multiply(new THREE.Quaternion().setFromEuler(FACES[face].up));
 
     // start resting with OPEN up, turned a little so three faces show
-    dice.quaternion.copy(restQuat(2, Math.PI / 4));
+    dice.quaternion.copy(restQuat(2, restYaw(2)));
 
     /* sizing */
     const resize = () => {
       const w = el.clientWidth, h = el.clientHeight;
       if (!w || !h) return;
-      renderer.setSize(w, h, false);
+      // the canvas reaches above its frame, so the dice can leap over the heading
+      const reach = h * ROOM;
+      renderer.setSize(w, h + reach, false);
       camera.aspect = w / h;
+      camera.setViewOffset(w, h, 0, -reach, w, h + reach);
       camera.updateProjectionMatrix();
       dirty = true;
     };
@@ -292,12 +307,12 @@ export const Dice3D = forwardRef<Dice3DHandle, {
       if (anim) return;
       const face = Math.floor(Math.random() * FACES.length);
       // a three-quarter turn, so the top and two sides show evenly
-      const yaw = Math.PI / 4 + (Math.random() - 0.5) * 0.18;
+      const yaw = restYaw(face) + (Math.random() - 0.5) * 0.18;
       const q1 = restQuat(face, yaw);
       if (reduced) { dice.quaternion.copy(q1); dirty = true; settleRef.current?.(FACES[face].key); return; }
       startRef.current?.();
       const axis = new THREE.Vector3(Math.random() - 0.5, (Math.random() - 0.5) * 0.4, Math.random() - 0.5).normalize();
-      anim = { t0: performance.now(), dur: 1500 + push * 150, q0: dice.quaternion.clone(), q1, axis, turns: 2 + Math.floor(Math.random() * 2) + Math.round(push), hop: 1.5 + push * 0.3, face };
+      anim = { t0: performance.now(), dur: 1500 + push * 150, q0: dice.quaternion.clone(), q1, axis, turns: 2 + Math.floor(Math.random() * 2) + Math.round(push), hop: 2.2 + push * 0.4, face };
     };
     api.current = { roll, rolling: () => !!anim };
 
@@ -305,14 +320,14 @@ export const Dice3D = forwardRef<Dice3DHandle, {
     let drag: { x: number; y: number; moved: number } | null = null;
     const canvas = renderer.domElement;
     if (!idle) {
-      canvas.style.touchAction = 'none';
-      canvas.style.cursor = 'grab';
+      el.style.touchAction = 'none';
+      el.style.cursor = 'grab';
     }
     const onDown = (e: PointerEvent) => {
       if (idle || anim) return;
-      canvas.setPointerCapture(e.pointerId);
+      el.setPointerCapture(e.pointerId);
       drag = { x: e.clientX, y: e.clientY, moved: 0 };
-      canvas.style.cursor = 'grabbing';
+      el.style.cursor = 'grabbing';
     };
     const onMove = (e: PointerEvent) => {
       if (!drag) return;
@@ -329,13 +344,13 @@ export const Dice3D = forwardRef<Dice3DHandle, {
       if (!drag) return;
       const moved = drag.moved;
       drag = null;
-      canvas.style.cursor = 'grab';
+      el.style.cursor = 'grab';
       roll(moved > 40 ? Math.min(2, moved / 160) : 0);
     };
-    canvas.addEventListener('pointerdown', onDown);
-    canvas.addEventListener('pointermove', onMove);
-    canvas.addEventListener('pointerup', onUp);
-    canvas.addEventListener('pointercancel', onUp);
+    el.addEventListener('pointerdown', onDown);
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onUp);
+    el.addEventListener('pointercancel', onUp);
 
     /* loop: renders only while something moves, and only when visible */
     let visible = true;
@@ -376,6 +391,8 @@ export const Dice3D = forwardRef<Dice3DHandle, {
       const h = Math.max(0, dice.position.y);
       const k = 1 / (1 + h * 0.9);
       blot.scale.setScalar(0.75 + 0.45 * k);
+      // the hard shadow fades as the dice rises, so it never runs off the frame mid-leap
+      key.shadow.intensity = Math.max(0, 1 - h * 1.1);
       (blot.material as THREE.MeshBasicMaterial).opacity = 0.25 + 0.75 * k;
       renderer.render(scene, camera);
       dirty = false;
@@ -385,10 +402,10 @@ export const Dice3D = forwardRef<Dice3DHandle, {
       renderer.setAnimationLoop(null);
       io.disconnect();
       ro.disconnect();
-      canvas.removeEventListener('pointerdown', onDown);
-      canvas.removeEventListener('pointermove', onMove);
-      canvas.removeEventListener('pointerup', onUp);
-      canvas.removeEventListener('pointercancel', onUp);
+      el.removeEventListener('pointerdown', onDown);
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+      el.removeEventListener('pointercancel', onUp);
       materials.forEach((m) => { m.map?.dispose(); m.bumpMap?.dispose(); m.dispose(); });
       dice.geometry.dispose();
       env.dispose();
@@ -398,7 +415,7 @@ export const Dice3D = forwardRef<Dice3DHandle, {
     };
   }, [idle]);
 
-  return <div ref={host} className={`dice3d ${className || ''}`} />;
+  return <div ref={host} className={`dice3d ${idle ? '' : 'dice3d--leap'} ${className || ''}`} />;
 });
 
 export default Dice3D;
