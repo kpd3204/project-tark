@@ -1568,8 +1568,11 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .dice-canvas:focus-visible { box-shadow: 0 0 0 3px var(--ink); }
 .dice3d { width: 100%; height: clamp(360px, 38vw, 520px); }
 .dice3d canvas { display: block; width: 100% !important; height: 100% !important; }
+/* on the dice page the canvas overhangs its frame upward, so a roll leaps over the heading; clicks pass through the overhang */
+.dice3d--leap { position: relative; }
+.dice3d--leap canvas { position: absolute; left: 0; bottom: 0; height: 170% !important; pointer-events: none; }
 .dice-teaser__die .dice3d { height: clamp(240px, 24vw, 320px); }
-.dice-stage { isolation: isolate; }
+.dice-stage { position: relative; z-index: 2; }
 .dice-hint { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--ink-3); margin: 6px 0 4px; }
 .dice-roll[disabled] { opacity: 0.7; cursor: default; }
 
