@@ -137,7 +137,7 @@ export function ToolkitPage() {
               return (
                 <Reveal key={s.move} delay={i * 0.05} y={24}>
                   <button type="button" className="stuck__btn" style={{ backgroundColor: m.color, color: INK[s.move] || '#FFFFFF' }} onClick={() => pickStuck(s.move)}>
-                    <span className="stuck__feels">“{s.feels}”</span>
+                    <span className="stuck__feels">{s.feels}</span>
                     <span className="stuck__move">
                       Try <strong>{s.move}</strong> · {m.tools.length} tools <span aria-hidden="true">→</span>
                     </span>

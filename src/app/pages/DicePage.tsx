@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'motion/react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { PageFooter } from '../components/PageFooter';
 import { MoveIcon } from '../components/MoveIcon';
 import type { MoveKey } from '../components/MoveIcon';
 import { Reveal, EASE } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill } from '../components/play';
-import { Die, FACES, ThinkingStamp } from '../components/Dice';
-import type { FaceKey } from '../components/Dice';
+import { ThinkingStamp } from '../components/Dice';
+import type { FaceKey, Dice3DHandle } from '../components/Dice3D';
+
+// three.js only loads on this page
+const Dice3D = lazy(() => import('../components/Dice3D'));
 
 const TP_URL = 'https://thinkingpartner.netlify.app/';
 
@@ -66,54 +69,30 @@ function readRolled(): MoveKey[] {
 }
 
 export function DicePage() {
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const lift = useMotionValue(0);
-  const shadowScale = useTransform(lift, [-150, 0], [0.45, 1]);
-  const shadowOpacity = useTransform(lift, [-150, 0], [0.12, 0.32]);
+  const dice = useRef<Dice3DHandle>(null);
   const [rolling, setRolling] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const [rollId, setRollId] = useState(0);
   const [situation, setSituation] = useState(() => pick(SITUATIONS));
   const [own, setOwn] = useState('');
   const [rolled, setRolled] = useState<MoveKey[]>(readRolled);
-  const drag = useRef<{ x: number; y: number; rx: number; ry: number; moved: number } | null>(null);
-  const reduced = useRef(false);
 
-  useEffect(() => { reduced.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }, []);
   useEffect(() => { try { sessionStorage.setItem('tk-dice-rolled', JSON.stringify(rolled)); } catch { /* storage unavailable */ } }, [rolled]);
 
+  const onRollStart = useCallback(() => {
+    setRolling(true);
+    setSituation((s) => pick(SITUATIONS, s));
+  }, []);
+
   const settle = useCallback((face: FaceKey) => {
+    setRolling(false);
     const move = face === 'WILD' ? null : face;
     setResult({ face, move, question: move ? pick(MOVES[move].questions) : '' });
     setRollId((n) => n + 1);
     if (move) setRolled((r) => (r.includes(move) ? r : [...r, move]));
   }, []);
 
-  const roll = useCallback((push = 1) => {
-    if (rolling) return;
-    const face = FACES[Math.floor(Math.random() * FACES.length)];
-    if (reduced.current) {
-      rx.set(face.show[0]); ry.set(face.show[1]);
-      settle(face.key);
-      return;
-    }
-    setRolling(true);
-    setSituation((s) => pick(SITUATIONS, s));
-    const spinsX = 2 + Math.floor(Math.random() * 2) + Math.round(push);
-    const spinsY = 2 + Math.floor(Math.random() * 2) + Math.round(push);
-    const baseX = Math.ceil(rx.get() / 360) * 360;
-    const baseY = Math.ceil(ry.get() / 360) * 360;
-    const toX = baseX + spinsX * 360 + face.show[0];
-    const toY = baseY + spinsY * 360 + face.show[1];
-    const duration = 1.5;
-    animate(lift, [0, -150, 0, -34, 0, -8, 0], { duration, times: [0, 0.3, 0.6, 0.72, 0.84, 0.92, 1], ease: 'easeInOut' });
-    animate(rx, toX, { duration, ease: [0.15, 0.7, 0.25, 1] });
-    animate(ry, toY, { duration, ease: [0.15, 0.7, 0.25, 1] }).then(() => {
-      setRolling(false);
-      settle(face.key);
-    });
-  }, [rolling, rx, ry, lift, settle]);
+  const roll = useCallback(() => { dice.current?.roll(); }, []);
 
   /* Space or Enter rolls */
   useEffect(() => {
@@ -125,27 +104,6 @@ export function DicePage() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [roll]);
-
-  /* Grab and flick: drag turns the dice, letting go throws it */
-  const onPointerDown = (e: React.PointerEvent) => {
-    if (rolling) return;
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-    drag.current = { x: e.clientX, y: e.clientY, rx: rx.get(), ry: ry.get(), moved: 0 };
-  };
-  const onPointerMove = (e: React.PointerEvent) => {
-    const d = drag.current;
-    if (!d) return;
-    const dx = e.clientX - d.x, dy = e.clientY - d.y;
-    d.moved = Math.max(d.moved, Math.hypot(dx, dy));
-    ry.set(d.ry + dx * 0.6);
-    rx.set(d.rx - dy * 0.6);
-  };
-  const onPointerUp = () => {
-    const d = drag.current;
-    drag.current = null;
-    if (!d) return;
-    roll(d.moved > 40 ? Math.min(2, d.moved / 120) : 0);
-  };
 
   const pickMove = (m: MoveKey) => {
     setResult({ face: 'WILD', move: m, question: pick(MOVES[m].questions) });
@@ -178,21 +136,12 @@ export function DicePage() {
             </Reveal>
 
             <div className="dice-stage">
-              <motion.div
-                className="dice-grab"
-                style={{ y: lift }}
-                onPointerDown={onPointerDown}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={() => { drag.current = null; }}
-                role="button"
-                tabIndex={0}
-                aria-label="Roll the dice"
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); roll(); } }}
-              >
-                <Die rx={rx} ry={ry} />
-              </motion.div>
-              <motion.div className="dice-shadow" style={{ scale: shadowScale, opacity: shadowOpacity }} aria-hidden="true" />
+              <div className="dice-canvas" role="button" tabIndex={0} aria-label="Roll the dice"
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); roll(); } }}>
+                <Suspense fallback={<div className="dice3d dice3d--loading" />}>
+                  <Dice3D ref={dice} onSettle={settle} onRollStart={onRollStart} />
+                </Suspense>
+              </div>
               <p className="dice-hint">Tap it, flick it, or press Space</p>
               <button type="button" className="pill pill--ink dice-roll" onClick={() => roll()} disabled={rolling}>
                 <span>{rolling ? 'Rolling…' : result ? 'Roll again' : 'Roll the dice'}</span>
@@ -290,7 +239,7 @@ export function DicePage() {
                 <div className="face-card" style={{ backgroundColor: MOVES[m].color }}>
                   <MoveIcon move={m} size={40} variant="white" />
                   <strong>{m} <span className="deva" lang="hi">{MOVES[m].hindi}</span></strong>
-                  <p>“{MOVES[m].questions[0]}”</p>
+                  <p>{MOVES[m].questions[0]}</p>
                 </div>
               </Reveal>
             ))}
@@ -298,7 +247,7 @@ export function DicePage() {
               <div className="face-card face-card--wild">
                 <ThinkingStamp className="stamp--flat" />
                 <strong>Thinking in progress</strong>
-                <p>“Which move do you need right now?”</p>
+                <p>Which move do you need right now?</p>
               </div>
             </Reveal>
           </div>

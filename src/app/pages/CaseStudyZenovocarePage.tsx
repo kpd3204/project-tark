@@ -286,7 +286,7 @@ export function CaseStudyZenovocarePage() {
           <Reveal delay={0.1}>
             <blockquote className="pullquote">
               <Squiggle kind="underline" width="100%" color="#FFD167" stroke={6} className="pullquote__line" />
-              <p>“The work is not bad. The work is not finished.”</p>
+              <p>The work is not bad. The work is not finished.</p>
             </blockquote>
           </Reveal>
         </div>

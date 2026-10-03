@@ -1555,23 +1555,6 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .intro__buddy { width: clamp(96px, 11vw, 140px); height: clamp(96px, 11vw, 140px); }
 
 /* ═══ Thinking dice ════════════════════════════════════════════ */
-.die { --s: clamp(150px, 20vw, 230px); width: var(--s); height: var(--s); perspective: 1100px; }
-.die__tilt { width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateX(-16deg) rotateY(24deg); }
-.die__cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; will-change: transform; }
-.die__core { position: absolute; left: 9%; top: 9%; width: 82%; height: 82%; background: #E9E1D1; }
-.die--spin .die__cube { animation: die-idle 9s linear infinite; }
-@keyframes die-idle { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-.die__face {
-  position: absolute; inset: 0;
-  display: grid; place-items: center;
-  background: #FFFDF8;
-  border-radius: 18%;
-  box-shadow: inset 0 0 0 1.5px rgba(29,27,22,0.08), inset 0 -10px 24px rgba(29,27,22,0.06);
-  backface-visibility: hidden;
-}
-.die__icon { width: 46%; height: 46%; }
-.die__icon > * { width: 100% !important; height: 100% !important; }
-.die__stamp { width: 60%; height: 60%; color: #465BA4; transform: rotate(-8deg); }
 .stamp { display: block; width: 100%; height: 100%; overflow: visible; }
 .stamp__text { font-family: var(--font-mono); font-weight: 700; font-size: 21px; letter-spacing: 0.1em; fill: currentColor; }
 .stamp--flat { width: 104px; height: 104px; color: #465BA4; transform: rotate(-8deg); }
@@ -1580,11 +1563,13 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .dice-play { display: grid; gap: clamp(28px, 5vw, 72px); align-items: center; }
 .dice-left .tk-head__title { font-size: clamp(40px, 5.2vw, 84px); }
 @media (min-width: 960px) { .dice-play { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); } }
-.dice-stage { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: clamp(70px, 8vw, 120px); }
-.dice-grab { cursor: grab; touch-action: none; outline: none; border-radius: 24px; }
-.dice-grab:active { cursor: grabbing; }
-.dice-grab:focus-visible { box-shadow: 0 0 0 3px var(--ink); }
-.dice-shadow { width: calc(var(--s, 200px) * 0.9); max-width: 210px; height: 18px; border-radius: 50%; background: radial-gradient(closest-side, rgba(29,27,22,0.9), transparent); margin-top: 18px; }
+.dice-stage { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.dice-canvas { width: 100%; max-width: 560px; outline: none; border-radius: var(--r-lg); }
+.dice-canvas:focus-visible { box-shadow: 0 0 0 3px var(--ink); }
+.dice3d { width: 100%; height: clamp(360px, 38vw, 520px); }
+.dice3d canvas { display: block; width: 100% !important; height: 100% !important; }
+.dice-teaser__die .dice3d { height: clamp(240px, 24vw, 320px); }
+.dice-stage { isolation: isolate; }
 .dice-hint { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--ink-3); margin: 6px 0 4px; }
 .dice-roll[disabled] { opacity: 0.7; cursor: default; }
 
@@ -1623,4 +1608,4 @@ a.way:hover .way__go span { transform: translate(3px, -3px); }
 .dice-teaser .tag { font-size: 18px; }
 .dice-teaser__title { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 4.4vw, 64px); line-height: 1; letter-spacing: -0.03em; margin: 22px 0 14px; }
 .dice-teaser__die { display: grid; place-items: center; padding-block: 20px; text-decoration: none; }
-.dice-teaser__die .die { --s: clamp(130px, 15vw, 190px); }
+.dice-teaser__die 
