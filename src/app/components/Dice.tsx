@@ -1,26 +1,5 @@
-import { motion, type MotionValue } from 'motion/react';
-import { MoveIcon } from './MoveIcon';
-import type { MoveKey } from './MoveIcon';
+/* The "Thinking in progress" stamp, the sixth face of the TARK dice. */
 
-/* The तर्क dice: a CSS 3D cube modelled on the physical TARK dice. Five
-   faces carry the move icons; the sixth is a wild face (any move). */
-
-export type FaceKey = MoveKey | 'WILD';
-
-/* Each face, where it sits on the cube, and the cube rotation that brings
-   it to the front: [rotateX, rotateY]. */
-export const FACES: { key: FaceKey; place: string; show: [number, number] }[] = [
-  { key: 'OPEN',    place: 'rotateY(0deg)',    show: [0, 0] },
-  { key: 'TRACE',   place: 'rotateY(90deg)',   show: [0, -90] },
-  { key: 'SHIFT',   place: 'rotateY(180deg)',  show: [0, 180] },
-  { key: 'SURFACE', place: 'rotateY(-90deg)',  show: [0, 90] },
-  { key: 'COMMIT',  place: 'rotateX(90deg)',   show: [-90, 0] },
-  { key: 'WILD',    place: 'rotateX(-90deg)',  show: [90, 0] },
-];
-
-const CORE = ['rotateY(0deg)', 'rotateY(90deg)', 'rotateY(180deg)', 'rotateY(-90deg)', 'rotateX(90deg)', 'rotateX(-90deg)'];
-
-/* The sixth face: a "Thinking in progress" stamp */
 export function ThinkingStamp({ className }: { className?: string }) {
   return (
     <svg className={`stamp ${className || ''}`} viewBox="0 0 200 200" aria-hidden="true">
@@ -38,29 +17,3 @@ export function ThinkingStamp({ className }: { className?: string }) {
   );
 }
 
-function Face({ k }: { k: FaceKey }) {
-  if (k === 'WILD') return <span className="die__stamp"><ThinkingStamp /></span>;
-  return <span className="die__icon"><MoveIcon move={k} size={64} variant="color" /></span>;
-}
-
-/* rx / ry: motion values for the cube rotation; spin: idle turning */
-export function Die({ rx, ry, spin = false, className }: {
-  rx?: MotionValue<number>; ry?: MotionValue<number>; spin?: boolean; className?: string;
-}) {
-  return (
-    <div className={`die ${spin ? 'die--spin' : ''} ${className || ''}`}>
-      {/* a fixed presentation tilt, so every face lands square but reads in 3D */}
-      <div className="die__tilt">
-      <motion.div className="die__cube" style={rx && ry ? { rotateX: rx, rotateY: ry } : undefined}>
-        {/* a smaller solid core fills the rounded corners */}
-        {CORE.map((t) => <div key={t} className="die__core" style={{ transform: `${t} translateZ(calc(var(--s) * 0.41))` }} />)}
-        {FACES.map((f) => (
-          <div key={f.key} className="die__face" style={{ transform: `${f.place} translateZ(calc(var(--s) / 2))` }}>
-            <Face k={f.key} />
-          </div>
-        ))}
-      </motion.div>
-      </div>
-    </div>
-  );
-}

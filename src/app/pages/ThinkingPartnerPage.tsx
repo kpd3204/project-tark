@@ -117,7 +117,7 @@ export function ThinkingPartnerPage() {
                   <MoveIcon move={m.key} size={36} variant={m.ink === '#FFFFFF' ? 'white' : 'black'} />
                   <div>
                     <strong className="moveq__name">{m.key} <span className="deva" lang="hi">{m.hindi}</span></strong>
-                    <p className="moveq__q">“{m.hint}”</p>
+                    <p className="moveq__q">{m.hint}</p>
                   </div>
                 </div>
               </Reveal>

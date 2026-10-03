@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { DocBand } from '../components/ProjectDoc';
-import { Die } from '../components/Dice';
+
 import { PageFooter } from '../components/PageFooter';
 import { AssumptionTicker } from '../components/AssumptionTicker';
 import { HeroSection } from '../components/HeroSection';
@@ -14,6 +14,9 @@ import { toolsData } from '../data/tools';
 import photoUniversity from '../../imports/photos/university-workshop.jpg';
 import photoWorksheetPhone from '../../imports/photos/worksheet-and-phone.jpg';
 import photoPresentation from '../../imports/photos/presentation-screen.jpg';
+
+// three.js only loads when the dice teaser is reached
+const Dice3D = lazy(() => import('../components/Dice3D'));
 
 /* ─── Data ─────────────────────────────────────────────────── */
 const MOVES: { key: MoveKey; color: string; tint: string; text: string; ink: string; hindi: string; tagline: string; question: string }[] = [
@@ -106,7 +109,7 @@ function MoveCard({ move, index }: { move: typeof MOVES[0]; index: number }) {
         <span className="move-card__name">{move.key}</span>
         <span className="move-card__hindi deva" lang="hi">{move.hindi}</span>
         <span className="move-card__tagline">{move.tagline}</span>
-        <span className="move-card__q">“{move.question}”</span>
+        <span className="move-card__q">{move.question}</span>
         <span className="move-card__go" aria-hidden="true">→</span>
       </Link>
     </Reveal>
@@ -316,7 +319,7 @@ export function Home() {
                 <p className="lede" style={{ maxWidth: '40ch' }}>A 3D version of the TARK dice. Flick it, see which move it lands on, and try that move on a real situation.</p>
                 <div style={{ marginTop: 26 }}><Pill to="/dice" variant="ink">Roll the dice</Pill></div>
               </div>
-              <Link to="/dice" className="dice-teaser__die" aria-label="Open the thinking dice"><Die spin /></Link>
+              <Link to="/dice" className="dice-teaser__die" aria-label="Open the Thinking Dice"><Suspense fallback={<div className="dice3d" />}><Dice3D idle /></Suspense></Link>
             </div>
           </Reveal>
           <div style={{ marginTop: 'clamp(16px, 2vw, 24px)' }}><DocBand /></div>
