@@ -11,7 +11,7 @@ import type { FaceKey, Dice3DHandle } from '../components/Dice3D';
 // three.js only loads on this page
 const Dice3D = lazy(() => import('../components/Dice3D'));
 
-const TP_URL = 'https://thinkingpartner.netlify.app/';
+const TP_URL = 'https://tark-thinking-partner.vercel.app/';
 
 const MOVES: Record<MoveKey, { hindi: string; color: string; tint: string; questions: string[] }> = {
   OPEN: {

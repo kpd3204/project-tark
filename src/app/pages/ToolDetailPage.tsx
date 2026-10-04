@@ -8,7 +8,7 @@ import { Reveal } from '../components/kit';
 import { Buddy, Squiggle, Pill } from '../components/play';
 
 const FALLBACK_URL = 'https://drive.google.com/drive/folders/1ivpEmL7nj3No2GXXrpZAo_Qk70TGEpxL';
-const TP_URL = 'https://thinkingpartner.netlify.app/';
+const TP_URL = 'https://tark-thinking-partner.vercel.app/';
 const GPT_URL = 'https://chatgpt.com/g/g-69e25c86db488191824d86bf3399227f-trk-thinking-partner';
 const GEM_URL = 'https://gemini.google.com/gem/1O2CGR8VO65PPOBuctSwskGO7RyGUsucZ?usp=sharing';
 

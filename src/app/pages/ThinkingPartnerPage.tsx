@@ -6,7 +6,7 @@ import { Reveal } from '../components/kit';
 import { Buddy, Squiggle, Tag, Pill, SoftImg } from '../components/play';
 import photoLaptop from '../../imports/photos/thinking-partner-laptop.jpg';
 
-const TP_URL      = 'https://thinkingpartner.netlify.app/';
+const TP_URL      = 'https://tark-thinking-partner.vercel.app/';
 const CHATGPT_URL = 'https://chatgpt.com/g/g-69e25c86db488191824d86bf3399227f-trk-thinking-partner';
 const GEMINI_URL  = 'https://gemini.google.com/gem/1O2CGR8VO65PPOBuctSwskGO7RyGUsucZ?usp=sharing';
 
